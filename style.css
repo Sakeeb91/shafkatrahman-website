@@ -1,5 +1,5 @@
 :root {
-    /* Colors */
+    /* Dark mode colors (default) */
     --background: #0f1419;
     --background-blur: rgba(15, 20, 25, 0.8);
     --foreground: #e2e8f0;
@@ -17,6 +17,20 @@
 
     /* Radius */
     --radius: 0.25rem;
+}
+
+/* Light mode colors */
+[data-theme="light"] {
+    --background: #ffffff;
+    --background-blur: rgba(255, 255, 255, 0.8);
+    --foreground: #1e293b;
+    --foreground-90: rgba(30, 41, 59, 0.9);
+    --muted: #64748b;
+    --muted-foreground: #64748b;
+    --primary: #3b82f6;
+    --primary-hover: rgba(59, 130, 246, 0.8);
+    --border: rgba(100, 116, 139, 0.2);
+    --muted-surface: rgba(100, 116, 139, 0.1);
 }
 
 *,
@@ -560,5 +574,74 @@ a:focus-visible {
         font-size: 1.125rem;
         padding-left: 1rem;
         margin: 1.5rem 0;
+    }
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    position: fixed;
+    top: 1.25rem;
+    right: 1.5rem;
+    z-index: 1000;
+    background: var(--muted-surface);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 200ms ease;
+    backdrop-filter: blur(12px);
+}
+
+.theme-toggle:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    transform: scale(1.1);
+}
+
+.theme-toggle:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.theme-toggle svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--foreground);
+    transition: transform 300ms ease;
+}
+
+.theme-toggle:hover svg {
+    color: white;
+    transform: rotate(180deg);
+}
+
+/* Hide/show icons based on theme */
+.theme-toggle .sun-icon {
+    display: none;
+}
+
+[data-theme="light"] .theme-toggle .sun-icon {
+    display: block;
+}
+
+[data-theme="light"] .theme-toggle .moon-icon {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .theme-toggle {
+        top: 1rem;
+        right: 1rem;
+        width: 2.25rem;
+        height: 2.25rem;
+    }
+
+    .theme-toggle svg {
+        width: 1.125rem;
+        height: 1.125rem;
     }
 }

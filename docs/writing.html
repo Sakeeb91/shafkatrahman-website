@@ -9,8 +9,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style.css?v=2">
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <i data-lucide="moon" class="moon-icon"></i>
+        <i data-lucide="sun" class="sun-icon"></i>
+    </button>
+
     <header class="site-nav" aria-label="Primary">
         <div class="container nav-inner">
             <a class="nav-link" href="/">Home</a>
@@ -41,5 +50,7 @@
             </div>
         </div>
     </main>
+
+    <script src="../theme-toggle.js"></script>
 </body>
 </html>

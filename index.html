@@ -36,6 +36,12 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <i data-lucide="moon" class="moon-icon"></i>
+        <i data-lucide="sun" class="sun-icon"></i>
+    </button>
+
     <header class="site-nav" aria-label="Primary">
         <div class="container nav-inner">
             <a class="nav-link nav-link-active" href="/">Home</a>
@@ -81,9 +87,6 @@
         </div>
     </main>
 
-    <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
-    </script>
+    <script src="theme-toggle.js"></script>
 </body>
 </html>
