@@ -1,0 +1,18 @@
+# Development and build artifacts
+.playwright/
+.npm-cache/
+node_modules/
+.wrangler/
+
+# Documentation and internal files
+docs/
+CLAUDE.md
+SETUP_GITHUB_ACTIONS.md
+
+# System files
+.DS_Store
+.git/
+.github/
+
+# Logs
+*.log
