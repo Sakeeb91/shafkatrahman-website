@@ -38,9 +38,33 @@ All styles are in a single `style.css` file organized by:
 - **Production domain**: `shafkatrahman.com`
 - **Pages domain**: `shafkatrahman.pages.dev`
 
-### Deploy Commands
+### Automatic Deployment (Recommended)
+The site uses GitHub Actions for automatic deployment to Cloudflare Pages:
+
+- **Workflow file**: `.github/workflows/deploy.yml`
+- **Trigger**: Pushes to `main` branch automatically deploy
+- **Action**: Uses `cloudflare/pages-action@v1` to deploy entire directory
+- **Secrets required**:
+  - `CLOUDFLARE_API_TOKEN` (set in repository secrets)
+  - `CLOUDFLARE_ACCOUNT_ID` (set in repository secrets)
+
+**Monitoring deployments**:
 ```bash
-# Deploy to production
+# View recent GitHub Actions runs
+gh run list --limit 5
+
+# Watch a specific deployment
+gh run watch [run-id]
+
+# View deployment logs if failed
+gh run view [run-id] --log-failed
+```
+
+### Manual Deployment (Local)
+For local testing or manual deployments:
+
+```bash
+# Deploy to production (requires .wranglerignore to exclude large files)
 wrangler pages deploy . --project-name=shafkatrahman
 
 # List recent deployments
@@ -49,6 +73,8 @@ wrangler pages deployment list --project-name=shafkatrahman
 # List all Cloudflare Pages projects
 wrangler pages project list
 ```
+
+**Note**: The `.wranglerignore` file excludes development artifacts (`.playwright/`, `.npm-cache/`, `docs/`, system files) from deployments to prevent file size errors.
 
 ### Git Workflow
 **Important**: Follow the commit strategy from the global CLAUDE.md:
@@ -74,20 +100,87 @@ After pushing, verify deployment propagation. Browser caching can cause issues; 
 
 To add a new essay or article:
 
-1. **Create the article HTML** in `writing/[slug].html`:
-   - Copy structure from existing article (e.g., `writing/maiutics.html`)
-   - Update title, date, and content
-   - Ensure proper navigation links (`<a href="../">` for CSS, `<a href="/writing">` for back link)
+1. **Create the article HTML** in `writings/[slug].html`:
+   - Copy structure from existing article (e.g., `writings/maiutics.html`)
+   - Update title, meta tags, and structured data with article details
+   - Include proper SEO meta tags (Open Graph, Twitter Card, Schema.org)
+   - Set publication date in ISO format (`datetime="YYYY-MM-DD"`)
+   - Ensure proper navigation links (`href="../style.css?v=2"` for CSS, `href="/writings/"` for back link)
+   - Use semantic HTML: `<article>`, `<header>`, `<time>`, `<blockquote>`, `<figure>`
 
-2. **Update the writing index** in `writing.html`:
-   - Add new `<article class="writing-item">` entry
+2. **Handle images and assets**:
+   - Create a subdirectory: `writings/[article-slug]/` for article-specific images
+   - Use descriptive filenames (e.g., `spiral-perturbation.png` instead of long generated names)
+   - Reference images with relative paths: `<img src="[article-slug]/image.png" alt="...">`
+   - Images are automatically styled to be centered, responsive, and have max-width of 800px
+   - For figures with captions: wrap in `<figure class="article-image">` for proper alignment
+
+3. **Update the writings index** in `writings/index.html`:
+   - Add new `<article class="writing-item">` entry at the TOP of the list
    - Include date in ISO format (`datetime="YYYY-MM-DD"`)
-   - Add title and excerpt
+   - Add compelling title and 2-3 sentence excerpt
    - Maintain reverse chronological order (newest first)
 
-3. **Commit structure**:
-   - Commit article page separately from index update for clear history
+4. **Commit structure** (create atomic commits):
+   - First commit: Add the article HTML file
+   - Second commit: Add image assets for the article
+   - Third commit: Update writings index page
+   - Fourth commit (if needed): Add any supporting files like .wranglerignore updates
    - Use descriptive commit messages with the article title and date
+
+5. **Deploy**:
+   - Push commits to GitHub: `git push`
+   - Monitor CI/CD: `gh run list --limit 5` and `gh run watch [run-id]`
+   - Verify all checks pass before considering deployment complete
+   - Changes automatically deploy to Cloudflare Pages via GitHub Actions
+   - Verify live at `https://shafkatrahman.com/writings/[slug].html`
+
+### Article Styling Reference
+
+Articles support the following content elements with automatic styling:
+
+- **Headings**: `<h2>`, `<h3>` (serif font, proper spacing)
+- **Blockquotes**: `<blockquote>` (left border, italic, muted color)
+- **Images**: `<img>` (centered, responsive, max 800px, rounded corners, shadow)
+- **Figures**: `<figure class="article-image">` (for images with better alignment)
+- **Emphasis**: `<em>` (italic), `<strong>` (bold)
+- **Paragraphs**: Proper vertical rhythm with 1.5rem bottom margin
+- **Quote callouts**: Use `<p class="article-quote">` for emphasized quotes within text
+
+### Example Article Structure
+
+```html
+<article class="container article-container animate-fade-in">
+    <header class="article-header animate-slide-up">
+        <h1>Article Title</h1>
+        <div class="article-meta">
+            <time datetime="2025-07-04">July 4, 2025</time>
+        </div>
+        <p class="article-subtitle"><em>Optional subtitle or tagline</em></p>
+    </header>
+
+    <div class="article-content animate-slide-up-delay">
+        <blockquote>
+            <p>"Opening quote" — <strong>Author</strong></p>
+        </blockquote>
+
+        <p>Article content...</p>
+
+        <h2>Section Heading</h2>
+        <p>More content...</p>
+
+        <figure class="article-image">
+            <img src="article-slug/image.png" alt="Description" loading="lazy">
+        </figure>
+
+        <p>Concluding content...</p>
+    </div>
+
+    <footer class="article-footer animate-slide-up-delay-2">
+        <a href="/writings/" class="back-link">← Back to Writing</a>
+    </footer>
+</article>
+```
 
 ## CSS Styling Guidelines
 
