@@ -41,15 +41,34 @@
             margin: 2rem 0;
         }
 
-        .chapter-nav h3 {
-            margin: 0 0 1rem 0;
+        .current-chapter-indicator {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .reading-label {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .current-chapter-title {
             font-size: 1.125rem;
+            font-weight: 600;
             color: var(--foreground);
         }
 
+        .chapter-links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
         .chapter-links {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            display: flex;
+            flex-wrap: wrap;
             gap: 0.5rem;
         }
 
@@ -73,6 +92,87 @@
             background: var(--primary);
             color: var(--background);
             border-color: var(--primary);
+        }
+
+        .show-all-chapters {
+            padding: 0.5rem 1rem;
+            background: var(--background);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 200ms ease;
+            width: fit-content;
+        }
+
+        .show-all-chapters:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .chapter-navigation {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .nav-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: var(--muted-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--foreground);
+            font-size: 0.9375rem;
+            cursor: pointer;
+            transition: all 200ms ease;
+            flex: 1;
+            max-width: 250px;
+        }
+
+        .nav-button:hover:not(:disabled) {
+            background: var(--primary);
+            color: var(--background);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .nav-button.prev-chapter {
+            justify-content: flex-start;
+        }
+
+        .nav-button.next-chapter {
+            justify-content: flex-end;
+            margin-left: auto;
+        }
+
+        .nav-arrow {
+            font-size: 1.125rem;
+        }
+
+        @media (max-width: 640px) {
+            .chapter-navigation {
+                flex-direction: column;
+            }
+
+            .nav-button {
+                max-width: 100%;
+            }
+
+            .nav-button.next-chapter {
+                margin-left: 0;
+            }
         }
 
         .chapter-content {
@@ -139,12 +239,19 @@
 
             <div class="article-content animate-slide-up-delay">
                 <div class="chapter-nav">
-                    <h3>Chapters</h3>
-                    <div class="chapter-links">
-                        <a href="#chapter-1" class="chapter-link">Chapter 1</a>
-                        <a href="#chapter-2" class="chapter-link">Chapter 2</a>
-                        <a href="/reading/" class="chapter-link">Chapter 3</a>
-                        <a href="/reading/" class="chapter-link">More coming soon...</a>
+                    <div class="current-chapter-indicator">
+                        <span class="reading-label">Currently Reading:</span>
+                        <span class="current-chapter-title" id="current-chapter-title">Chapter 1: The World Before Brains</span>
+                    </div>
+                    <div class="chapter-links-container">
+                        <div class="chapter-links" id="chapter-links">
+                            <a href="#chapter-1" class="chapter-link" data-chapter="1">Chapter 1</a>
+                            <a href="#chapter-2" class="chapter-link" data-chapter="2">Chapter 2</a>
+                        </div>
+                        <button class="show-all-chapters" id="show-all-chapters">
+                            <span class="show-text">Show all chapters</span>
+                            <span class="hide-text" style="display: none;">Hide chapters</span>
+                        </button>
                     </div>
                 </div>
 
@@ -274,6 +381,17 @@
                 <div style="background: var(--muted-surface); border-left: 4px solid var(--primary); padding: 1rem; margin: 1rem 0; border-radius: var(--radius);">
                     <p>📌 Life on Earth spent billions of years <em>steering</em> (Ch. 2) at a cellular level <em>before</em> brains even existed. Intelligence wasn't born with neurons, but began as a way for life to <em>reinforce</em> (Ch. 2) successful DNA replication against the universe's tendency towards disorder (entropy). First, DNA learned to copy itself, the original hack against entropy. Then single cells developed "intelligence" through <em>simulating</em> (Ch. 3) basic actions like movement and sensing, tweaking these tricks through associative learning and adaptation. Photosynthesis and respiration were key energy innovations, fueling a Cambrian explosion (Ch. 5) of new life forms. The "eating" of other cells (phagotrophy) created an evolutionary arms race, accelerating the development of new <em>simulations</em> (Ch. 3) and creating selective pressures for <em>multicellularity</em>—the building block for nervous systems and the eventual "steering" breakthrough of the first brains (Ch. 2). This early period established the core philosophy of the book: intelligence is problem-solving, driven by the need to persist and replicate. Key ideas include cellular intelligence, the role of energy breakthroughs, and the predatory arms race as drivers of complexity. This lays the groundwork for understanding the subsequent five breakthroughs in brain evolution, demonstrating that even without brains, life was already exhibiting impressive computational skills, foreshadowing the more complex <em>mentalizing</em> (Ch. 4) and language (Ch. 5) abilities to come. (Bennett, 2023, pp. 17-29)</p>
                 </div>
+
+                <nav class="chapter-navigation">
+                    <button class="nav-button prev-chapter" id="prev-chapter-1" disabled>
+                        <span class="nav-arrow">←</span>
+                        <span class="nav-text">Previous Chapter</span>
+                    </button>
+                    <button class="nav-button next-chapter" id="next-chapter-1" data-next="2">
+                        <span class="nav-text">Next: Chapter 2</span>
+                        <span class="nav-arrow">→</span>
+                    </button>
+                </nav>
                 </div>
 
                 <div class="chapter-content" data-chapter="2" id="chapter-2">
@@ -397,6 +515,17 @@
                 <div style="background: var(--muted-surface); border-left: 4px solid var(--primary); padding: 1rem; margin: 1rem 0; border-radius: var(--radius);">
                     <p>📌 Brains evolved to <em>steer</em> (Ch. 1), but <em>valence</em> tells them <em>where</em> to steer. Valence is the brain's system for labeling things as "good" (approach) or "bad" (avoid) (Bennett, 2023, p. 53). This emerged with the first bilaterally symmetrical animals (bilaterians), allowing them to make more efficient choices than earlier radially symmetrical creatures with infinite directions of choice (Bennett, 2023, p. 48). Even simple nematode brains use valence to navigate complex environments, much like a Roomba uses simple sensors and algorithms to clean a room (Bennett, 2023, p. 49-52). But what is "good" or "bad" isn't fixed; internal states like hunger and contextual cues such as threat of predators can flip a brain's preferences, tweaking <em>reinforcement signals</em> (Ch. 6) (Bennett, 2023, p. 57-59). This flexibility is key to <em>simulating</em> (Ch. 3) future outcomes and anticipating <em>future needs</em> (Ch. 19) (Bennett, 2023, p. 69). The core philosophy is that even simple brains make complex trade-offs, driven by their subjective experience of the world. Key ideas include the evolution of bilateral symmetry for efficient steering, the context-dependent nature of valence, and the role of internal states in shaping motivation and decision-making. This sets the stage for understanding how emotions develop and become fine-tuned drivers of behavior (Ch. 3) and <em>learning</em> (Ch. 4), influencing the way mammals create an internal model of themselves and the world to guide action (Ch. 11). (Bennett, 2023, p. 43-70).</p>
                 </div>
+
+                <nav class="chapter-navigation">
+                    <button class="nav-button prev-chapter" id="prev-chapter-2" data-prev="1">
+                        <span class="nav-arrow">←</span>
+                        <span class="nav-text">Previous: Chapter 1</span>
+                    </button>
+                    <button class="nav-button next-chapter" id="next-chapter-2" disabled>
+                        <span class="nav-text">Next Chapter</span>
+                        <span class="nav-arrow">→</span>
+                    </button>
+                </nav>
                 </div>
             </div>
 
