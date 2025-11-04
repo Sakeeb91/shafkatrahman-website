@@ -75,6 +75,27 @@
             border-color: var(--primary);
         }
 
+        .chapter-content {
+            display: none;
+            opacity: 0;
+            animation: fadeIn 0.3s ease-in-out forwards;
+        }
+
+        .chapter-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .book-meta {
             text-align: center;
             margin-bottom: 2rem;
@@ -120,14 +141,15 @@
                 <div class="chapter-nav">
                     <h3>Chapters</h3>
                     <div class="chapter-links">
-                        <a href="#chapter-1" class="chapter-link active">Chapter 1</a>
-                        <a href="/reading/" class="chapter-link">Chapter 2</a>
+                        <a href="#chapter-1" class="chapter-link">Chapter 1</a>
+                        <a href="#chapter-2" class="chapter-link">Chapter 2</a>
                         <a href="/reading/" class="chapter-link">Chapter 3</a>
                         <a href="/reading/" class="chapter-link">More coming soon...</a>
                     </div>
                 </div>
 
-                <h2 id="chapter-1">Chapter 1: The World Before Brains</h2>
+                <div class="chapter-content" data-chapter="1" id="chapter-1">
+                <h2>Chapter 1: The World Before Brains</h2>
 
                 <h3>Chapter Overview</h3>
                 <p><strong>Main Focus:</strong> This chapter lays the groundwork for Bennett's argument by exploring the origins of life and the emergence of intelligence <em>before</em> the development of brains. He challenges the traditional association of intelligence with complex nervous systems, demonstrating how even simple organisms exhibit intelligent behavior.</p>
@@ -252,6 +274,130 @@
                 <div style="background: var(--muted-surface); border-left: 4px solid var(--primary); padding: 1rem; margin: 1rem 0; border-radius: var(--radius);">
                     <p>📌 Life on Earth spent billions of years <em>steering</em> (Ch. 2) at a cellular level <em>before</em> brains even existed. Intelligence wasn't born with neurons, but began as a way for life to <em>reinforce</em> (Ch. 2) successful DNA replication against the universe's tendency towards disorder (entropy). First, DNA learned to copy itself, the original hack against entropy. Then single cells developed "intelligence" through <em>simulating</em> (Ch. 3) basic actions like movement and sensing, tweaking these tricks through associative learning and adaptation. Photosynthesis and respiration were key energy innovations, fueling a Cambrian explosion (Ch. 5) of new life forms. The "eating" of other cells (phagotrophy) created an evolutionary arms race, accelerating the development of new <em>simulations</em> (Ch. 3) and creating selective pressures for <em>multicellularity</em>—the building block for nervous systems and the eventual "steering" breakthrough of the first brains (Ch. 2). This early period established the core philosophy of the book: intelligence is problem-solving, driven by the need to persist and replicate. Key ideas include cellular intelligence, the role of energy breakthroughs, and the predatory arms race as drivers of complexity. This lays the groundwork for understanding the subsequent five breakthroughs in brain evolution, demonstrating that even without brains, life was already exhibiting impressive computational skills, foreshadowing the more complex <em>mentalizing</em> (Ch. 4) and language (Ch. 5) abilities to come. (Bennett, 2023, pp. 17-29)</p>
                 </div>
+                </div>
+
+                <div class="chapter-content" data-chapter="2" id="chapter-2">
+                <h2>Chapter 2: The Birth of Good and Bad</h2>
+
+                <h3>Chapter Overview</h3>
+                <p><strong>Main Focus:</strong> This chapter delves into the origin of <em>valence</em>—the brain's system for assigning positive or negative values to stimuli and experiences. Bennett argues that valence is a fundamental component of intelligence, driving behavior long before the emergence of complex emotions or conscious thought.</p>
+
+                <p><strong>Objectives:</strong> The chapter aims to:</p>
+                <ul>
+                    <li>Explain the concept of valence and its role in guiding behavior.</li>
+                    <li>Connect the evolution of valence to the emergence of the first brains in bilaterians.</li>
+                    <li>Illustrate how valence operates in simple organisms like nematodes.</li>
+                    <li>Show how past innovations constrain and support subsequent evolutionary developments, by highlighting how the neural mechanisms for valence evolved in early, simple, radially-symmetric animals and then were repurposed for more complex steering decisions in bilaterians (Bennett, 2023, p. 70).</li>
+                    <li>Introduce the concept of internal states (like hunger) and their influence on valence.</li>
+                </ul>
+
+                <p><strong>Fit into Book's Structure:</strong> This chapter directly follows the introduction of "steering" in Chapter 1. While Chapter 1 established <em>how</em> simple organisms steer, this chapter explains <em>why</em> they steer in particular directions by introducing the concept of valence as the driver of approach and avoidance behaviors. This sets the foundation for later discussions of reinforcement learning, simulation, and decision-making.</p>
+
+                <h3>Key Terms and Concepts</h3>
+                <ul>
+                    <li><strong>Valence:</strong> The goodness or badness of a stimulus, experience, or outcome, as subjectively determined by an individual's brain (Bennett, 2023, p. 53). This is the core concept of the chapter, presented as the underlying driver of behavior.</li>
+                    <li><strong>Bilateral Symmetry:</strong> A body plan with a distinct front and back, left and right sides. The evolution of bilateral symmetry is linked to the emergence of the first brains and the development of more efficient steering mechanisms.</li>
+                    <li><strong>Steering:</strong> The ability to navigate toward or away from stimuli. Valence is presented as the mechanism that directs steering behaviors.</li>
+                    <li><strong>Sensory Neurons:</strong> Specialized cells that detect and respond to stimuli from the environment. Sensory neurons provide the input that drives valence assignments.</li>
+                    <li><strong>Internal States:</strong> Physiological or psychological conditions within an organism, such as hunger, thirst, or fear. Internal states influence how valence is assigned to stimuli; what is "good" or "bad" can change depending on an organism's internal state.</li>
+                </ul>
+
+                <h3>Key Figures</h3>
+                <ul>
+                    <li><strong>Rodney Brooks:</strong> A roboticist known for his work on behavior-based AI. Bennett uses Brooks' work, especially his focus on the Roomba, to highlight how simple behaviors like steering can generate complex and seemingly intelligent behavior (Bennett, 2023, p. 61-63). This comparison between nematode brains and the Roomba highlights how even very simple intelligence algorithms can be remarkably effective.</li>
+                </ul>
+
+                <h3>Central Thesis and Supporting Arguments</h3>
+                <p><strong>Central Thesis:</strong> Valence, the brain's subjective evaluation of stimuli as good or bad, is a fundamental component of intelligence that drives and directs steering behaviors.</p>
+
+                <p><strong>Supporting Arguments:</strong></p>
+                <ul>
+                    <li><strong>Evolutionary progression:</strong> Valence emerged with the first bilaterians, enabling more efficient navigation than the simple stimulus-response behaviors of earlier radially symmetrical animals.</li>
+                    <li><strong>Simplicity and efficiency:</strong> Simple organisms like nematodes demonstrate how even rudimentary valence systems can generate sophisticated steering behaviors.</li>
+                    <li><strong>Context dependence:</strong> The valence of a stimulus can change depending on an animal's internal state and prior experiences.</li>
+                    <li><strong>Role in decision-making:</strong> Valence guides decisions about whether to approach or avoid stimuli, even when multiple conflicting stimuli are present.</li>
+                    <li><strong>Neural basis:</strong> Valence is implemented through specific neural circuits, including sensory neurons, interneurons, and motor neurons.</li>
+                </ul>
+
+                <h3>Observations and Insights</h3>
+                <ul>
+                    <li><strong>The link between valence and motivation:</strong> Valence not only drives approach/avoidance behaviors, but also influences an animal's motivation to pursue or avoid certain stimuli.</li>
+                    <li><strong>The adaptability of valence:</strong> Valence assignments can change rapidly in response to changes in the environment or internal states, enabling flexible and adaptive behavior.</li>
+                    <li><strong>The limitations of pure trial-and-error:</strong> Bennett demonstrates how trial and error learning requires steering, which is informed by valence assignments.</li>
+                </ul>
+
+                <h3>Unique Interpretations and Unconventional Ideas</h3>
+                <ul>
+                    <li><strong>The emphasis on steering and valence as fundamental aspects of intelligence:</strong> This contrasts with traditional views of intelligence that prioritize "higher" cognitive functions like reasoning and language.</li>
+                </ul>
+
+                <h3>Problems and Solutions</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Problem/Challenge</th>
+                            <th>Proposed Solution/Approach</th>
+                            <th>Page/Section Reference</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Inefficient navigation in complex environments</td>
+                            <td>Bilateral symmetry, steering guided by valence</td>
+                            <td>45-47</td>
+                        </tr>
+                        <tr>
+                            <td>Conflicting stimuli</td>
+                            <td>Integration of valence signals through neural circuits</td>
+                            <td>50-51, 55-57</td>
+                        </tr>
+                        <tr>
+                            <td>Changing needs and environmental conditions</td>
+                            <td>Adaptability of valence assignments, influence of internal states</td>
+                            <td>57-59, 69</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Critical Analysis</h3>
+                <p><strong>Strengths:</strong> The chapter provides a clear and concise introduction to the concept of valence and its importance in guiding behavior. The use of examples from simple organisms and robotics makes the concept accessible and engaging.</p>
+                <p><strong>Weaknesses:</strong> The chapter focuses primarily on simple organisms, and it is not yet clear how the concept of valence scales up to explain complex human emotions and decision-making.</p>
+
+                <h3>Practical Applications</h3>
+                <p>Understanding the role of valence in motivation can be applied to improve behavioral interventions, marketing strategies, and educational techniques.</p>
+
+                <h3>Connections to Other Chapters</h3>
+                <ul>
+                    <li><strong>Chapter 1 (World Before Brains):</strong> This chapter builds upon the concept of cellular intelligence introduced in Chapter 1, showing how valence guides the behavior of multicellular organisms.</li>
+                    <li><strong>Chapter 3 (Origin of Emotion):</strong> This chapter sets the stage for the discussion of emotions in Chapter 3, by establishing valence as the foundation of affective states.</li>
+                    <li><strong>Chapter 4 (Associating, Predicting):</strong> This chapter foreshadows the emergence of associative learning, which is built upon valence-based reinforcement signals.</li>
+                    <li><strong>Chapter 6 (Cambrian Explosion):</strong> This chapter sets the groundwork for the explosion of intelligence that occurs in the Cambrian, highlighting the importance of valence in the predatory arms race.</li>
+                </ul>
+
+                <h3>Surprising, Interesting, and Novel Ideas</h3>
+                <ul>
+                    <li><strong>Valence as a foundational component of intelligence:</strong> This idea challenges the traditional emphasis on higher cognitive functions, highlighting the importance of basic motivational systems in shaping behavior (Bennett, 2023, p. 53).</li>
+                    <li><strong>The connection between valence, internal states, and decision-making:</strong> Bennett's discussion of how internal states like hunger can flip the valence of a stimulus is insightful and potentially explains how decision-making works across contexts (Bennett, 2023, p. 57-59).</li>
+                    <li><strong>The use of the Roomba to understand biological intelligence:</strong> This unconventional comparison highlights the universality of basic intelligence principles across biological and artificial systems (Bennett, 2023, p. 49-52).</li>
+                </ul>
+
+                <h3>Discussion Questions</h3>
+                <ol>
+                    <li>How might the concept of valence be applied to understand human decision-making in complex situations?</li>
+                    <li>What are the ethical implications of manipulating valence to influence behavior, for example, in advertising or political campaigns?</li>
+                    <li>Does Bennett's focus on valence sufficiently capture the complexity of human motivation and behavior?</li>
+                    <li>How does the concept of valence inform our understanding of animal behavior?</li>
+                    <li>In what ways can AI researchers incorporate the concept of valence to build truly intelligent machines?</li>
+                </ol>
+
+                <h3>Visual Representation</h3>
+                <p><code>[Stimulus] --> [Valence Assignment (Good/Bad)] --> [Steering Behavior (Approach/Avoid)]</code></p>
+
+                <h3>TL;DR</h3>
+                <div style="background: var(--muted-surface); border-left: 4px solid var(--primary); padding: 1rem; margin: 1rem 0; border-radius: var(--radius);">
+                    <p>📌 Brains evolved to <em>steer</em> (Ch. 1), but <em>valence</em> tells them <em>where</em> to steer. Valence is the brain's system for labeling things as "good" (approach) or "bad" (avoid) (Bennett, 2023, p. 53). This emerged with the first bilaterally symmetrical animals (bilaterians), allowing them to make more efficient choices than earlier radially symmetrical creatures with infinite directions of choice (Bennett, 2023, p. 48). Even simple nematode brains use valence to navigate complex environments, much like a Roomba uses simple sensors and algorithms to clean a room (Bennett, 2023, p. 49-52). But what is "good" or "bad" isn't fixed; internal states like hunger and contextual cues such as threat of predators can flip a brain's preferences, tweaking <em>reinforcement signals</em> (Ch. 6) (Bennett, 2023, p. 57-59). This flexibility is key to <em>simulating</em> (Ch. 3) future outcomes and anticipating <em>future needs</em> (Ch. 19) (Bennett, 2023, p. 69). The core philosophy is that even simple brains make complex trade-offs, driven by their subjective experience of the world. Key ideas include the evolution of bilateral symmetry for efficient steering, the context-dependent nature of valence, and the role of internal states in shaping motivation and decision-making. This sets the stage for understanding how emotions develop and become fine-tuned drivers of behavior (Ch. 3) and <em>learning</em> (Ch. 4), influencing the way mammals create an internal model of themselves and the world to guide action (Ch. 11). (Bennett, 2023, p. 43-70).</p>
+                </div>
+                </div>
             </div>
 
             <footer class="article-footer animate-slide-up-delay-2">
@@ -261,5 +407,6 @@
     </main>
 
     <script src="../../theme-toggle.js"></script>
+    <script src="chapter-navigation.js"></script>
 </body>
 </html>
