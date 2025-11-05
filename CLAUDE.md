@@ -16,8 +16,10 @@ The entire design system is defined via CSS custom properties in `style.css`:
 
 ### Page Structure
 - **Homepage** (`index.html`): Hero section with fixed navigation, social icons using Lucide Icons CDN
-- **Writing Index** (`writing.html`): List of essays with dates and excerpts
-- **Individual Posts** (`writing/*.html`): Full article pages with proper typography and back navigation
+- **Writing Index** (`writings/index.html`): List of essays with dates and excerpts
+- **Individual Posts** (`writings/*.html`): Full article pages with proper typography and back navigation
+- **Reading Index** (`reading/index.html`): List of books and reading notes
+- **Reading Notes** (`reading/*/index.html`): Individual book reading notes with chapter navigation
 
 ### CSS Architecture
 All styles are in a single `style.css` file organized by:
