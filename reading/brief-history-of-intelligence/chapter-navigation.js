@@ -5,7 +5,8 @@
     // Chapter metadata - update this when adding new chapters
     const CHAPTERS = [
         { number: 1, title: 'Chapter 1: The World Before Brains' },
-        { number: 2, title: 'Chapter 2: The Birth of Good and Bad' }
+        { number: 2, title: 'Chapter 2: The Birth of Good and Bad' },
+        { number: 3, title: 'Chapter 3: The Origin of Emotion' }
         // Add more chapters here as they're added to the page
     ];
 
