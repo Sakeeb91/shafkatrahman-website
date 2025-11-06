@@ -109,6 +109,7 @@ To add a new essay or article:
    - Set publication date in ISO format (`datetime="YYYY-MM-DD"`)
    - Ensure proper navigation links (`href="../style.css?v=2"` for CSS, `href="/writings/"` for back link)
    - Use semantic HTML: `<article>`, `<header>`, `<time>`, `<blockquote>`, `<figure>`
+   - **Include performance optimizations** (see Performance Optimization Template below)
 
 2. **Handle images and assets**:
    - Create a subdirectory: `writings/[article-slug]/` for article-specific images
@@ -213,11 +214,41 @@ The site uses query parameter versioning for the CSS file to handle browser cach
 
 **Important**: Cloudflare Pages has a 4-hour cache (`max-age=14400`), so changes may not be immediately visible on the production domain. Preview deployments have `max-age=0`.
 
+## Performance Optimization Template
+
+**Important**: All new HTML pages must include these performance optimizations in the `<head>` section:
+
+```html
+<!-- Performance Optimizations -->
+<link rel="dns-prefetch" href="https://unpkg.com">
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" fetchpriority="high">
+<link rel="stylesheet" href="[relative-path]/style.css?v=2">
+
+<!-- Lucide Icons CDN -->
+<script src="https://unpkg.com/lucide@latest" defer></script>
+```
+
+**Performance Checklist for New Pages:**
+- ✅ `dns-prefetch` for `unpkg.com`
+- ✅ `preconnect` for `unpkg.com` with `crossorigin`
+- ✅ `preconnect` for `fonts.googleapis.com` and `fonts.gstatic.com`
+- ✅ `fetchpriority="high"` on font stylesheet link
+- ✅ `defer` attribute on Lucide script tag
+- ✅ `loading="lazy"` on all `<img>` tags (except above-the-fold images)
+
+**Note**: Adjust the CSS path (`[relative-path]`) based on page location:
+- Root pages: `style.css?v=2`
+- One level deep: `../style.css?v=2`
+- Two levels deep: `../../style.css?v=2`
+
 ## Icon Usage
 
 Social media icons use Lucide Icons CDN:
 ```html
-<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://unpkg.com/lucide@latest" defer></script>
 <i data-lucide="icon-name"></i>
 <script>lucide.createIcons();</script>
 ```
