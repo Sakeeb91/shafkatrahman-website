@@ -6,7 +6,8 @@
     const CHAPTERS = [
         { number: 1, title: 'Chapter 1: The World Before Brains' },
         { number: 2, title: 'Chapter 2: The Birth of Good and Bad' },
-        { number: 3, title: 'Chapter 3: The Origin of Emotion' }
+        { number: 3, title: 'Chapter 3: The Origin of Emotion' },
+        { number: 4, title: 'Chapter 4: Associating, Predicting, and the Dawn of Learning' }
         // Add more chapters here as they're added to the page
     ];
 
