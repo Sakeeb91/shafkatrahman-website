@@ -685,3 +685,191 @@ a:focus-visible {
         height: 1.125rem;
     }
 }
+
+/* Research Article Styles */
+.research-article {
+    max-width: 50rem;
+}
+
+.research-article .article-content {
+    font-size: 1.15rem;
+    line-height: 1.8;
+}
+
+.research-article .article-content h2 {
+    margin-top: 3rem;
+    margin-bottom: 1.25rem;
+    font-size: 1.875rem;
+}
+
+.research-article .article-content h3 {
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.research-article .article-content h4 {
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+    color: var(--foreground);
+}
+
+.research-article .article-content ul,
+.research-article .article-content ol {
+    margin: 1.5rem 0;
+    padding-left: 1.75rem;
+}
+
+.research-article .article-content li {
+    margin: 0.5rem 0;
+}
+
+.research-article .article-content code {
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-size: 0.9em;
+    background-color: var(--muted-surface);
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    color: var(--foreground);
+}
+
+/* Table Styles */
+.table-wrapper {
+    margin: 2.5rem 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.research-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+    font-size: 0.95rem;
+    background-color: var(--background);
+}
+
+.research-table caption {
+    caption-side: top;
+    text-align: left;
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--foreground);
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+}
+
+.research-table thead {
+    background-color: #1f4e79;
+}
+
+[data-theme="light"] .research-table thead {
+    background-color: #2e74b5;
+}
+
+.research-table th {
+    padding: 0.875rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: #ffffff;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.research-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--foreground-90);
+}
+
+.research-table tbody tr:nth-child(even) {
+    background-color: var(--muted-surface);
+}
+
+.research-table tbody tr:hover {
+    background-color: rgba(59, 130, 246, 0.05);
+}
+
+.table-source {
+    margin-top: 0.75rem;
+    font-size: 0.8125rem;
+    font-style: italic;
+    color: var(--muted-foreground);
+    text-align: center;
+}
+
+/* Category Title Styles */
+.category-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+    margin: 3rem 0 1.5rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.category-title:first-child {
+    margin-top: 0;
+}
+
+/* Subtitle styles for research articles */
+.article-subtitle {
+    font-size: 1.125rem;
+    color: var(--muted-foreground);
+    margin: 0.5rem 0 0 0;
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .research-article .article-content {
+        font-size: 1.0625rem;
+    }
+
+    .research-article .article-content h2 {
+        font-size: 1.625rem;
+        margin-top: 2.5rem;
+    }
+
+    .research-article .article-content h3 {
+        font-size: 1.375rem;
+        margin-top: 2rem;
+    }
+
+    .research-table {
+        font-size: 0.875rem;
+    }
+
+    .research-table th,
+    .research-table td {
+        padding: 0.65rem 0.75rem;
+    }
+
+    .research-table caption {
+        font-size: 1rem;
+    }
+
+    .table-wrapper {
+        margin: 2rem -0.5rem;
+        padding: 0 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .research-table {
+        font-size: 0.8125rem;
+    }
+
+    .research-table th,
+    .research-table td {
+        padding: 0.5rem 0.6rem;
+    }
+}
