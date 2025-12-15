@@ -1300,3 +1300,426 @@ a:focus-visible {
         margin-left: -0.5rem;
     }
 }
+
+/* ==================== */
+/* Article Enhancements */
+/* Editorial Typography & Distinctive Features */
+/* ==================== */
+
+/* Dropcap - First letter treatment for essays */
+.article-content > p:first-of-type::first-letter {
+    float: left;
+    font-family: var(--font-display);
+    font-size: 4.5rem;
+    line-height: 0.85;
+    margin: 0.1em 0.15em 0 0;
+    color: var(--primary);
+    font-weight: 500;
+}
+
+/* Enhanced subtitle */
+.article-subtitle {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: var(--muted-foreground);
+    margin-top: 1rem;
+    font-weight: 400;
+}
+
+/* Pull quotes - Extract key passages */
+.pull-quote {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    line-height: 1.4;
+    color: var(--foreground);
+    margin: 3rem 0;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    font-style: italic;
+    position: relative;
+}
+
+.pull-quote::before {
+    content: '"';
+    position: absolute;
+    left: -0.5em;
+    top: 1.5rem;
+    font-size: 4rem;
+    color: var(--primary);
+    opacity: 0.3;
+    font-family: var(--font-display);
+}
+
+.pull-quote cite {
+    display: block;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    font-style: normal;
+    color: var(--muted-foreground);
+    text-align: right;
+}
+
+/* Enhanced blockquotes with ornamental quotes */
+blockquote {
+    position: relative;
+    margin: 2.5rem 0;
+    padding: 1.5rem 2rem 1.5rem 3rem;
+    border-left: 3px solid var(--primary);
+    background: linear-gradient(90deg, var(--muted-surface) 0%, transparent 100%);
+    font-style: italic;
+}
+
+blockquote::before {
+    content: '"';
+    position: absolute;
+    left: 0.5rem;
+    top: 0.25rem;
+    font-family: var(--font-display);
+    font-size: 3rem;
+    color: var(--primary);
+    opacity: 0.4;
+    line-height: 1;
+}
+
+blockquote p {
+    margin: 0;
+}
+
+blockquote strong {
+    font-style: normal;
+    color: var(--foreground);
+}
+
+/* Section ornaments - Decorative dividers */
+.section-ornament {
+    text-align: center;
+    margin: 4rem 0;
+    color: var(--muted-foreground);
+    opacity: 0.5;
+    font-size: 1rem;
+    letter-spacing: 0.5em;
+}
+
+.section-ornament::before {
+    content: '◆  ◆  ◆';
+}
+
+/* Enhanced figures and images */
+.article-image {
+    margin: 3rem 0;
+    text-align: center;
+}
+
+.article-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.article-image figcaption {
+    margin-top: 1rem;
+    font-family: var(--font-display);
+    font-size: 0.9375rem;
+    color: var(--muted-foreground);
+    font-style: italic;
+}
+
+/* Reading progress indicator */
+.reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--primary-hover) 100%);
+    z-index: 1000;
+    transition: width 150ms ease-out;
+}
+
+/* Data callout boxes - For key statistics in research articles */
+.data-callout {
+    margin: 2.5rem 0;
+    padding: 1.75rem 2rem;
+    background: var(--muted-surface);
+    border-left: 4px solid var(--primary);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    position: relative;
+}
+
+.data-callout::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top right, var(--primary), transparent 70%);
+    opacity: 0.05;
+    pointer-events: none;
+}
+
+.data-callout-title {
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--primary);
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+.data-callout-value {
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    line-height: 1.2;
+    color: var(--foreground);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.data-callout-description {
+    font-size: 0.9375rem;
+    color: var(--muted-foreground);
+    line-height: 1.6;
+}
+
+/* Enhanced research tables */
+.research-table {
+    position: relative;
+}
+
+.research-table caption {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: left;
+    margin-bottom: 1rem;
+    color: var(--foreground);
+}
+
+.research-table thead th {
+    position: relative;
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+}
+
+.research-table thead th::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--primary);
+}
+
+.research-table tbody tr:hover {
+    background: var(--muted-surface);
+    transition: background 200ms ease;
+}
+
+.research-table tbody tr:hover td:first-child {
+    color: var(--primary);
+    transition: color 200ms ease;
+}
+
+/* Executive summary styling */
+.executive-summary {
+    margin: 3rem 0;
+    padding: 2.5rem;
+    background: linear-gradient(135deg, var(--muted-surface) 0%, transparent 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    position: relative;
+    overflow: hidden;
+}
+
+.executive-summary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--primary);
+}
+
+.executive-summary h2:first-child {
+    margin-top: 0;
+    font-size: 1.5rem;
+}
+
+/* Key insights box */
+.insight-box {
+    margin: 2.5rem 0;
+    padding: 1.5rem 2rem;
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.insight-box::before {
+    content: '✦';
+    display: block;
+    font-size: 1.5rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    opacity: 0.6;
+}
+
+.insight-box-title {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    color: var(--foreground);
+}
+
+/* Article quote callouts - highlighted passages */
+.article-quote {
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    line-height: 1.5;
+    margin: 2.5rem 0;
+    padding: 1.5rem 2rem;
+    background: linear-gradient(90deg, var(--muted-surface) 0%, transparent 100%);
+    border-left: 3px solid var(--primary);
+    font-style: italic;
+    color: var(--foreground-90);
+}
+
+/* Smooth scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Anchor links within articles */
+.article-content h2[id],
+.article-content h3[id] {
+    scroll-margin-top: 6rem;
+}
+
+/* Scroll-triggered fade-in animations */
+@keyframes fade-in-up-scroll {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.scroll-reveal {
+    animation: fade-in-up-scroll 0.8s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+/* Article metadata enhancement */
+.article-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    font-size: 0.9375rem;
+    color: var(--muted-foreground);
+}
+
+.article-meta::before {
+    content: '';
+    width: 2rem;
+    height: 1px;
+    background: var(--border);
+}
+
+.article-meta time {
+    font-family: var(--font-display);
+    font-style: italic;
+}
+
+/* Reading time estimate */
+.reading-time {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+}
+
+.reading-time::before {
+    content: '·';
+}
+
+/* Responsive refinements for article enhancements */
+@media (max-width: 768px) {
+    .article-content > p:first-of-type::first-letter {
+        font-size: 3.5rem;
+        margin: 0.05em 0.1em 0 0;
+    }
+
+    .pull-quote {
+        font-size: 1.375rem;
+        padding: 1.5rem 0;
+        margin: 2rem 0;
+    }
+
+    .pull-quote::before {
+        font-size: 3rem;
+        top: 1rem;
+    }
+
+    blockquote {
+        padding: 1.25rem 1.5rem 1.25rem 2.5rem;
+    }
+
+    blockquote::before {
+        font-size: 2.5rem;
+    }
+
+    .data-callout {
+        padding: 1.5rem;
+    }
+
+    .data-callout-value {
+        font-size: 1.875rem;
+    }
+
+    .article-quote {
+        font-size: 1.125rem;
+        padding: 1.25rem 1.5rem;
+    }
+
+    .insight-box {
+        padding: 1.25rem 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .article-content > p:first-of-type::first-letter {
+        font-size: 3rem;
+    }
+
+    .pull-quote {
+        font-size: 1.125rem;
+        margin: 1.5rem 0;
+    }
+
+    .pull-quote::before {
+        display: none;
+    }
+
+    .article-subtitle {
+        font-size: 1.125rem;
+    }
+
+    .section-ornament {
+        margin: 3rem 0;
+        font-size: 0.875rem;
+    }
+
+    .data-callout-value {
+        font-size: 1.5rem;
+    }
+}
