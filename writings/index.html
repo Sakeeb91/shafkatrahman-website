@@ -30,7 +30,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" fetchpriority="high">
-    <link rel="stylesheet" href="../style.css?v=3">
+    <link rel="stylesheet" href="../style.css?v=4">
 
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest" defer></script>
@@ -59,62 +59,105 @@
 
             <div class="writing-list animate-slide-up-delay">
                 <!-- Research Category -->
-                <h2 class="category-title">Research</h2>
-
-                <article class="writing-item">
-                    <a href="/writings/research/data-center-investment-analysis.html" class="writing-link">
-                        <div class="writing-meta">
-                            <time datetime="2025-11-25">November 25, 2025</time>
+                <section class="category-section" data-category="research">
+                    <button
+                        class="category-header"
+                        aria-expanded="false"
+                        aria-controls="research-content"
+                        id="research-header"
+                    >
+                        <div class="category-header-content">
+                            <h2 class="category-title">Research</h2>
+                            <span class="category-count">1</span>
                         </div>
-                        <h2 class="writing-title">Data Center Infrastructure Investment Analysis</h2>
-                        <p class="writing-excerpt">
-                            Comprehensive deep dive into the $652 billion data center market, examining AI infrastructure revolution, liquid cooling imperatives, power grid challenges, and investment opportunities in hyperscale platforms. Analysis covers the transition to gigawatt-scale training clusters, GB200 NVL72 architecture, and private equity strategies in this generational infrastructure opportunity.
-                        </p>
-                    </a>
-                </article>
+                        <i data-lucide="chevron-down" class="category-chevron" aria-hidden="true"></i>
+                    </button>
+
+                    <div
+                        id="research-content"
+                        class="category-content"
+                        role="region"
+                        aria-labelledby="research-header"
+                        hidden
+                    >
+                        <article class="writing-item">
+                            <a href="/writings/research/data-center-investment-analysis.html" class="writing-link">
+                                <div class="writing-meta">
+                                    <time datetime="2025-11-25">November 25, 2025</time>
+                                </div>
+                                <h2 class="writing-title">Data Center Infrastructure Investment Analysis</h2>
+                                <p class="writing-excerpt">
+                                    Comprehensive deep dive into the $652 billion data center market, examining AI infrastructure revolution, liquid cooling imperatives, power grid challenges, and investment opportunities in hyperscale platforms. Analysis covers the transition to gigawatt-scale training clusters, GB200 NVL72 architecture, and private equity strategies in this generational infrastructure opportunity.
+                                </p>
+                            </a>
+                        </article>
+                    </div>
+                </section>
 
                 <!-- Essays Category -->
-                <h2 class="category-title">Essays</h2>
-
-                <article class="writing-item">
-                    <a href="/writings/window-frost-thermodynamics/frost-crystals-physics.html" class="writing-link">
-                        <div class="writing-meta">
-                            <time datetime="2025-12-08">December 8, 2025</time>
+                <section class="category-section" data-category="essays">
+                    <button
+                        class="category-header"
+                        aria-expanded="false"
+                        aria-controls="essays-content"
+                        id="essays-header"
+                    >
+                        <div class="category-header-content">
+                            <h2 class="category-title">Essays</h2>
+                            <span class="category-count">3</span>
                         </div>
-                        <h2 class="writing-title">The Thermodynamics of Window Frost</h2>
-                        <p class="writing-excerpt">
-                            How diffusion, instability, and crystallography conspire to create ephemeral beauty. A deep dive into the physics of pattern formation at the edge of equilibrium—from the Mullins-Sekerka instability to phase field dynamics.
-                        </p>
-                    </a>
-                </article>
+                        <i data-lucide="chevron-down" class="category-chevron" aria-hidden="true"></i>
+                    </button>
 
-                <article class="writing-item">
-                    <a href="/writings/art-intelligence-patterns.html" class="writing-link">
-                        <div class="writing-meta">
-                            <time datetime="2025-07-04">July 4, 2025</time>
-                        </div>
-                        <h2 class="writing-title">Art, Intelligence, and the Patterns That Make Reality</h2>
-                        <p class="writing-excerpt">
-                            What begins as a poetic observation about decoration becomes a journey into the nature of consciousness, pattern, and intelligence itself. A meditation on perturbation and the dissolving boundaries between natural and artificial.
-                        </p>
-                    </a>
-                </article>
+                    <div
+                        id="essays-content"
+                        class="category-content"
+                        role="region"
+                        aria-labelledby="essays-header"
+                        hidden
+                    >
+                        <article class="writing-item">
+                            <a href="/writings/window-frost-thermodynamics/frost-crystals-physics.html" class="writing-link">
+                                <div class="writing-meta">
+                                    <time datetime="2025-12-08">December 8, 2025</time>
+                                </div>
+                                <h2 class="writing-title">The Thermodynamics of Window Frost</h2>
+                                <p class="writing-excerpt">
+                                    How diffusion, instability, and crystallography conspire to create ephemeral beauty. A deep dive into the physics of pattern formation at the edge of equilibrium—from the Mullins-Sekerka instability to phase field dynamics.
+                                </p>
+                            </a>
+                        </article>
 
-                <article class="writing-item">
-                    <a href="/writings/maiutics.html" class="writing-link">
-                        <div class="writing-meta">
-                            <time datetime="2025-04-03">April 3, 2025</time>
-                        </div>
-                        <h2 class="writing-title">Maiutics: AI as Midwife of the Mind</h2>
-                        <p class="writing-excerpt">
-                            The ancient Greeks had a word for the art of midwifery: maieutikos. Socrates used it as a metaphor for his philosophical method. Today, something remarkably similar is unfolding in the quiet hum of algorithms.
-                        </p>
-                    </a>
-                </article>
+                        <article class="writing-item">
+                            <a href="/writings/art-intelligence-patterns.html" class="writing-link">
+                                <div class="writing-meta">
+                                    <time datetime="2025-07-04">July 4, 2025</time>
+                                </div>
+                                <h2 class="writing-title">Art, Intelligence, and the Patterns That Make Reality</h2>
+                                <p class="writing-excerpt">
+                                    What begins as a poetic observation about decoration becomes a journey into the nature of consciousness, pattern, and intelligence itself. A meditation on perturbation and the dissolving boundaries between natural and artificial.
+                                </p>
+                            </a>
+                        </article>
+
+                        <article class="writing-item">
+                            <a href="/writings/maiutics.html" class="writing-link">
+                                <div class="writing-meta">
+                                    <time datetime="2025-04-03">April 3, 2025</time>
+                                </div>
+                                <h2 class="writing-title">Maiutics: AI as Midwife of the Mind</h2>
+                                <p class="writing-excerpt">
+                                    The ancient Greeks had a word for the art of midwifery: maieutikos. Socrates used it as a metaphor for his philosophical method. Today, something remarkably similar is unfolding in the quiet hum of algorithms.
+                                </p>
+                            </a>
+                        </article>
+                    </div>
+                </section>
             </div>
         </div>
     </main>
 
     <script src="../theme-toggle.js"></script>
+    <script src="category-collapse.js" defer></script>
 </body>
 </html>
