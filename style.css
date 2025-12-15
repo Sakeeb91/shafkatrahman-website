@@ -1867,11 +1867,6 @@ html {
     font-family: var(--font-body);
 }
 
-.highlight-box h4::before {
-    content: '▸ ';
-    opacity: 0.6;
-}
-
 /* Warning Box - Critical information with attention signal */
 .warning-box {
     background:
@@ -1911,11 +1906,6 @@ html {
     font-family: var(--font-body);
 }
 
-.warning-box h4::before {
-    content: '! ';
-    font-weight: 900;
-}
-
 /* Economics Box - Financial data with grid aesthetic */
 .economics-box {
     background: rgba(16, 185, 129, 0.06);
@@ -1945,11 +1935,6 @@ html {
     text-transform: uppercase;
     letter-spacing: 0.1em;
     font-family: var(--font-body);
-}
-
-.economics-box h4::before {
-    content: '$ ';
-    font-weight: 700;
 }
 
 /* Calculation Box - Terminal aesthetic with monospace perfection */
