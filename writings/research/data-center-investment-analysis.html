@@ -61,38 +61,529 @@
     <link rel="preconnect" href="https://unpkg.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" fetchpriority="high">
-    <link rel="stylesheet" href="../../style.css?v=6">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #0a0c10;
+            --color-bg-elevated: #12151c;
+            --color-bg-card: #181c26;
+            --color-frost: #a8d4f0;
+            --color-frost-light: #d4eaf7;
+            --color-frost-glow: rgba(168, 212, 240, 0.15);
+            --color-ice: #7eb8da;
+            --color-text: #e8eef4;
+            --color-text-muted: #8a9aad;
+            --color-text-dim: #5a6a7d;
+            --color-accent: #f0a878;
+            --color-accent-warm: #e8c4a0;
+            --color-border: rgba(168, 212, 240, 0.12);
+            --color-warning: #e8a87f;
+            --color-highlight: #9ed4a8;
+            --font-display: 'Cormorant Garamond', Georgia, serif;
+            --font-body: 'Source Sans 3', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
 
-    <!-- Lucide Icons CDN -->
-    <script src="https://unpkg.com/lucide@latest" defer></script>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 18px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.75;
+            font-weight: 300;
+            min-height: 100vh;
+        }
+
+        /* Frost crystal background animation */
+        .frost-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.4;
+            background:
+                radial-gradient(ellipse at 20% 20%, var(--color-frost-glow) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(126, 184, 218, 0.08) 0%, transparent 40%),
+                radial-gradient(ellipse at 60% 30%, rgba(240, 168, 120, 0.05) 0%, transparent 35%);
+        }
+
+        /* Header */
+        header {
+            padding: 6rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 80px;
+            background: linear-gradient(to bottom, transparent, var(--color-frost), transparent);
+        }
+
+        .header-label {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--color-frost);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.2s forwards;
+        }
+
+        h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 400;
+            line-height: 1.15;
+            color: var(--color-frost-light);
+            max-width: 900px;
+            margin: 0 auto 1.5rem;
+            letter-spacing: -0.02em;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.4s forwards;
+        }
+
+        .subtitle {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-style: italic;
+            color: var(--color-text-muted);
+            font-weight: 400;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.6s forwards;
+        }
+
+        /* Main content */
+        main {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 0 2rem 6rem;
+        }
+
+        /* Article sections */
+        section {
+            margin-bottom: 4rem;
+        }
+
+        h2 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 500;
+            color: var(--color-frost-light);
+            margin-bottom: 1.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-border);
+        }
+
+        h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--color-frost);
+            margin: 2.5rem 0 1rem;
+        }
+
+        h4 {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--color-accent);
+            margin: 2rem 0 1rem;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            color: var(--color-text);
+        }
+
+        .lead {
+            font-size: 1.2rem;
+            color: var(--color-text-muted);
+            line-height: 1.85;
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        a {
+            color: var(--color-frost);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--color-frost-light);
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 1.5rem 0 1.5rem 2rem;
+            color: var(--color-text);
+        }
+
+        li {
+            margin-bottom: 0.75rem;
+            line-height: 1.75;
+        }
+
+        /* Table of contents */
+        .toc {
+            background: var(--color-bg-elevated);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+
+        .toc h3 {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            color: var(--color-frost-light);
+            margin: 0 0 1rem 0;
+            padding: 0;
+            border: none;
+        }
+
+        .toc ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .toc li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc a {
+            color: var(--color-text-muted);
+            text-decoration: none;
+            display: block;
+            transition: color 0.2s ease, transform 0.2s ease;
+            padding: 0.25rem 0;
+        }
+
+        .toc a:hover {
+            color: var(--color-frost);
+            transform: translateX(5px);
+        }
+
+        /* Callout boxes */
+        .callout, .key-insight {
+            background: linear-gradient(135deg, var(--color-bg-card), var(--color-bg-elevated));
+            border-left: 3px solid var(--color-frost);
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .callout-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-frost);
+            margin-bottom: 0.75rem;
+        }
+
+        .callout p, .key-insight p {
+            margin-bottom: 0.75rem;
+            color: var(--color-text-muted);
+        }
+
+        .callout p:last-child, .key-insight p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Highlight boxes */
+        .highlight-box, .economics-box {
+            background: rgba(168, 212, 240, 0.06);
+            border: 1px solid var(--color-frost);
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .highlight-box h4, .economics-box h4 {
+            color: var(--color-frost-light);
+            margin-top: 0;
+        }
+
+        /* Warning boxes */
+        .warning-box {
+            background: rgba(232, 168, 127, 0.08);
+            border: 1px solid rgba(232, 168, 127, 0.3);
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .warning-box h4 {
+            color: var(--color-warning);
+            margin-top: 0;
+        }
+
+        /* Insight boxes */
+        .insight {
+            background: rgba(240, 168, 120, 0.08);
+            border: 1px solid rgba(240, 168, 120, 0.2);
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .insight::before {
+            content: '✦';
+            position: absolute;
+            top: -0.6rem;
+            left: 1.5rem;
+            background: var(--color-bg);
+            padding: 0 0.5rem;
+            color: var(--color-accent);
+            font-size: 0.9rem;
+        }
+
+        .insight p {
+            color: var(--color-accent-warm);
+            font-style: italic;
+            margin-bottom: 0;
+        }
+
+        /* Calculation/Code boxes */
+        .calculation {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            background: var(--color-bg-card);
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+            border-radius: 6px;
+            border: 1px solid var(--color-border);
+            line-height: 1.8;
+        }
+
+        /* Blockquotes */
+        blockquote {
+            border-left: 3px solid var(--color-accent);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: var(--color-text-muted);
+        }
+
+        blockquote strong {
+            color: var(--color-accent);
+            font-style: normal;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--color-bg-card);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        thead {
+            background: var(--color-bg-elevated);
+        }
+
+        th {
+            font-family: var(--font-display);
+            font-weight: 500;
+            color: var(--color-frost-light);
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid var(--color-border);
+            color: var(--color-text-muted);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        strong {
+            color: var(--color-frost);
+            font-weight: 500;
+        }
+
+        em {
+            color: var(--color-accent);
+            font-style: italic;
+        }
+
+        code {
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+            background: var(--color-bg-card);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            color: var(--color-frost);
+        }
+
+        /* Citations */
+        .citation {
+            font-size: 0.8rem;
+            color: var(--color-accent);
+            vertical-align: super;
+        }
+
+        /* Section dividers */
+        .divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 4rem 0;
+            gap: 1rem;
+        }
+
+        .divider span {
+            color: var(--color-frost);
+            font-size: 0.6rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--color-border), transparent);
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid var(--color-border);
+            margin: 3rem 0;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--color-border);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: var(--color-text-dim);
+            font-size: 0.85rem;
+            margin-top: 4rem;
+        }
+
+        footer a {
+            color: var(--color-frost);
+            text-decoration: none;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--color-bg-elevated);
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            color: var(--color-frost);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: var(--color-bg-card);
+            border-color: var(--color-frost);
+            transform: translateX(-5px);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            html {
+                font-size: 16px;
+            }
+
+            header {
+                padding: 4rem 1.5rem 3rem;
+            }
+
+            main {
+                padding: 0 1.5rem 4rem;
+            }
+
+            h2 {
+                font-size: 1.7rem;
+            }
+
+            h3 {
+                font-size: 1.3rem;
+            }
+
+            .callout, .highlight-box, .warning-box, .insight {
+                padding: 1.25rem 1.5rem;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .frost-bg {
+                display: none;
+            }
+
+            body {
+                background: white;
+                color: black;
+            }
+        }
+    </style>
+
+    
 </head>
 <body>
-    <!-- Theme Toggle Button -->
-    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
-        <i data-lucide="moon" class="moon-icon"></i>
-        <i data-lucide="sun" class="sun-icon"></i>
-    </button>
+    <div class="frost-bg"></div>
+    
 
-    <header class="site-nav" aria-label="Primary">
-        <div class="container nav-inner">
-            <a class="nav-link" href="/">Home</a>
-            <a class="nav-link nav-link-active" href="/writings/">Writing</a>
-            <a class="nav-link" href="/reading/">Reading</a>
-        </div>
+    
+
+    <header>
+        <p class="header-label">Investment Research</p>
+            <h1>Data Center Infrastructure Investment Analysis</h1>
+        <p class="subtitle">Industry deep dive and investment thesis for the AI revolution</p>
     </header>
 
-    <main class="article-page">
-        <article class="container article-container research-article animate-fade-in">
-            <header class="article-header animate-slide-up">
-                <h1>Data Center Infrastructure Investment Analysis</h1>
-                <div class="article-meta">
-                    <time datetime="2025-11-25">November 25, 2025</time>
-                </div>
-                <p class="article-subtitle">Industry Deep Dive & Investment Thesis: The Compute Infrastructure Powering the AI Revolution</p>
-            </header>
+    <main>
 
-            <div class="article-content animate-slide-up-delay">
+            
                 <h2>Executive Summary</h2>
 
                 <p>The global data center market represents one of the most compelling infrastructure investment opportunities of the decade. Valued at approximately <strong>$347.6 billion in 2024</strong>, the market is projected to reach <strong>$652 billion by 2030</strong>, growing at a CAGR of 11.2%. This growth is being turbocharged by the AI revolution, with data center electricity consumption projected to more than double by 2030, reaching 945 TWh annually—equivalent to Japan's entire current electricity consumption.</p>
@@ -745,12 +1236,14 @@
                 </ul>
             </div>
 
-            <footer class="article-footer animate-slide-up-delay-2">
-                <a href="/writings/" class="back-link">← Back to Writing</a>
-            </footer>
-        </article>
+            
     </main>
 
-    <script src="../../theme-toggle.js"></script>
+    <footer>
+        <p>Published November 2025 by Shafkat Rahman</p>
+        <a href="/writings/" class="back-link">← Back to Writing</a>
+    </footer>
+
+    
 </body>
 </html>
