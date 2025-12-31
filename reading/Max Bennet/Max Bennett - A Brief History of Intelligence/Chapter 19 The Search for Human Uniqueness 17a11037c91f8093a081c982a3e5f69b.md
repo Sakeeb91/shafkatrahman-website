@@ -101,7 +101,7 @@ Bennett uses a simple graph to distinguish how humans cooperate across larger nu
 - How does language shape our perception of reality and our understanding of ourselves?
 - If language is the key to human uniqueness, what does this mean for the future of our species and the potential for other forms of intelligence to emerge?
 
-**Visual Representation:**
+### **Visual Representation:**
 
 [Inner Simulations] --(Language)--> [Shared Simulations] --> [Cumulative Cultural Evolution] --> [Human Uniqueness]
 
