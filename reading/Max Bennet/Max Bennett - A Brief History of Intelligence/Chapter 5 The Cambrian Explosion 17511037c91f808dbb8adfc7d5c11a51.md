@@ -48,7 +48,7 @@ There isn't a clear problem/solution structure in this chapter.  Instead, the Ca
 
 Bennett uses existing biological taxonomies (arthropods, vertebrates) to organize his discussion of the Cambrian explosion. He also introduces the categories of "radiatans" (radially symmetrical animals) and "bilaterians," highlighting the differences in their body plans and their implications for intelligence.
 
-**Literature and References:** (Refer to the book's bibliography for full citations)
+### **Literature and References:** (Refer to the book's bibliography for full citations)
 
 - General scientific literature on the Cambrian explosion and vertebrate evolution is cited.
 
