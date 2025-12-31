@@ -53,7 +53,7 @@
 
 - **The neocortex as a predictive machine:** Bennett links pattern recognition to the neocortex's ability to simulate and predict sensory input.
 
-**Problems and Solutions:**
+### **Problems and Solutions:**
 
 | Problem/Challenge | Proposed Solution/Approach | Page/Section Reference |
 | --- | --- | --- |
