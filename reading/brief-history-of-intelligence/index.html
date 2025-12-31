@@ -44,10 +44,7 @@
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Crimson+Pro:wght@400;500;600&display=swap');
 
         .chapter-nav {
-            background: linear-gradient(135deg,
-                rgba(99, 102, 241, 0.03) 0%,
-                rgba(139, 92, 246, 0.02) 50%,
-                rgba(236, 72, 153, 0.03) 100%);
+            background: rgba(59, 130, 246, 0.03);
             border: 1px solid var(--border);
             border-radius: 16px;
             padding: 0;
@@ -63,12 +60,7 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg,
-                #6366f1 0%,
-                #8b5cf6 25%,
-                #a855f7 50%,
-                #d946ef 75%,
-                #ec4899 100%);
+            background: var(--primary);
             opacity: 0.8;
         }
 
@@ -85,7 +77,7 @@
             width: 56px;
             height: 56px;
             border-radius: 14px;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            background: var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -94,7 +86,7 @@
             font-weight: 500;
             color: white;
             flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
             transition: all 0.3s ease;
         }
 
@@ -139,10 +131,10 @@
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #6366f1, #ec4899);
+            background: var(--primary);
             border-radius: 3px;
             transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            width: 0%;
+            width: 4.35%;
         }
 
         .progress-text {
@@ -204,69 +196,21 @@
             border-color: var(--primary);
             color: var(--primary);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
         }
 
         .chapter-link.active {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            background: var(--primary);
             border-color: transparent;
             color: white;
-            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
             transform: translateY(-2px);
         }
 
-        /* Breakthrough color variations */
-        .chapter-link[data-chapter="1"],
-        .chapter-link[data-chapter="2"],
-        .chapter-link[data-chapter="3"],
-        .chapter-link[data-chapter="4"] {
-            --node-color: #6366f1;
-        }
-
-        .chapter-link[data-chapter="5"],
-        .chapter-link[data-chapter="6"],
-        .chapter-link[data-chapter="7"],
-        .chapter-link[data-chapter="8"],
-        .chapter-link[data-chapter="9"],
-        .chapter-link[data-chapter="10"] {
-            --node-color: #8b5cf6;
-        }
-
-        .chapter-link[data-chapter="11"],
-        .chapter-link[data-chapter="12"],
-        .chapter-link[data-chapter="13"],
-        .chapter-link[data-chapter="14"] {
-            --node-color: #a855f7;
-        }
-
-        .chapter-link[data-chapter="15"],
-        .chapter-link[data-chapter="16"],
-        .chapter-link[data-chapter="17"],
-        .chapter-link[data-chapter="18"] {
-            --node-color: #d946ef;
-        }
-
-        .chapter-link[data-chapter="19"],
-        .chapter-link[data-chapter="20"],
-        .chapter-link[data-chapter="21"],
-        .chapter-link[data-chapter="22"] {
-            --node-color: #ec4899;
-        }
-
         .chapter-link[data-chapter="conclusion"] {
-            --node-color: #f43f5e;
             width: auto;
             padding: 0 12px;
             font-size: 0.75rem;
-        }
-
-        .chapter-link.active {
-            background: linear-gradient(135deg, var(--node-color), color-mix(in srgb, var(--node-color) 80%, white));
-        }
-
-        .chapter-link:hover {
-            border-color: var(--node-color);
-            color: var(--node-color);
         }
 
         /* Bottom Chapter Navigation */
@@ -297,7 +241,7 @@
 
         .nav-button:hover:not(:disabled) {
             border-color: var(--primary);
-            background: rgba(99, 102, 241, 0.05);
+            background: rgba(59, 130, 246, 0.05);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }

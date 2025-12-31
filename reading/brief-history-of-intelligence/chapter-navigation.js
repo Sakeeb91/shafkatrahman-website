@@ -29,14 +29,8 @@
         { id: 'conclusion', title: 'The Sixth Breakthrough', breakthrough: 6 }
     ];
 
-    const BREAKTHROUGHS = {
-        1: { name: 'Steering', color: '#6366f1' },
-        2: { name: 'Reinforcing', color: '#8b5cf6' },
-        3: { name: 'Simulating', color: '#a855f7' },
-        4: { name: 'Mentalizing', color: '#d946ef' },
-        5: { name: 'Speaking', color: '#ec4899' },
-        6: { name: 'The Sixth', color: '#f43f5e' }
-    };
+    // Use website's primary blue color for all chapters
+    const PRIMARY_COLOR = '#3b82f6';
 
     // DOM elements
     const chapterLinks = document.querySelectorAll('.chapter-link');
@@ -71,15 +65,17 @@
         const chapter = getChapter(chapterId);
         if (chapter) {
             if (currentChapterTitle) {
-                currentChapterTitle.textContent = chapter.title;
+                // Show "Chapter X: Title" for chapters, just title for conclusion
+                if (chapter.id === 'conclusion') {
+                    currentChapterTitle.textContent = chapter.title;
+                } else {
+                    currentChapterTitle.textContent = `Chapter ${chapter.id}: ${chapter.title}`;
+                }
             }
             if (currentChapterNumber) {
                 currentChapterNumber.textContent = chapter.id === 'conclusion' ? '∞' : chapter.id;
-                // Update color based on breakthrough
-                const breakthrough = BREAKTHROUGHS[chapter.breakthrough];
-                if (breakthrough) {
-                    currentChapterNumber.style.background = `linear-gradient(135deg, ${breakthrough.color}, ${breakthrough.color}dd)`;
-                }
+                // Use consistent primary blue color
+                currentChapterNumber.style.background = PRIMARY_COLOR;
             }
             updateProgress(chapterId);
         }
