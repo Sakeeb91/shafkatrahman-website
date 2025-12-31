@@ -1,6 +1,6 @@
 # Chapter 13: Model-Based Reinforcement Learning
 
-**Chapter Overview:**
+### **Chapter Overview:**
 
 - **Main Focus:** This chapter explores model-based reinforcement learning, a more sophisticated form of learning that involves building and using internal models of the world to plan and make decisions. Bennett argues that this type of learning represents a significant advance over simpler, model-free approaches, enabling greater flexibility and adaptability. He claims this may be one of the core reasons why the game Go has been far more challenging for AI than games such as chess, since Go requires a richer internal model of how a sequence of moves might affect the entire state of the board (Bennett, 2023, p. 203). He also points out that, unlike earlier model-free temporal difference learning approaches, model-based learning algorithms have had a far more recent resurgence in AI research.
 - **Objectives:**
@@ -63,7 +63,7 @@
 
 Bennett categorizes different types of reinforcement learning (model-free vs. model-based) and relates them to different brain regions and cognitive abilities. He also discusses levels of the motor control hierarchy, distinguishing between high-level goals and low-level actions.
 
-**Literature and References:** (Refer to the book's bibliography for full citations)
+### **Literature and References:** (Refer to the book's bibliography for full citations)
 
 - Works by Sutton, Hassabis, Minsky, LeCun, Damasio, and others are cited.
 - Research on reinforcement learning, AI, neuroscience, and cognitive psychology is referenced.
