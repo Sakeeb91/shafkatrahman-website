@@ -64,7 +64,7 @@
 
 Bennett distinguishes between model-free and model-based reinforcement learning, highlighting the increased flexibility and adaptability afforded by the latter. He also categorizes different types of memory (episodic, procedural) and relates them to the neocortex's simulation abilities.
 
-**Literature and References:** (Refer to the book's bibliography for full citations)
+### **Literature and References:** (Refer to the book's bibliography for full citations)
 
 - Works by Tolman, Redish, Johnson, Dickinson, Friston, Damasio, and others are cited.
 - Studies on rat navigation, primate behavior, and the neural basis of planning and memory are referenced.
