@@ -91,6 +91,14 @@ Bennett categorizes affective states along two dimensions: valence (positive/neg
 - Chapter 11 (Neocortex): This chapter foreshadows the discussion of the neocortex as a generative model, which is central to Bennett's understanding of how simulations are created and transferred.
 - Chapter 17 (Modeling Other Minds): This chapter foreshadows the discussion of theory of mind, which is closely related to the ability to understand and predict the emotional states of others.
 
+### **Surprising, Interesting, and Novel Ideas:**
+
+- **Emotions as computational tools rather than feelings:** Bennett reframes emotions not as subjective experiences but as evolved algorithms that enhance decision-making—a perspective that challenges folk psychological views and has implications for AI design (Bennett, 2023, p. 61-64).
+- **Dopamine as "wanting" not "liking":** The distinction between dopamine's role in anticipating pleasure versus experiencing it is counterintuitive and explains phenomena like addiction, where people compulsively pursue things they no longer enjoy (Bennett, 2023, p. 68).
+- **"Steering in the dark" as a fundamental strategy:** The idea that affective states persist precisely to help organisms navigate when sensory information is unavailable or unreliable provides a novel computational justification for mood states (Bennett, 2023, p. 62-64).
+- **Chronic stress as an evolutionary mismatch:** Bennett's framing of depression as a hijacking of an adaptive acute stress response system—designed for short-term energy conservation—provides an evolutionary explanation for modern mental health challenges (Bennett, 2023, p. 74).
+- **The opioid system's role in binge-eating after stress:** The connection between post-stress opioid release and resource replenishment behaviors offers a surprising link between ancient survival mechanisms and modern issues like emotional eating (Bennett, 2023, p. 72).
+
 ### **Key Quotes:**
 
 - "Emotions are evolved computational tools that enhance decision-making and adaptive behavior in the face of challenges and opportunities." (Paraphrased, central thesis)
