@@ -36,83 +36,240 @@
     <script src="https://unpkg.com/lucide@latest" defer></script>
 
     <style>
+        /* ═══════════════════════════════════════════════════════════════
+           NEURAL TIMELINE - Chapter Navigation
+           Inspired by synaptic pathways & evolutionary breakthroughs
+           ═══════════════════════════════════════════════════════════════ */
+
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Crimson+Pro:wght@400;500;600&display=swap');
+
         .chapter-nav {
-            background: var(--muted-surface);
-            border-radius: var(--radius);
-            padding: 1.5rem;
+            background: linear-gradient(135deg,
+                rgba(99, 102, 241, 0.03) 0%,
+                rgba(139, 92, 246, 0.02) 50%,
+                rgba(236, 72, 153, 0.03) 100%);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 0;
             margin: 2rem 0;
+            overflow: hidden;
+            position: relative;
         }
 
-        .current-chapter-indicator {
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
+        .chapter-nav::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg,
+                #6366f1 0%,
+                #8b5cf6 25%,
+                #a855f7 50%,
+                #d946ef 75%,
+                #ec4899 100%);
+            opacity: 0.8;
+        }
+
+        /* Current Chapter Display */
+        .current-chapter-display {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            padding: 1.5rem;
             border-bottom: 1px solid var(--border);
         }
 
-        .reading-label {
-            font-size: 0.875rem;
+        .chapter-number-badge {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: white;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .chapter-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .chapter-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
             color: var(--muted-foreground);
-            display: block;
             margin-bottom: 0.25rem;
         }
 
         .current-chapter-title {
-            font-size: 1.125rem;
-            font-weight: 600;
+            font-family: 'Crimson Pro', var(--font-display), serif;
+            font-size: 1.25rem;
+            font-weight: 500;
             color: var(--foreground);
+            line-height: 1.3;
+            margin: 0;
         }
 
-        .chapter-links-container {
+        /* Progress Indicator */
+        .progress-container {
             display: flex;
-            flex-direction: column;
+            align-items: center;
             gap: 0.75rem;
+            flex-shrink: 0;
         }
 
-        .chapter-links {
+        .progress-bar {
+            width: 80px;
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #ec4899);
+            border-radius: 3px;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0%;
+        }
+
+        .progress-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+            white-space: nowrap;
+        }
+
+        /* Chapter Timeline */
+        .chapter-timeline {
+            padding: 1rem 1.5rem 1.5rem;
+        }
+
+        .timeline-scroll {
             display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
+            gap: 6px;
+            overflow-x: auto;
+            padding: 0.5rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) transparent;
+            -webkit-overflow-scrolling: touch;
         }
 
+        .timeline-scroll::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .timeline-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .timeline-scroll::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        /* Chapter Nodes */
         .chapter-link {
-            padding: 0.5rem 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
             background: var(--background);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            font-size: 0.875rem;
+            border: 2px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem;
+            font-weight: 500;
             color: var(--muted-foreground);
             text-decoration: none;
-            transition: all 200ms ease;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            position: relative;
         }
 
         .chapter-link:hover {
             border-color: var(--primary);
             color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
         }
 
         .chapter-link.active {
-            background: var(--primary);
-            color: var(--background);
-            border-color: var(--primary);
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px);
         }
 
-        .show-all-chapters {
-            padding: 0.5rem 1rem;
-            background: var(--background);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            color: var(--muted-foreground);
-            font-size: 0.875rem;
-            cursor: pointer;
-            transition: all 200ms ease;
-            width: fit-content;
+        /* Breakthrough color variations */
+        .chapter-link[data-chapter="1"],
+        .chapter-link[data-chapter="2"],
+        .chapter-link[data-chapter="3"],
+        .chapter-link[data-chapter="4"] {
+            --node-color: #6366f1;
         }
 
-        .show-all-chapters:hover {
-            border-color: var(--primary);
-            color: var(--primary);
+        .chapter-link[data-chapter="5"],
+        .chapter-link[data-chapter="6"],
+        .chapter-link[data-chapter="7"],
+        .chapter-link[data-chapter="8"],
+        .chapter-link[data-chapter="9"],
+        .chapter-link[data-chapter="10"] {
+            --node-color: #8b5cf6;
         }
 
+        .chapter-link[data-chapter="11"],
+        .chapter-link[data-chapter="12"],
+        .chapter-link[data-chapter="13"],
+        .chapter-link[data-chapter="14"] {
+            --node-color: #a855f7;
+        }
+
+        .chapter-link[data-chapter="15"],
+        .chapter-link[data-chapter="16"],
+        .chapter-link[data-chapter="17"],
+        .chapter-link[data-chapter="18"] {
+            --node-color: #d946ef;
+        }
+
+        .chapter-link[data-chapter="19"],
+        .chapter-link[data-chapter="20"],
+        .chapter-link[data-chapter="21"],
+        .chapter-link[data-chapter="22"] {
+            --node-color: #ec4899;
+        }
+
+        .chapter-link[data-chapter="conclusion"] {
+            --node-color: #f43f5e;
+            width: auto;
+            padding: 0 12px;
+            font-size: 0.75rem;
+        }
+
+        .chapter-link.active {
+            background: linear-gradient(135deg, var(--node-color), color-mix(in srgb, var(--node-color) 80%, white));
+        }
+
+        .chapter-link:hover {
+            border-color: var(--node-color);
+            color: var(--node-color);
+        }
+
+        /* Bottom Chapter Navigation */
         .chapter-navigation {
             display: flex;
             justify-content: space-between;
@@ -125,24 +282,24 @@
         .nav-button {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.25rem;
-            background: var(--muted-surface);
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            background: var(--background);
             border: 1px solid var(--border);
-            border-radius: var(--radius);
+            border-radius: 12px;
             color: var(--foreground);
             font-size: 0.9375rem;
             cursor: pointer;
-            transition: all 200ms ease;
+            transition: all 0.2s ease;
             flex: 1;
-            max-width: 250px;
+            max-width: 280px;
         }
 
         .nav-button:hover:not(:disabled) {
-            background: var(--primary);
-            color: var(--background);
             border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .nav-button:disabled {
@@ -160,10 +317,45 @@
         }
 
         .nav-arrow {
-            font-size: 1.125rem;
+            font-size: 1.25rem;
+            opacity: 0.7;
+        }
+
+        .nav-text {
+            font-weight: 500;
         }
 
         @media (max-width: 640px) {
+            .current-chapter-display {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .progress-container {
+                width: 100%;
+                order: 3;
+            }
+
+            .progress-bar {
+                flex: 1;
+            }
+
+            .chapter-number-badge {
+                width: 48px;
+                height: 48px;
+                font-size: 1.25rem;
+            }
+
+            .current-chapter-title {
+                font-size: 1.1rem;
+            }
+
+            .chapter-link {
+                width: 36px;
+                height: 36px;
+                font-size: 0.75rem;
+            }
+
             .chapter-navigation {
                 flex-direction: column;
             }
@@ -177,6 +369,7 @@
             }
         }
 
+        /* Chapter Content Animation */
         .chapter-content {
             display: none;
             opacity: 0;
@@ -198,6 +391,7 @@
             }
         }
 
+        /* Book Meta */
         .book-meta {
             text-align: center;
             margin-bottom: 2rem;
@@ -240,43 +434,51 @@
             </header>
 
             <div class="article-content animate-slide-up-delay">
-                <div class="chapter-nav">
-                    <div class="current-chapter-indicator">
-                        <span class="reading-label">Currently Reading:</span>
-                        <span class="current-chapter-title" id="current-chapter-title">Chapter 1: The World Before Brains</span>
-                    </div>
-                    <div class="chapter-links-container">
-                        <div class="chapter-links" id="chapter-links">
-                            <a href="#chapter-1" class="chapter-link" data-chapter="1">Chapter 1</a>
-                            <a href="#chapter-2" class="chapter-link" data-chapter="2">Chapter 2</a>
-                            <a href="#chapter-3" class="chapter-link" data-chapter="3">Chapter 3</a>
-                            <a href="#chapter-4" class="chapter-link" data-chapter="4">Chapter 4</a>
-                            <a href="#chapter-5" class="chapter-link" data-chapter="5">Chapter 5</a>
-                            <a href="#chapter-6" class="chapter-link" data-chapter="6">Chapter 6</a>
-                            <a href="#chapter-7" class="chapter-link" data-chapter="7">Chapter 7</a>
-                            <a href="#chapter-8" class="chapter-link" data-chapter="8">Chapter 8</a>
-                            <a href="#chapter-9" class="chapter-link" data-chapter="9">Chapter 9</a>
-                            <a href="#chapter-10" class="chapter-link" data-chapter="10">Chapter 10</a>
-                            <a href="#chapter-11" class="chapter-link" data-chapter="11">Chapter 11</a>
-                            <a href="#chapter-12" class="chapter-link" data-chapter="12">Chapter 12</a>
-                            <a href="#chapter-13" class="chapter-link" data-chapter="13">Chapter 13</a>
-                            <a href="#chapter-14" class="chapter-link" data-chapter="14">Chapter 14</a>
-                            <a href="#chapter-15" class="chapter-link" data-chapter="15">Chapter 15</a>
-                            <a href="#chapter-16" class="chapter-link" data-chapter="16">Chapter 16</a>
-                            <a href="#chapter-17" class="chapter-link" data-chapter="17">Chapter 17</a>
-                            <a href="#chapter-18" class="chapter-link" data-chapter="18">Chapter 18</a>
-                            <a href="#chapter-19" class="chapter-link" data-chapter="19">Chapter 19</a>
-                            <a href="#chapter-20" class="chapter-link" data-chapter="20">Chapter 20</a>
-                            <a href="#chapter-21" class="chapter-link" data-chapter="21">Chapter 21</a>
-                            <a href="#chapter-22" class="chapter-link" data-chapter="22">Chapter 22</a>
-                            <a href="#chapter-conclusion" class="chapter-link" data-chapter="conclusion">Conclusion</a>
+                <nav class="chapter-nav" aria-label="Chapter navigation">
+                    <!-- Current Chapter Display -->
+                    <div class="current-chapter-display">
+                        <div class="chapter-number-badge" id="current-chapter-number">1</div>
+                        <div class="chapter-info">
+                            <div class="chapter-label">Currently Reading</div>
+                            <h2 class="current-chapter-title" id="current-chapter-title">The World Before Brains</h2>
                         </div>
-                        <button class="show-all-chapters" id="show-all-chapters">
-                            <span class="show-text">Show all chapters</span>
-                            <span class="hide-text" style="display: none;">Hide chapters</span>
-                        </button>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-fill"></div>
+                            </div>
+                            <span class="progress-text" id="progress-text">1 of 23</span>
+                        </div>
                     </div>
-                </div>
+
+                    <!-- Chapter Timeline -->
+                    <div class="chapter-timeline">
+                        <div class="timeline-scroll" id="chapter-links">
+                            <a href="#chapter-1" class="chapter-link" data-chapter="1">1</a>
+                            <a href="#chapter-2" class="chapter-link" data-chapter="2">2</a>
+                            <a href="#chapter-3" class="chapter-link" data-chapter="3">3</a>
+                            <a href="#chapter-4" class="chapter-link" data-chapter="4">4</a>
+                            <a href="#chapter-5" class="chapter-link" data-chapter="5">5</a>
+                            <a href="#chapter-6" class="chapter-link" data-chapter="6">6</a>
+                            <a href="#chapter-7" class="chapter-link" data-chapter="7">7</a>
+                            <a href="#chapter-8" class="chapter-link" data-chapter="8">8</a>
+                            <a href="#chapter-9" class="chapter-link" data-chapter="9">9</a>
+                            <a href="#chapter-10" class="chapter-link" data-chapter="10">10</a>
+                            <a href="#chapter-11" class="chapter-link" data-chapter="11">11</a>
+                            <a href="#chapter-12" class="chapter-link" data-chapter="12">12</a>
+                            <a href="#chapter-13" class="chapter-link" data-chapter="13">13</a>
+                            <a href="#chapter-14" class="chapter-link" data-chapter="14">14</a>
+                            <a href="#chapter-15" class="chapter-link" data-chapter="15">15</a>
+                            <a href="#chapter-16" class="chapter-link" data-chapter="16">16</a>
+                            <a href="#chapter-17" class="chapter-link" data-chapter="17">17</a>
+                            <a href="#chapter-18" class="chapter-link" data-chapter="18">18</a>
+                            <a href="#chapter-19" class="chapter-link" data-chapter="19">19</a>
+                            <a href="#chapter-20" class="chapter-link" data-chapter="20">20</a>
+                            <a href="#chapter-21" class="chapter-link" data-chapter="21">21</a>
+                            <a href="#chapter-22" class="chapter-link" data-chapter="22">22</a>
+                            <a href="#chapter-conclusion" class="chapter-link" data-chapter="conclusion">End</a>
+                        </div>
+                    </div>
+                </nav>
 
                 <div class="chapter-content" data-chapter="1" id="chapter-1">
                 <h2>Chapter 1: The World Before Brains</h2>
