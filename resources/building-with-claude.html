@@ -188,11 +188,27 @@
                 </section>
 
                 <!-- Videos -->
-                <section class="resource-category">
-                    <div class="resource-category-header">
-                        <h2 class="resource-category-title">Videos</h2>
-                        <span class="resource-category-count">4</span>
-                    </div>
+                <section class="category-section" data-category="videos">
+                    <button
+                        class="category-header"
+                        aria-expanded="false"
+                        aria-controls="videos-content"
+                        id="videos-header"
+                    >
+                        <div class="category-header-content">
+                            <h2 class="category-title">Videos</h2>
+                            <span class="category-count">4</span>
+                        </div>
+                        <i data-lucide="chevron-down" class="category-chevron" aria-hidden="true"></i>
+                    </button>
+
+                    <div
+                        id="videos-content"
+                        class="category-content"
+                        role="region"
+                        aria-labelledby="videos-header"
+                        hidden
+                    >
                     <div class="resources-grid">
                         <a href="https://www.youtube.com/watch?v=6eBSHbLKuN0" target="_blank" rel="noopener noreferrer" class="resource-card">
                             <i data-lucide="external-link" class="resource-card-external" aria-hidden="true"></i>
@@ -234,14 +250,31 @@
                             <p class="resource-card-description">Comprehensive beginner's guide to Claude Code for enhanced productivity.</p>
                         </a>
                     </div>
+                    </div>
                 </section>
 
                 <!-- Repos -->
-                <section class="resource-category">
-                    <div class="resource-category-header">
-                        <h2 class="resource-category-title">Repos</h2>
-                        <span class="resource-category-count">5</span>
-                    </div>
+                <section class="category-section" data-category="repos">
+                    <button
+                        class="category-header"
+                        aria-expanded="false"
+                        aria-controls="repos-content"
+                        id="repos-header"
+                    >
+                        <div class="category-header-content">
+                            <h2 class="category-title">Repos</h2>
+                            <span class="category-count">5</span>
+                        </div>
+                        <i data-lucide="chevron-down" class="category-chevron" aria-hidden="true"></i>
+                    </button>
+
+                    <div
+                        id="repos-content"
+                        class="category-content"
+                        role="region"
+                        aria-labelledby="repos-header"
+                        hidden
+                    >
                     <div class="resources-grid">
                         <a href="https://github.com/anthropics/claude-code" target="_blank" rel="noopener noreferrer" class="resource-card">
                             <i data-lucide="external-link" class="resource-card-external" aria-hidden="true"></i>
@@ -303,14 +336,31 @@
                             <p class="resource-card-description">Discovery tool for finding and evaluating Claude Code skills.</p>
                         </a>
                     </div>
+                    </div>
                 </section>
 
                 <!-- Guides -->
-                <section class="resource-category">
-                    <div class="resource-category-header">
-                        <h2 class="resource-category-title">Guides</h2>
-                        <span class="resource-category-count">4</span>
-                    </div>
+                <section class="category-section" data-category="guides">
+                    <button
+                        class="category-header"
+                        aria-expanded="false"
+                        aria-controls="guides-content"
+                        id="guides-header"
+                    >
+                        <div class="category-header-content">
+                            <h2 class="category-title">Guides</h2>
+                            <span class="category-count">4</span>
+                        </div>
+                        <i data-lucide="chevron-down" class="category-chevron" aria-hidden="true"></i>
+                    </button>
+
+                    <div
+                        id="guides-content"
+                        class="category-content"
+                        role="region"
+                        aria-labelledby="guides-header"
+                        hidden
+                    >
                     <div class="resources-grid">
                         <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices" target="_blank" rel="noopener noreferrer" class="resource-card">
                             <i data-lucide="external-link" class="resource-card-external" aria-hidden="true"></i>
@@ -373,14 +423,31 @@
                         </a>
 
                     </div>
+                    </div>
                 </section>
 
                 <!-- Books -->
-                <section class="resource-category">
-                    <div class="resource-category-header">
-                        <h2 class="resource-category-title">Books</h2>
-                        <span class="resource-category-count">3</span>
-                    </div>
+                <section class="category-section" data-category="books">
+                    <button
+                        class="category-header"
+                        aria-expanded="false"
+                        aria-controls="books-content"
+                        id="books-header"
+                    >
+                        <div class="category-header-content">
+                            <h2 class="category-title">Books</h2>
+                            <span class="category-count">3</span>
+                        </div>
+                        <i data-lucide="chevron-down" class="category-chevron" aria-hidden="true"></i>
+                    </button>
+
+                    <div
+                        id="books-content"
+                        class="category-content"
+                        role="region"
+                        aria-labelledby="books-header"
+                        hidden
+                    >
                     <div class="resources-grid">
                         <a href="https://www.chirpbooks.com/audiobooks/claude-llm-by-anthropic-by-et-tu-code" target="_blank" rel="noopener noreferrer" class="resource-card">
                             <i data-lucide="external-link" class="resource-card-external" aria-hidden="true"></i>
@@ -413,14 +480,31 @@
                         </a>
 
                     </div>
+                    </div>
                 </section>
 
                 <!-- Papers -->
-                <section class="resource-category">
-                    <div class="resource-category-header">
-                        <h2 class="resource-category-title">Papers</h2>
-                        <span class="resource-category-count">6</span>
-                    </div>
+                <section class="category-section" data-category="papers">
+                    <button
+                        class="category-header"
+                        aria-expanded="false"
+                        aria-controls="papers-content"
+                        id="papers-header"
+                    >
+                        <div class="category-header-content">
+                            <h2 class="category-title">Papers</h2>
+                            <span class="category-count">6</span>
+                        </div>
+                        <i data-lucide="chevron-down" class="category-chevron" aria-hidden="true"></i>
+                    </button>
+
+                    <div
+                        id="papers-content"
+                        class="category-content"
+                        role="region"
+                        aria-labelledby="papers-header"
+                        hidden
+                    >
                     <div class="resources-grid">
                         <a href="https://arxiv.org/abs/2210.03629" target="_blank" rel="noopener noreferrer" class="resource-card">
                             <i data-lucide="external-link" class="resource-card-external" aria-hidden="true"></i>
@@ -482,6 +566,7 @@
                             <p class="resource-card-description">Language agents with verbal reinforcement learning.</p>
                         </a>
                     </div>
+                    </div>
                 </section>
 
             </div>
@@ -492,9 +577,9 @@
     <script src="../writings/category-collapse.js" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.resource-category, .category-section').forEach(function(section) {
+            document.querySelectorAll('.category-section').forEach(function(section) {
                 var cards = section.querySelectorAll('.resource-card').length;
-                var counter = section.querySelector('.resource-category-count, .category-count');
+                var counter = section.querySelector('.category-count');
                 if (counter) counter.textContent = cards;
             });
         });
