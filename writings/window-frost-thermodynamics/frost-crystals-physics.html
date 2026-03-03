@@ -11,11 +11,16 @@
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
     
-    <!-- Google Fonts -->
+    <!-- Shared site styles + fonts -->
+    <link rel="dns-prefetch" href="https://unpkg.com">
+    <link rel="preconnect" href="https://unpkg.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500&family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet" fetchpriority="high">
+    <link rel="stylesheet" href="../../style.css?v=10">
+    <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'dark');</script>
+    <script src="https://unpkg.com/lucide@0.576.0" defer></script>
+
     <style>
         :root {
             --color-bg: #0a0c10;
@@ -54,6 +59,8 @@
             line-height: 1.75;
             font-weight: 300;
             min-height: 100vh;
+            display: block;
+            padding: 0;
         }
 
         /* Frost crystal background animation */
@@ -437,6 +444,25 @@
     </style>
 </head>
 <body>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <i data-lucide="moon" class="moon-icon"></i>
+        <i data-lucide="sun" class="sun-icon"></i>
+    </button>
+
+    <header class="site-nav" aria-label="Primary">
+        <div class="container nav-inner">
+            <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
+                <i data-lucide="menu" class="hamburger-icon"></i>
+                <i data-lucide="x" class="hamburger-close-icon"></i>
+            </button>
+            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link nav-link-active" href="/writings/">Writing</a>
+            <a class="nav-link" href="/reading/">Reading</a>
+            <a class="nav-link" href="/resources/">Resources</a>
+            <a class="nav-link" href="/advisory.html">Advisory</a>
+        </div>
+    </header>
+
     <div class="frost-bg"></div>
 
     <header>
@@ -853,6 +879,8 @@
     </div>
 
     </main>
+
+    <script src="../../theme-toggle.js" defer></script>
 
     <!-- Initialize KaTeX auto-render after DOM is ready -->
     <script>
