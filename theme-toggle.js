@@ -18,5 +18,33 @@ themeToggle.addEventListener('click', () => {
     lucide.createIcons();
 });
 
+// Hamburger menu toggle
+const navHamburger = document.getElementById('nav-hamburger');
+if (navHamburger) {
+    const navInner = navHamburger.closest('.nav-inner');
+
+    navHamburger.addEventListener('click', () => {
+        const isOpen = navInner.classList.toggle('nav-open');
+        navHamburger.setAttribute('aria-expanded', isOpen);
+        lucide.createIcons();
+    });
+
+    // Close menu when a nav link is tapped
+    navInner.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            navInner.classList.remove('nav-open');
+            navHamburger.setAttribute('aria-expanded', 'false');
+        });
+    });
+
+    // Close menu on outside click
+    document.addEventListener('click', (e) => {
+        if (!navInner.contains(e.target)) {
+            navInner.classList.remove('nav-open');
+            navHamburger.setAttribute('aria-expanded', 'false');
+        }
+    });
+}
+
 // Initialize Lucide icons
 lucide.createIcons();
