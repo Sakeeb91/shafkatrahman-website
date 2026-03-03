@@ -63,11 +63,27 @@
             <div class="animate-slide-up-delay">
 
                 <!-- YouTubers -->
-                <section class="resource-category">
-                    <div class="resource-category-header">
-                        <h2 class="resource-category-title">YouTubers</h2>
-                        <span class="resource-category-count">11</span>
-                    </div>
+                <section class="category-section" data-category="youtubers">
+                    <button
+                        class="category-header"
+                        aria-expanded="false"
+                        aria-controls="youtubers-content"
+                        id="youtubers-header"
+                    >
+                        <div class="category-header-content">
+                            <h2 class="category-title">YouTubers</h2>
+                            <span class="category-count" data-label="creators">11</span>
+                        </div>
+                        <i data-lucide="chevron-down" class="category-chevron" aria-hidden="true"></i>
+                    </button>
+
+                    <div
+                        id="youtubers-content"
+                        class="category-content"
+                        role="region"
+                        aria-labelledby="youtubers-header"
+                        hidden
+                    >
                     <div class="resources-grid">
                         <a href="https://www.youtube.com/@AlexFinnOfficial" target="_blank" rel="noopener noreferrer" class="resource-card">
                             <i data-lucide="external-link" class="resource-card-external" aria-hidden="true"></i>
@@ -167,6 +183,7 @@
                             </div>
                             <h3 class="resource-card-title">Riley Brown</h3>
                         </a>
+                    </div>
                     </div>
                 </section>
 
@@ -452,5 +469,6 @@
     </main>
 
     <script src="../theme-toggle.js" defer></script>
+    <script src="../writings/category-collapse.js" defer></script>
 </body>
 </html>
