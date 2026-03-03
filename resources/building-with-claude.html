@@ -470,5 +470,14 @@
 
     <script src="../theme-toggle.js" defer></script>
     <script src="../writings/category-collapse.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.resource-category, .category-section').forEach(function(section) {
+                var cards = section.querySelectorAll('.resource-card').length;
+                var counter = section.querySelector('.resource-category-count, .category-count');
+                if (counter) counter.textContent = cards;
+            });
+        });
+    </script>
 </body>
 </html>

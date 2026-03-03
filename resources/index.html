@@ -63,7 +63,7 @@
                 <article class="writing-item">
                     <a href="/resources/building-with-claude.html" class="writing-link">
                         <div class="writing-meta">
-                            <span>30 resources</span>
+                            <span data-resource-count></span>
                         </div>
                         <h2 class="writing-title">Building with Claude</h2>
                         <p class="writing-excerpt">
@@ -76,5 +76,15 @@
     </main>
 
     <script src="../theme-toggle.js" defer></script>
+    <script>
+        fetch('/resources/building-with-claude.html')
+            .then(r => r.text())
+            .then(html => {
+                const doc = new DOMParser().parseFromString(html, 'text/html');
+                const count = doc.querySelectorAll('.resource-card').length;
+                const el = document.querySelector('[data-resource-count]');
+                if (el) el.textContent = count + ' resources';
+            });
+    </script>
 </body>
 </html>
