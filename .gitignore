@@ -10,3 +10,10 @@
 # Temporary files
 *.tmp
 *.temp
+
+# Large binary files
+*.HEIC
+*.heic
+
+# Progress tracking (local only)
+PROGRESS.md
