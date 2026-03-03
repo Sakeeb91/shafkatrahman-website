@@ -1240,6 +1240,21 @@
             
     </main>
 
+    <div class="article-email-capture" style="max-width: 640px; margin-left: auto; margin-right: auto; border-top: 1px solid var(--border, rgba(148,163,184,0.4)); padding-top: 2rem; margin-top: 3rem;">
+        <p style="color: var(--muted, #94a3b8); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1rem;">If you read this far, you'd probably like the newsletter. One email per week. Free.</p>
+        <form
+            action="https://buttondown.com/api/emails/embed-subscribe/shafkatsakeeb"
+            method="post"
+            style="display: flex; gap: 0.5rem; max-width: 28rem;"
+            onsubmit="setTimeout(()=>{this.parentElement.innerHTML='<p style=color:#94a3b8;font-size:0.9rem>You\'re in. Check your inbox.</p>'},1000)"
+        >
+            <input type="email" name="email" placeholder="your@email.com" required
+                   style="flex:1; padding:0.6rem 0.9rem; background:rgba(148,163,184,0.1); border:1px solid rgba(148,163,184,0.4); border-radius:0.25rem; color:inherit; font-family:inherit; font-size:0.85rem;">
+            <button type="submit"
+                    style="padding:0.6rem 1.2rem; background:#e2e8f0; color:#0f1419; border:none; border-radius:0.25rem; font-family:inherit; font-size:0.85rem; font-weight:500; cursor:pointer; white-space:nowrap;">Subscribe</button>
+        </form>
+    </div>
+
     <footer>
         <p>Published November 2025 by Shafkat Rahman</p>
         <a href="/writings/" class="back-link">← Back to Writing</a>
