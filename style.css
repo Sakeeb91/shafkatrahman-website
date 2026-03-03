@@ -2301,6 +2301,10 @@ html {
     margin-bottom: 3rem;
 }
 
+.resources-header .back-link {
+    margin-bottom: 1.5rem;
+}
+
 .resources-header h1 {
     font-family: var(--font-display);
     font-size: clamp(2rem, 5vw, 3rem);
