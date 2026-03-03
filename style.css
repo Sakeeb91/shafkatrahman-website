@@ -131,6 +131,34 @@ a:focus-visible {
     background-color: var(--primary);
 }
 
+/* Hamburger menu button — hidden on desktop */
+.nav-hamburger {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 0.25rem;
+    line-height: 0;
+}
+
+.nav-hamburger:hover,
+.nav-hamburger:focus-visible {
+    color: var(--foreground);
+}
+
+.hamburger-close-icon {
+    display: none;
+}
+
+.nav-open .hamburger-icon {
+    display: none;
+}
+
+.nav-open .hamburger-close-icon {
+    display: inline-block;
+}
+
 .hero {
     flex: 1;
     display: flex;
@@ -335,24 +363,30 @@ a:focus-visible {
         padding: 0 1rem;
     }
 
+    .nav-hamburger {
+        display: block;
+    }
+
     .nav-inner {
-        justify-content: flex-start;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        gap: 1.25rem;
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
+        gap: 0;
         padding-left: 1rem;
         padding-right: 1rem;
     }
 
-    .nav-inner::-webkit-scrollbar {
+    .nav-inner .nav-link {
         display: none;
+        width: 100%;
+        padding: 0.75rem 0;
+        border-top: 1px solid var(--border);
     }
 
-    .nav-link {
-        white-space: nowrap;
-        flex-shrink: 0;
+    .nav-inner.nav-open .nav-link {
+        display: block;
+    }
+
+    .nav-link-active::after {
+        display: none;
     }
 
     .hero-inner {
