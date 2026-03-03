@@ -26,7 +26,6 @@ if (navHamburger) {
     navHamburger.addEventListener('click', () => {
         const isOpen = navInner.classList.toggle('nav-open');
         navHamburger.setAttribute('aria-expanded', isOpen);
-        lucide.createIcons();
     });
 
     // Close menu when a nav link is tapped
