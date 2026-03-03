@@ -2507,6 +2507,86 @@ html {
     margin: 2.5rem 0;
 }
 
+/* Advisory Page Styles */
+.advisory-services {
+    margin: 1.5rem 0 2rem;
+}
+
+.advisory-service {
+    margin-bottom: 1.5rem;
+}
+
+.advisory-service h3 {
+    margin-bottom: 0.5rem;
+}
+
+.advisory-service p {
+    color: var(--foreground-90);
+}
+
+.advisory-form {
+    margin-top: 1.5rem;
+}
+
+.advisory-form-group {
+    margin-bottom: 1.25rem;
+}
+
+.advisory-form-group label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--muted);
+}
+
+.advisory-form-group input,
+.advisory-form-group textarea {
+    width: 100%;
+    padding: 0.6rem 0.9rem;
+    background: var(--muted-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--foreground);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    transition: border-color 200ms ease;
+}
+
+.advisory-form-group input::placeholder,
+.advisory-form-group textarea::placeholder {
+    color: var(--muted);
+}
+
+.advisory-form-group input:focus,
+.advisory-form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.advisory-form-group textarea {
+    resize: vertical;
+    min-height: 6rem;
+}
+
+.advisory-form-submit {
+    padding: 0.6rem 1.5rem;
+    background: var(--foreground);
+    color: var(--background);
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 200ms ease;
+}
+
+.advisory-form-submit:hover {
+    opacity: 0.85;
+}
+
 /* Mobile responsive */
 @media (max-width: 640px) {
     .resources-grid {
