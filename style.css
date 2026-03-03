@@ -2433,6 +2433,7 @@ html {
 /* Email Capture */
 .email-capture {
     margin: 2rem 0;
+    text-align: center;
 }
 
 .email-capture p {
@@ -2446,6 +2447,7 @@ html {
     display: flex;
     gap: 0.5rem;
     max-width: 28rem;
+    margin: 0 auto;
 }
 
 .email-capture-form input[type="email"] {
