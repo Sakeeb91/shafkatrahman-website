@@ -2480,6 +2480,32 @@ html {
     opacity: 0.6;
 }
 
+/* "NEW" pill badge for recently added resources */
+.resource-card-new {
+    display: none;
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    font-family: var(--font-body);
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.5rem;
+    border-radius: 9999px;
+    background: #22c55e;
+    color: #fff;
+    line-height: 1.4;
+}
+
+.resource-card[data-new] .resource-card-new {
+    display: inline-block;
+}
+
+.resource-card[data-new] .resource-card-external {
+    display: none;
+}
+
 /* Email Capture */
 .email-capture {
     margin: 2rem 0;

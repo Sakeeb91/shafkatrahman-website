@@ -37,7 +37,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" fetchpriority="high">
-    <link rel="stylesheet" href="../style.css?v=10">
+    <link rel="stylesheet" href="../style.css?v=11">
     <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'dark');</script>
 
     <!-- Lucide Icons CDN -->
@@ -338,7 +338,8 @@
                             <p class="resource-card-description">Advanced skills and workflows that extend Claude Code's capabilities.</p>
                         </a>
 
-                        <a href="https://github.com/shanraisshan/claude-code-best-practice" target="_blank" rel="noopener noreferrer" class="resource-card">
+                        <a href="https://github.com/shanraisshan/claude-code-best-practice" target="_blank" rel="noopener noreferrer" class="resource-card" data-added="2026-03-04">
+                            <span class="resource-card-new">New</span>
                             <i data-lucide="external-link" class="resource-card-external" aria-hidden="true"></i>
                             <div class="resource-card-header">
                                 <i data-lucide="github" class="resource-icon" aria-hidden="true"></i>
@@ -444,7 +445,8 @@
                             <p class="resource-card-description">Comprehensive guide to using Claude Cowork for file management, research, and document creation.</p>
                         </a>
 
-                        <a href="https://anthropic.skilljar.com/" target="_blank" rel="noopener noreferrer" class="resource-card">
+                        <a href="https://anthropic.skilljar.com/" target="_blank" rel="noopener noreferrer" class="resource-card" data-added="2026-03-04">
+                            <span class="resource-card-new">New</span>
                             <i data-lucide="external-link" class="resource-card-external" aria-hidden="true"></i>
                             <div class="resource-card-header">
                                 <i data-lucide="book-open" class="resource-icon" aria-hidden="true"></i>
@@ -471,6 +473,16 @@
                 var cards = section.querySelectorAll('.resource-card').length;
                 var counter = section.querySelector('.category-count');
                 if (counter) counter.textContent = cards;
+            });
+
+            // Show "New" badge on cards added within the last 48 hours
+            var now = Date.now();
+            var TWO_DAYS = 48 * 60 * 60 * 1000;
+            document.querySelectorAll('.resource-card[data-added]').forEach(function(card) {
+                var added = new Date(card.getAttribute('data-added') + 'T00:00:00').getTime();
+                if (now - added < TWO_DAYS) {
+                    card.setAttribute('data-new', '');
+                }
             });
         });
     </script>
