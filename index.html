@@ -110,7 +110,7 @@
                 <p>One analysis per week. Free.</p>
                 <form
                     class="email-capture-form"
-                    onsubmit="event.preventDefault();var e=this.email.value,f=this;fetch('https://emailoctopus.com/api/1.6/lists/f44f25c8-175f-11f1-ab9e-a9cd1d0608b4/contacts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({api_key:'eo_40371dd6e37354837c9d82d036049c8b3158cd5ca6577279af71aea2308ffb16',email_address:e})}).then(r=>{if(r.ok)f.parentElement.innerHTML='<p class=email-capture-success>You\'re in. Check your inbox.</p>';else f.parentElement.innerHTML='<p class=email-capture-success>Something went wrong. Try again.</p>'}).catch(()=>{f.parentElement.innerHTML='<p class=email-capture-success>Something went wrong. Try again.</p>'})"
+                    onsubmit="event.preventDefault();var e=this.email.value,f=this;fetch('https://email-subscribe.rahman-sakeeb.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e})}).then(r=>{if(r.ok)f.parentElement.innerHTML='<p class=email-capture-success>You\'re in. Check your inbox.</p>';else f.parentElement.innerHTML='<p class=email-capture-success>Something went wrong. Try again.</p>'}).catch(()=>{f.parentElement.innerHTML='<p class=email-capture-success>Something went wrong. Try again.</p>'})"
                 >
                     <input type="email" name="email" placeholder="your@email.com" required>
                     <button type="submit">Subscribe</button>

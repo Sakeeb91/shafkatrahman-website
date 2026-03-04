@@ -1,0 +1,7 @@
+name = "email-subscribe"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+EO_API_KEY = "eo_40371dd6e37354837c9d82d036049c8b3158cd5ca6577279af71aea2308ffb16"
+EO_LIST_ID = "f44f25c8-175f-11f1-ab9e-a9cd1d0608b4"
