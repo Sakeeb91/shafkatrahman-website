@@ -89,14 +89,27 @@
 
     <script src="../theme-toggle.js" defer></script>
     <script>
-        fetch('/resources/building-with-claude.html')
-            .then(r => r.text())
-            .then(html => {
-                const doc = new DOMParser().parseFromString(html, 'text/html');
-                const count = doc.querySelectorAll('.resource-card').length;
-                const el = document.querySelector('[data-resource-count]');
-                if (el) el.textContent = count + ' resources';
-            });
+        var pages = [
+            '/resources/claude.html',
+            '/resources/claude-code.html',
+            '/resources/cowork.html',
+            '/resources/youtubers.html'
+        ];
+        var total = 0;
+        var done = 0;
+        pages.forEach(function(url) {
+            fetch(url)
+                .then(function(r) { return r.text(); })
+                .then(function(html) {
+                    var doc = new DOMParser().parseFromString(html, 'text/html');
+                    total += doc.querySelectorAll('.resource-card').length;
+                    done++;
+                    if (done === pages.length) {
+                        var el = document.querySelector('[data-resource-count]');
+                        if (el) el.textContent = total + ' resources';
+                    }
+                });
+        });
     </script>
 </body>
 </html>
