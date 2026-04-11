@@ -502,7 +502,11 @@
             </p>
 
             <p>
-                I'm not the first person to arrive here. A former Manus backend lead posted a <a href="https://www.reddit.com/r/LocalLLaMA/comments/1rrisqn/" target="_blank" rel="noopener noreferrer">long argument</a> for this in November 2025 and it blew up on r/LocalLLaMA. Anthropic's engineering team published <a href="https://www.anthropic.com/engineering/code-execution-with-mcp" target="_blank" rel="noopener noreferrer"><em>Code Execution with MCP</em></a> within the same window, reaching the same diagnosis from the research side. Simon Willison wrote that he'd already abandoned MCP for coding agents in favor of CLI utilities. Three independent actors, same conclusion, two-week span. That's the kind of convergence I pay attention to.
+                I'm not the first person to arrive here, and the list of people arriving independently is getting hard to ignore. A former Manus backend lead posted a <a href="https://www.reddit.com/r/LocalLLaMA/comments/1rrisqn/" target="_blank" rel="noopener noreferrer">long argument</a> for this in November 2025 and it blew up on r/LocalLLaMA. Anthropic's engineering team published <a href="https://www.anthropic.com/engineering/code-execution-with-mcp" target="_blank" rel="noopener noreferrer"><em>Code Execution with MCP</em></a> within the same window, reaching the same diagnosis from the research side. Simon Willison wrote he'd already abandoned MCP for coding agents. At Perplexity's Ask 2026 conference in March, co-founder and CTO Denis Yarats announced Perplexity is <a href="https://repello.ai/blog/mcp-vs-cli" target="_blank" rel="noopener noreferrer">moving away from MCP internally</a>, citing a 72% context window consumption problem and replacing it with direct REST APIs and CLI. Cloudflare's Code Mode reported a 244x token reduction on the same pattern. Y Combinator's Garry Tan built his agent integration as a CLI rather than MCP for reliability and speed.
+            </p>
+
+            <p>
+                Five independent actors, same conclusion, reached without coordinating. That's the kind of convergence I pay attention to.
             </p>
 
             <p>
@@ -520,11 +524,15 @@
             </p>
 
             <p>
-                <strong>Context tax before the conversation starts.</strong> Every MCP tool definition sits in the system prompt. Anthropic put a number on it: a five-server setup with 58 tools burns roughly 55K tokens before the user types anything (<a href="https://www.anthropic.com/engineering/advanced-tool-use" target="_blank" rel="noopener noreferrer"><em>Advanced Tool Use</em></a>). You paid for that context. You can't use it for anything else.
+                <strong>Context tax before the conversation starts.</strong> Every MCP tool definition sits in the system prompt. Anthropic put a number on it: a five-server setup with 58 tools burns roughly 55K tokens before the user types anything (<a href="https://www.anthropic.com/engineering/advanced-tool-use" target="_blank" rel="noopener noreferrer"><em>Advanced Tool Use</em></a>). Perplexity put a bigger number on it: in production, tool schemas and protocol overhead consumed up to 72% of available context before any user intent reached the model. Cloudflare put the biggest number on it: exposing 2,500 API endpoints as individual MCP tools takes roughly 244,000 tokens to describe, versus ~1,000 tokens to surface the same functionality via code generation against a pre-authorized client. A 244x reduction.
             </p>
 
             <p>
-                <strong>Round-trip tax on intermediate results.</strong> Every tool response passes through the model whether the model needs to reason about it or not. Pull a transcript from Drive, push it to Salesforce — the full transcript traverses the context twice. Practitioners have reported complex workflows going from 150K tokens to ~2K by moving to code-execution patterns. A 98% reduction isn't a clever optimization. It's the size of the hole you were pouring money into.
+                You paid for that context. You can't use it for anything else.
+            </p>
+
+            <p>
+                <strong>Round-trip tax on intermediate results.</strong> Every tool response passes through the model whether the model needs to reason about it or not. Pull a transcript from Drive, push it to Salesforce — the full transcript traverses the context twice. Workflows have gone from 150K tokens to ~2K by moving to code-execution patterns. A 98% reduction isn't a clever optimization. It's the size of the hole you were pouring money into.
             </p>
 
             <p>
@@ -533,9 +541,13 @@
 
             <div class="callout">
                 <p>
-                    And the reflex fix — "just load tools dynamically" — breaks the KV cache prefix. Every time you add or remove a tool mid-conversation, the system prompt region recomputes. A single stable <code>run()</code> tool sidesteps this entirely, which is a subtle cost advantage that I don't see people talk about enough.
+                    The reflex fix — "just load tools dynamically" — breaks the KV cache prefix. Every time you add or remove a tool mid-conversation, the system prompt region recomputes. A single stable <code>run()</code> tool sidesteps this entirely, which is a subtle cost advantage I don't see people talk about enough.
                 </p>
             </div>
+
+            <p>
+                Yarats' third point is the one that took me longest to appreciate: most MCP features are simply never used in production. Discoverability is a development-time feature, not a runtime requirement. Once you know which tools your production agent needs, the dynamic-enumeration machinery is pure overhead you're paying for something you stopped doing.
+            </p>
         </section>
 
         <div class="divider"><span>✦</span></div>
@@ -562,6 +574,56 @@
             <div class="highlight-box">
                 <p>
                     The deeper point: MCP is paying token and engineering costs to invent discoverability the model already understands. CLI stops paying those costs.
+                </p>
+            </div>
+        </section>
+
+        <div class="divider"><span>❄</span></div>
+
+        <section>
+            <h2>The security reality check</h2>
+
+            <p>
+                This is the part I feel strongly about and most of the discourse gets wrong. The MCP-vs-CLI debate has been framed in part as a security argument, and I want to shut that framing down before it spreads further.
+            </p>
+
+            <div class="highlight-box">
+                <p>
+                    <strong>Switching from MCP to CLI does not reduce your attack surface. It changes the protocol. It does not change the threat model.</strong>
+                </p>
+            </div>
+
+            <p>
+                Repello's AI research team made this point in their <a href="https://repello.ai/blog/mcp-vs-cli" target="_blank" rel="noopener noreferrer">coverage of Perplexity's move</a> and it's the clearest statement of the issue I've seen: "The question is not which protocol the tool call travels over. The question is whether the content that comes back from the tool gets inspected before it reaches the model. That question has the same answer regardless of whether you're running MCP, CLI, or direct REST."
+            </p>
+
+            <p>
+                Break this down concretely:
+            </p>
+
+            <ul class="source-list">
+                <li>
+                    <strong>Prompt injection through tool responses is transport-independent.</strong> The injection surface is the content a tool returns, not the JSON-RPC or subprocess layer that delivered it. A <code>run("curl example.com")</code> that fetches an attacker-controlled page hands adversarial instructions to the model just as efficiently as an MCP server doing the same fetch. The attack doesn't care about the protocol.
+                </li>
+                <li>
+                    <strong>Privilege escalation follows tool permissions, not protocol design.</strong> A CLI agent with subprocess access to the host has the same blast radius as an MCP agent with equivalent permissions. Least privilege, sandbox isolation, and action allowlists are architectural requirements no protocol choice eliminates.
+                </li>
+                <li>
+                    <strong>Authentication complexity shifts, it doesn't disappear.</strong> Yarats is right that managing credentials across multiple MCP servers is harder than a single API key. But a CLI agent calling multiple external services still has a credential management surface. The risk of credential exposure through prompt injection is structurally the same; the credentials just live in different files.
+                </li>
+            </ul>
+
+            <p>
+                The one genuine security <em>improvement</em> in this space isn't the switch to CLI at all — it's Cloudflare's pre-authorized client pattern in Code Mode. When the model writes code that runs against an already-authenticated client, the model never sees the raw credentials, which means prompt injection into the model's context can't extract them. That's a real reduction in attack surface, and it comes from keeping credentials out of the model's reachable state, not from the choice of transport.
+            </p>
+
+            <p>
+                Practical implication: your threat model covers <em>every</em> tool integration path, not the protocol layer. Content inspection happens at the model context boundary, not at the transport boundary. If you're running both MCP and CLI agents, your red team test plan has to cover tool response injection across all of them equally.
+            </p>
+
+            <div class="callout">
+                <p>
+                    Do not let anyone sell you "we migrated from MCP to CLI, so we fixed our injection problem." They didn't. They moved it.
                 </p>
             </div>
         </section>
@@ -624,11 +686,11 @@
             <h3>5. Large outputs go to files, summaries come back.</h3>
 
             <p>
-                When a command produces more than ~200 lines or ~50KB, truncate to the first 200 lines, write the full result to <code>/tmp/cmd-output/cmd-N.txt</code>, and return the head plus a pointer. Include suggested follow-up commands in the pointer (<code>grep</code>, <code>tail</code>). The agent already knows how to navigate a file with the tools it has. You're not building a custom pagination API; you're giving it a map.
+                When a command produces more than ~200 lines or ~50KB, truncate to the first 200 lines, write the full result to <code>/tmp/cmd-output/cmd-N.txt</code>, and return the head plus a pointer. Include suggested follow-up commands (<code>grep</code>, <code>tail</code>). The agent already knows how to navigate a file. You're not building a custom pagination API; you're giving it a map.
             </p>
 
             <p>
-                This is the CLI-native version of what Anthropic does with code execution: "Large datasets remain inside the execution environment... the heavy lifting happens in code" (<a href="https://www.anthropic.com/engineering/code-execution-with-mcp" target="_blank" rel="noopener noreferrer"><em>Code Execution with MCP</em></a>). Same philosophy, different mechanism.
+                This is the CLI-native version of what Anthropic does with code execution: large datasets remain inside the execution environment, the heavy lifting happens in code, and the model only sees the summary (<a href="https://www.anthropic.com/engineering/code-execution-with-mcp" target="_blank" rel="noopener noreferrer"><em>Code Execution with MCP</em></a>). Same philosophy, different mechanism.
             </p>
 
             <h3>6. Append exit code and duration to every result.</h3>
@@ -646,11 +708,11 @@
             <h3>8. Your CLI surface <em>is</em> your agent's capability boundary.</h3>
 
             <p>
-                This is the security model, and it's cleaner than any MCP permissions framework I've seen. The commands you expose define the action space. What's not a command is not a capability. Combine this with sandbox isolation for anything that touches the OS, allowlists for network egress, and the per-command self-gating from practice #4, and you get a layered model where the worst case at each layer is something you've explicitly accepted.
+                The commands you expose define the action space. What's not a command is not a capability. Combine this with sandbox isolation for anything that touches the OS, allowlists for network egress, per-command self-gating from practice #4, and content inspection at the model context layer, and you get a layered model where the worst case at each layer is something you've explicitly accepted.
             </p>
 
             <p>
-                You're not hoping the agent won't make mistakes. You're designing a boundary, confirming the worst case inside the boundary is acceptable, and letting the agent act freely within it.
+                You're not hoping the agent won't make mistakes. You're designing a boundary, confirming the worst case inside the boundary is acceptable, and letting the agent act freely within it. Injection defense lives at the content-inspection layer; privilege containment lives at the capability-surface layer. Different problems, different layers, both required.
             </p>
         </section>
 
@@ -664,11 +726,11 @@
             </p>
 
             <p>
-                <strong>Strongly-typed structured queries.</strong> Database access, GraphQL, anywhere schema validation beats string parsing on the input side. Build the typed interface, or wrap it so the typed layer lives inside the command handler.
+                <strong>Dynamic tool discovery in local environments.</strong> This is what MCP was actually designed for and where it's genuinely the right answer: Claude Desktop, Cursor, VS Code integrations, IDE tooling, anywhere the agent legitimately needs to enumerate capabilities at runtime that weren't known at design time. Yarats' own framing makes this explicit — MCP's discoverability is a feature you want at development time and stop needing at production scale. If you're building the development-time use case, MCP is fine.
             </p>
 
             <p>
-                <strong>Data-heavy transformation workflows.</strong> This is where Anthropic's Programmatic Tool Calling wins — Claude for Excel reads thousands of spreadsheet rows without drowning the context, because the work happens in a sandboxed TypeScript runtime and only the result comes back (<a href="https://www.anthropic.com/engineering/advanced-tool-use" target="_blank" rel="noopener noreferrer"><em>Advanced Tool Use</em></a>). CLI pipes can express the same thing, but code-execution is more ergonomic when the transformation logic is nontrivial. Use both. They're not in conflict.
+                <strong>Data-heavy transformation workflows.</strong> This is where Anthropic's Programmatic Tool Calling wins — Claude for Excel reads thousands of spreadsheet rows without drowning the context, because the work happens in a sandboxed TypeScript runtime and only the result comes back (<a href="https://www.anthropic.com/engineering/advanced-tool-use" target="_blank" rel="noopener noreferrer"><em>Advanced Tool Use</em></a>). Cloudflare's Code Mode is the same idea: write code against a pre-authorized client, get 244x token efficiency and credential isolation in one move. CLI pipes can express the same thing but code-execution is more ergonomic when the transformation logic is nontrivial.
             </p>
 
             <p>
@@ -677,7 +739,7 @@
 
             <div class="highlight-box">
                 <p>
-                    The honest framing is that CLI and code-execution are the same idea at different layers — both move the agent from "emit one tool call at a time through the model" to "compose operations in a language the model already knows." Shell for orchestration, code for data transformation, both exposing capabilities the agent discovers on demand. The enemy isn't MCP or typed tools. The enemy is interfaces the model is seeing for the first time.
+                    The honest framing is that CLI, code-execution, and MCP aren't competitors — they're the right answers to different questions. Shell for orchestration in production, code for data-heavy transformation, MCP for local dynamic discovery. The enemy isn't any single protocol. The enemy is interfaces the model is seeing for the first time, paying token cost for features you don't use, and security theater that mistakes transport choice for threat-model work.
                 </p>
             </div>
         </section>
@@ -696,7 +758,7 @@
             </p>
 
             <p>
-                <strong>Training on CLI traces.</strong> Every production agent session naturally generates (task, command, output) triples. Targeted fine-tuning on this data could compound the CLI advantage for smaller models — the agent's behavior improves specifically in the shape of its actual environment. I haven't seen public numbers on this yet and I'm suspicious of claims without them, but the setup is obvious enough that someone will publish soon.
+                <strong>Training on CLI traces.</strong> Every production agent session naturally generates (task, command, output) triples. Targeted fine-tuning on this data could compound the CLI advantage for smaller models — behavior improves specifically in the shape of its actual environment. I'm suspicious of claims without numbers, but the setup is obvious enough that someone will publish soon.
             </p>
         </section>
 
@@ -706,11 +768,11 @@
             <h2>The one-line version</h2>
 
             <blockquote>
-                <p>Stop inventing new tool interfaces. Hand the model the one it already knows.</p>
+                <p>Stop inventing new tool interfaces. Hand the model the one it already knows. Secure the content it sees, not the protocol it travels over.</p>
             </blockquote>
 
             <p>
-                Everything else in this document is implementation detail in service of that single claim.
+                Everything else in this document is implementation detail in service of those three claims.
             </p>
         </section>
 
@@ -731,6 +793,15 @@
                 </li>
                 <li>
                     Anthropic Engineering, <a href="https://www.anthropic.com/engineering/advanced-tool-use" target="_blank" rel="noopener noreferrer"><em>Advanced Tool Use</em></a> — Tool Search Tool, Programmatic Tool Calling
+                </li>
+                <li>
+                    Archisman Pal / Repello AI, <a href="https://repello.ai/blog/mcp-vs-cli" target="_blank" rel="noopener noreferrer"><em>MCP vs CLI: What Perplexity's Move Actually Means for AI Security Teams</em></a> (Mar 2026) — Yarats announcement, 72% context figure, the security argument I'm leaning on in §4
+                </li>
+                <li>
+                    Cloudflare, <em>Code Mode</em> — 244x token reduction vs MCP for 2,500-endpoint API surface, pre-authorized client pattern
+                </li>
+                <li>
+                    Denis Yarats, Ask 2026 developer conference keynote — Perplexity's internal migration away from MCP
                 </li>
                 <li>
                     Simon Willison, <a href="https://simonwillison.net/2025/Nov/4/code-execution-with-mcp/" target="_blank" rel="noopener noreferrer"><em>Code execution with MCP: Building more efficient agents</em></a> (Nov 4, 2025)
