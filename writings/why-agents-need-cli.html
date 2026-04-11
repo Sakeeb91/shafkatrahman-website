@@ -490,11 +490,11 @@
             </p>
 
             <p>
-                I'm not the first person to arrive here, and the list of people arriving independently is getting hard to ignore. A former Manus backend lead posted a <a href="https://www.reddit.com/r/LocalLLaMA/comments/1rrisqn/" target="_blank" rel="noopener noreferrer">long argument</a> for this in November 2025 and it blew up on r/LocalLLaMA. Anthropic's engineering team published <a href="https://www.anthropic.com/engineering/code-execution-with-mcp" target="_blank" rel="noopener noreferrer"><em>Code Execution with MCP</em></a> within the same window, reaching the same diagnosis from the research side. Simon Willison wrote he'd already abandoned MCP for coding agents. At Perplexity's Ask 2026 conference in March, co-founder and CTO Denis Yarats announced Perplexity is <a href="https://repello.ai/blog/mcp-vs-cli" target="_blank" rel="noopener noreferrer">moving away from MCP internally</a>, citing a 72% context window consumption problem and replacing it with direct REST APIs and CLI. Cloudflare's Code Mode reported a 244x token reduction on the same pattern. Y Combinator's Garry Tan built his agent integration as a CLI rather than MCP for reliability and speed.
+                I'm not the first person to arrive here, and the list of people arriving independently keeps getting longer. A former Manus backend lead posted a <a href="https://www.reddit.com/r/LocalLLaMA/comments/1rrisqn/" target="_blank" rel="noopener noreferrer">long argument</a> for this in November 2025 and it blew up on r/LocalLLaMA. Anthropic's engineering team published <a href="https://www.anthropic.com/engineering/code-execution-with-mcp" target="_blank" rel="noopener noreferrer"><em>Code Execution with MCP</em></a> within the same window, reaching the same diagnosis from the research side. Simon Willison wrote he'd already abandoned MCP for coding agents. At Perplexity's Ask 2026 conference in March, co-founder and CTO Denis Yarats announced Perplexity is <a href="https://repello.ai/blog/mcp-vs-cli" target="_blank" rel="noopener noreferrer">moving away from MCP internally</a>, citing a 72% context window consumption problem and replacing it with direct REST APIs and CLI. Cloudflare's Code Mode reported a 244x token reduction on the same pattern. Y Combinator's Garry Tan built his agent integration as a CLI rather than MCP for reliability and speed. Google deleted MCP from their Workspace CLI (<code>gws</code>) the day after shipping it, because 200-400 Workspace API tools burned 40-100K tokens of context before the agent read a user message. And in March 2026, HKU's Data Intelligence Lab dropped <a href="https://github.com/HKUDS/CLI-Anything" target="_blank" rel="noopener noreferrer">CLI-Anything</a>, a pipeline that auto-generates agent-navigable CLIs for GUI-only software — GIMP, Blender, Audacity, LibreOffice — with 1,508 passing tests across 11 applications in its first release.
             </p>
 
             <p>
-                Five independent actors, same conclusion, reached without coordinating. That's the kind of convergence I pay attention to.
+                Seven independent actors, same conclusion, reached without coordinating. That's the kind of convergence I pay attention to.
             </p>
 
             <p>
@@ -510,7 +510,7 @@
             </p>
 
             <p>
-                <strong>Context tax before the conversation starts.</strong> Every MCP tool definition sits in the system prompt. Anthropic put a number on it: a five-server setup with 58 tools burns roughly 55K tokens before the user types anything (<a href="https://www.anthropic.com/engineering/advanced-tool-use" target="_blank" rel="noopener noreferrer"><em>Advanced Tool Use</em></a>). Perplexity put a bigger number on it: in production, tool schemas and protocol overhead consumed up to 72% of available context before any user intent reached the model. Cloudflare put the biggest number on it: exposing 2,500 API endpoints as individual MCP tools takes roughly 244,000 tokens to describe, versus ~1,000 tokens to surface the same functionality via code generation against a pre-authorized client. A 244x reduction.
+                <strong>Context tax before the conversation starts.</strong> Every MCP tool definition sits in the system prompt. Anthropic put a number on it: a five-server setup with 58 tools burns roughly 55K tokens before the user types anything (<a href="https://www.anthropic.com/engineering/advanced-tool-use" target="_blank" rel="noopener noreferrer"><em>Advanced Tool Use</em></a>). Perplexity put a bigger number on it: in production, tool schemas and protocol overhead consumed up to 72% of available context before any user intent reached the model. Google hit the wall hardest and loudest: their Workspace CLI (<code>gws</code>) exposed 200-400 Workspace API tools over MCP, costing an estimated 40-100K tokens in definitions alone, and they deleted MCP the day after shipping it. A "compact mode" that collapsed the surface to ~26 tools wasn't enough; MCP came back in v0.9.x as an optional layer only where it earns its cost. Cloudflare put the biggest number on it: exposing 2,500 API endpoints as individual MCP tools takes roughly 244,000 tokens to describe, versus ~1,000 tokens to surface the same functionality via code generation against a pre-authorized client. A 244x reduction.
             </p>
 
             <p>
@@ -723,6 +723,18 @@
         </section>
 
         <section>
+            <h2>The infrastructure layer is catching up</h2>
+
+            <p>
+                One objection I used to hear: "CLI-for-agents is great if your software already has a CLI. What about GIMP, Blender, LibreOffice, every GUI-only tool my team depends on?" That objection is evaporating. HKU's Data Intelligence Lab shipped <a href="https://github.com/HKUDS/CLI-Anything" target="_blank" rel="noopener noreferrer">CLI-Anything</a> in March 2026 — a 7-phase pipeline that reads a codebase, maps functionality, architects a command structure, generates a Click-based CLI with REPL support, writes the tests, and publishes to PATH. First release covers GIMP, Blender, Inkscape, Audacity, LibreOffice, OBS, Kdenlive, Shotcut, Zoom, Draw.io, and AnyGen, with 1,508 passing tests at 100%.
+            </p>
+
+            <p>
+                Read this as a signal, not a product endorsement. The gold for anyone building internal tooling is the category of work this unlocks: design software agents couldn't touch, video pipelines that broke every time someone clicked a setting, internal tools where humans were the bottleneck between the agent and the actual work. Point a generator at the repo, get a structured capability surface. If your product ships in 2026 and an agent can't operate it from the command line, you're building for a workflow that's already thinning out. CLI-Anything is the bridge for open-source software; the same pipeline applied to internal codebases is a weekend project for most teams.
+            </p>
+        </section>
+
+        <section>
             <h2>What I'm still figuring out</h2>
 
             <p>
@@ -774,6 +786,12 @@
                 </li>
                 <li>
                     Denis Yarats, Ask 2026 developer conference keynote — Perplexity's internal migration away from MCP
+                </li>
+                <li>
+                    Google <code>gws</code> CLI — MCP removed one day after shipping due to 200-400 Workspace tools / 40-100K token overhead; reinstated as optional in v0.9.x
+                </li>
+                <li>
+                    HKU Data Intelligence Lab, <a href="https://github.com/HKUDS/CLI-Anything" target="_blank" rel="noopener noreferrer"><em>CLI-Anything</em></a> (Mar 2026) — auto-generates agent-navigable CLIs for GUI software; 1,508 tests across 11 applications
                 </li>
                 <li>
                     Simon Willison, <a href="https://simonwillison.net/2025/Nov/4/code-execution-with-mcp/" target="_blank" rel="noopener noreferrer"><em>Code execution with MCP: Building more efficient agents</em></a> (Nov 4, 2025)
