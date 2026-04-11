@@ -520,7 +520,7 @@
             </p>
 
             <p>
-                <strong>Round-trip tax on intermediate results.</strong> Every tool response passes through the model whether the model needs to reason about it or not. Pull a transcript from Drive, push it to Salesforce — the full transcript traverses the context twice. Workflows have gone from 150K tokens to ~2K by moving to code-execution patterns. A 98% reduction isn't a clever optimization. It's the size of the hole you were pouring money into.
+                <strong>Round-trip tax on intermediate results.</strong> Every tool response passes through the model whether the model needs to reason about it or not. Pull a transcript from Drive, push it to Salesforce — the full transcript traverses the context twice. Workflows have gone from 150K tokens to ~2K by moving to code-execution patterns. A 98% reduction at that scale measures the size of the hole you were pouring money into.
             </p>
 
             <p>
@@ -561,7 +561,7 @@
 
             <div class="highlight-box">
                 <p>
-                    The deeper point: MCP is paying token and engineering costs to invent discoverability the model already understands. CLI stops paying those costs.
+                    Zoom out and the pattern is clear: MCP is paying token and engineering costs to invent discoverability the model already understands. CLI stops paying those costs.
                 </p>
             </div>
         </section>
@@ -572,7 +572,7 @@
             <h2>The security reality check</h2>
 
             <p>
-                This is the part I feel strongly about and most of the discourse gets wrong. The MCP-vs-CLI debate has been framed in part as a security argument, and I want to shut that framing down before it spreads further.
+                Here's where I want to push back on the dominant framing. The MCP-vs-CLI debate has been positioned in part as a security argument, and I want to shut that framing down before it spreads further.
             </p>
 
             <div class="highlight-box">
@@ -727,7 +727,7 @@
 
             <div class="highlight-box">
                 <p>
-                    The honest framing is that CLI, code-execution, and MCP aren't competitors — they're the right answers to different questions. Shell for orchestration in production, code for data-heavy transformation, MCP for local dynamic discovery. The enemy isn't any single protocol. The enemy is interfaces the model is seeing for the first time, paying token cost for features you don't use, and security theater that mistakes transport choice for threat-model work.
+                    Read this way, CLI, code-execution, and MCP are the right answers to different questions. Shell for orchestration in production, code for data-heavy transformation, MCP for local dynamic discovery. The enemy isn't any single protocol. The enemy is interfaces the model is seeing for the first time, paying token cost for features you don't use, and security theater that mistakes transport choice for threat-model work.
                 </p>
             </div>
         </section>
