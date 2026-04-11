@@ -17,3 +17,7 @@
 
 # Progress tracking (local only)
 PROGRESS.md
+
+# Internal planning docs and private research (local only, never commit)
+docs/plans/
+docs/Private & Shared 2/Data_Center_Investment_Thesis_SemiAnalysis.tex
