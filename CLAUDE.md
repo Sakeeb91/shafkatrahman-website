@@ -193,6 +193,30 @@ Articles support the following content elements with automatic styling:
 - Add new component styles after existing sections, before media queries
 - Ensure responsive design with mobile-first approach
 
+### Theme-aware essays (CRITICAL)
+
+Long-form essays under `/writings/` use the **frost palette** defined in `style.css` under `:root` and `[data-theme="light"]`. Variables like `--color-bg`, `--color-text`, `--color-frost`, `--color-accent`, `--color-border` must be **inherited** — never hardcoded in an essay's inline `<style>` block, or the theme toggle will silently break for that page.
+
+**Allowed in an essay's inline `:root`:** typographic overrides only (`--font-display`, `--font-body`, `--font-mono`) and essay-specific one-offs. Any essay-specific color var must be paired with a matching `[data-theme="light"]` block in the same inline style.
+
+**Required template:**
+```html
+<style>
+    :root {
+        /* Frost color palette is inherited from style.css so [data-theme="light"] works.
+           Do NOT redefine --color-bg, --color-text, --color-frost, etc. here. */
+        --font-display: 'Cormorant Garamond', Georgia, serif;
+        --font-body: 'Source Sans 3', -apple-system, sans-serif;
+        --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    /* If the essay introduces its own color var, also add its light-mode override: */
+    /* [data-theme="light"] { --color-warning: #a8481a; } */
+</style>
+```
+
+Before shipping any new essay: load it, click the theme toggle, confirm background/text/accent colors all flip. If any element stays dark, it's referencing a hardcoded hex instead of a frost var — fix it to use `var(--color-*)`.
+
 ### Typography
 - Headings: `var(--font-display)` (EB Garamond)
 - Body text: `var(--font-body)` (Inter with system fallbacks)
