@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Agents Need CLI | Shafkat Rahman</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="A practitioner's case for Unix CLI conventions over typed tool catalogs — why agents work better when you hand them the interface the model already knows.">
+    <meta name="author" content="Shafkat Rahman">
+    <meta name="keywords" content="Claude Code, AI agents, MCP, CLI, tool use, agent architecture, Anthropic, function calling, code execution, shell">
+    <link rel="canonical" href="https://shafkatrahman.com/writings/why-agents-need-cli.html">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://shafkatrahman.com/writings/why-agents-need-cli.html">
+    <meta property="og:title" content="Why Agents Need CLI">
+    <meta property="og:description" content="A practitioner's take on the tool-interface problem, and why I think the industry picked the wrong default.">
+    <meta property="og:site_name" content="Shafkat Rahman">
+    <meta property="article:published_time" content="2026-04-11T00:00:00Z">
+    <meta property="article:author" content="Shafkat Rahman">
+    <meta property="article:section" content="AI Engineering">
+    <meta property="og:image" content="https://cdn.midjourney.com/5cb1a18e-f79f-46ec-8300-531588bd6534/0_3.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Shafkat Rahman">
+    <meta property="og:image:type" content="image/png">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@Sakeeb91">
+    <meta name="twitter:creator" content="@Sakeeb91">
+    <meta name="twitter:title" content="Why Agents Need CLI">
+    <meta name="twitter:description" content="A practitioner's take on the tool-interface problem, and why I think the industry picked the wrong default.">
+    <meta name="twitter:image" content="https://cdn.midjourney.com/5cb1a18e-f79f-46ec-8300-531588bd6534/0_3.png">
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Why Agents Need CLI",
+      "author": {
+        "@type": "Person",
+        "name": "Shafkat Rahman",
+        "url": "https://shafkatrahman.com"
+      },
+      "datePublished": "2026-04-11",
+      "description": "A practitioner's case for Unix CLI conventions over typed tool catalogs — why agents work better when you hand them the interface the model already knows.",
+      "url": "https://shafkatrahman.com/writings/why-agents-need-cli.html",
+      "publisher": {
+        "@type": "Person",
+        "name": "Shafkat Rahman"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://shafkatrahman.com/writings/why-agents-need-cli.html"
+      }
+    }
+    </script>
+
+    <!-- Shared site styles + fonts -->
+    <link rel="dns-prefetch" href="https://unpkg.com">
+    <link rel="preconnect" href="https://unpkg.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500&family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet" fetchpriority="high">
+    <link rel="stylesheet" href="../style.css?v=10">
+    <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'dark');</script>
+    <script src="https://unpkg.com/lucide@0.576.0" defer></script>
+
+    <style>
+        :root {
+            --color-bg: #0a0c10;
+            --color-bg-elevated: #12151c;
+            --color-bg-card: #181c26;
+            --color-frost: #a8d4f0;
+            --color-frost-light: #d4eaf7;
+            --color-frost-glow: rgba(168, 212, 240, 0.15);
+            --color-ice: #7eb8da;
+            --color-text: #e8eef4;
+            --color-text-muted: #8a9aad;
+            --color-text-dim: #5a6a7d;
+            --color-accent: #f0a878;
+            --color-accent-warm: #e8c4a0;
+            --color-border: rgba(168, 212, 240, 0.12);
+            --font-display: 'Cormorant Garamond', Georgia, serif;
+            --font-body: 'Source Sans 3', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 18px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.75;
+            font-weight: 300;
+            min-height: 100vh;
+            display: block;
+            padding: 0;
+        }
+
+        /* Frost crystal background animation */
+        .frost-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.4;
+            background:
+                radial-gradient(ellipse at 20% 20%, var(--color-frost-glow) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(126, 184, 218, 0.08) 0%, transparent 40%),
+                radial-gradient(ellipse at 60% 30%, rgba(240, 168, 120, 0.05) 0%, transparent 35%);
+        }
+
+        /* Article header */
+        .article-hero {
+            padding: 6rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .article-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 80px;
+            background: linear-gradient(to bottom, transparent, var(--color-frost), transparent);
+        }
+
+        .header-label {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--color-frost);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.2s forwards;
+        }
+
+        h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 400;
+            line-height: 1.15;
+            color: var(--color-frost-light);
+            max-width: 900px;
+            margin: 0 auto 1.5rem;
+            letter-spacing: -0.02em;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.4s forwards;
+        }
+
+        .subtitle {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--color-text-muted);
+            font-weight: 400;
+            max-width: 760px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.6s forwards;
+        }
+
+        .article-date {
+            display: block;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-text-dim);
+            margin-top: 1.5rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease 0.7s forwards;
+        }
+
+        /* Main content */
+        main {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 0 2rem 6rem;
+        }
+
+        /* Article sections */
+        section {
+            margin-bottom: 4rem;
+        }
+
+        h2 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 500;
+            color: var(--color-frost-light);
+            margin-bottom: 1.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-border);
+        }
+
+        h3 {
+            font-family: var(--font-display);
+            font-size: 1.45rem;
+            font-weight: 500;
+            color: var(--color-frost);
+            margin: 2.5rem 0 1rem;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            color: var(--color-text);
+        }
+
+        .lead {
+            font-size: 1.2rem;
+            color: var(--color-text-muted);
+            line-height: 1.85;
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        em {
+            color: var(--color-accent);
+            font-style: italic;
+        }
+
+        strong {
+            color: var(--color-frost);
+            font-weight: 500;
+        }
+
+        a {
+            color: var(--color-frost);
+            text-decoration: none;
+            border-bottom: 1px solid var(--color-border);
+            transition: border-color 0.2s ease, color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--color-frost-light);
+            border-bottom-color: var(--color-frost);
+        }
+
+        /* Inline code */
+        code {
+            font-family: var(--font-mono);
+            font-size: 0.88em;
+            color: var(--color-accent-warm);
+            background: rgba(168, 212, 240, 0.07);
+            border: 1px solid var(--color-border);
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+
+        /* Callout boxes */
+        .callout {
+            background: linear-gradient(135deg, var(--color-bg-card), var(--color-bg-elevated));
+            border-left: 3px solid var(--color-frost);
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .callout p {
+            margin-bottom: 0.75rem;
+            color: var(--color-text-muted);
+        }
+
+        .callout p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Highlight boxes */
+        .highlight-box {
+            background: rgba(168, 212, 240, 0.06);
+            border: 1px solid var(--color-frost);
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .highlight-box p {
+            color: var(--color-text-muted);
+        }
+
+        /* Blockquote */
+        blockquote {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--color-accent-warm);
+            border-left: 3px solid var(--color-accent);
+            padding: 0.5rem 0 0.5rem 1.5rem;
+            margin: 2rem 0;
+        }
+
+        blockquote p {
+            color: var(--color-accent-warm);
+            margin-bottom: 0;
+        }
+
+        /* Source list */
+        .source-list {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0 2rem;
+        }
+
+        .source-list li {
+            color: var(--color-text-muted);
+            font-size: 0.95rem;
+            padding: 0.6rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            border-bottom: 1px solid var(--color-border);
+            line-height: 1.6;
+        }
+
+        .source-list li:last-child {
+            border-bottom: none;
+        }
+
+        .source-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--color-frost);
+        }
+
+        /* Section dividers */
+        .divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 4rem 0;
+            gap: 1rem;
+        }
+
+        .divider span {
+            color: var(--color-frost);
+            font-size: 0.6rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--color-border), transparent);
+        }
+
+        /* Footer */
+        .article-footer {
+            border-top: 1px solid var(--color-border);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: var(--color-text-dim);
+            font-size: 0.85rem;
+            margin-top: 4rem;
+        }
+
+        .article-footer a {
+            color: var(--color-frost);
+            text-decoration: none;
+            border-bottom: none;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--color-bg-elevated);
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            color: var(--color-frost);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: var(--color-bg-card);
+            border-color: var(--color-frost);
+            transform: translateX(-5px);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            html {
+                font-size: 16px;
+            }
+
+            .article-hero {
+                padding: 4rem 1.5rem 3rem;
+            }
+
+            main {
+                padding: 0 1.5rem 4rem;
+            }
+
+            h2 {
+                font-size: 1.7rem;
+            }
+
+            h3 {
+                font-size: 1.25rem;
+            }
+
+            .callout, .highlight-box {
+                padding: 1.25rem 1.5rem;
+            }
+
+            code {
+                white-space: normal;
+                word-break: break-word;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .frost-bg {
+                display: none;
+            }
+
+            body {
+                background: white;
+                color: black;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <i data-lucide="moon" class="moon-icon"></i>
+        <i data-lucide="sun" class="sun-icon"></i>
+    </button>
+
+    <header class="site-nav" aria-label="Primary">
+        <div class="container nav-inner">
+            <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
+                <i data-lucide="menu" class="hamburger-icon"></i>
+                <i data-lucide="x" class="hamburger-close-icon"></i>
+            </button>
+            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link nav-link-active" href="/writings/">Writing</a>
+            <a class="nav-link" href="/reading/">Reading</a>
+            <a class="nav-link" href="/resources/">Resources</a>
+            <a class="nav-link" href="/advisory.html">Advisory</a>
+        </div>
+    </header>
+
+    <div class="frost-bg"></div>
+
+    <header class="article-hero">
+        <p class="header-label">AI Engineering</p>
+        <h1>Why Agents Need CLI</h1>
+        <p class="subtitle">A practitioner's take on the tool-interface problem, and why I think the industry picked the wrong default.</p>
+        <time class="article-date" datetime="2026-04-11">April 11, 2026</time>
+    </header>
+
+    <main>
+        <p class="lead">
+            Typed tool catalogs over MCP are the default way to give agents capabilities, and I think that default is wrong. Not wrong in the sense of "suboptimal in some cases." Wrong in the sense of structurally expensive, architecturally brittle, and solving a problem the model already knows how to solve itself if you stop getting in its way.
+        </p>
+
+        <section>
+            <h2>The thesis</h2>
+
+            <p>
+                The fix is to stop inventing new tool interfaces and hand the model the one it's already seen a billion times in training: Unix-style CLI conventions. A single <code>run(command="...")</code> tool with command dispatch behind it outperforms a catalog of typed function calls on every axis I care about — context cost, composition, discoverability, error recovery, auditability.
+            </p>
+
+            <p>
+                I'm not the first person to arrive here. A former Manus backend lead posted a <a href="https://www.reddit.com/r/LocalLLaMA/comments/1rrisqn/" target="_blank" rel="noopener noreferrer">long argument</a> for this in November 2025 and it blew up on r/LocalLLaMA. Anthropic's engineering team published <a href="https://www.anthropic.com/engineering/code-execution-with-mcp" target="_blank" rel="noopener noreferrer"><em>Code Execution with MCP</em></a> within the same window, reaching the same diagnosis from the research side. Simon Willison wrote that he'd already abandoned MCP for coding agents in favor of CLI utilities. Three independent actors, same conclusion, two-week span. That's the kind of convergence I pay attention to.
+            </p>
+
+            <p>
+                This is my synthesis of what they got right, what they're missing, and what I'd tell anyone building an agent system in 2026.
+            </p>
+        </section>
+
+        <div class="divider"><span>❄</span></div>
+
+        <section>
+            <h2>Why the typed-tool-catalog pattern is broken</h2>
+
+            <p>
+                Two failure modes, both measurable, both structural.
+            </p>
+
+            <p>
+                <strong>Context tax before the conversation starts.</strong> Every MCP tool definition sits in the system prompt. Anthropic put a number on it: a five-server setup with 58 tools burns roughly 55K tokens before the user types anything (<a href="https://www.anthropic.com/engineering/advanced-tool-use" target="_blank" rel="noopener noreferrer"><em>Advanced Tool Use</em></a>). You paid for that context. You can't use it for anything else.
+            </p>
+
+            <p>
+                <strong>Round-trip tax on intermediate results.</strong> Every tool response passes through the model whether the model needs to reason about it or not. Pull a transcript from Drive, push it to Salesforce — the full transcript traverses the context twice. Practitioners have reported complex workflows going from 150K tokens to ~2K by moving to code-execution patterns. A 98% reduction isn't a clever optimization. It's the size of the hole you were pouring money into.
+            </p>
+
+            <p>
+                Neither of these is a bug in any particular MCP server. They're properties of the pattern. You get them for free the moment you commit to "upfront tool definitions + model-mediated result passing."
+            </p>
+
+            <div class="callout">
+                <p>
+                    And the reflex fix — "just load tools dynamically" — breaks the KV cache prefix. Every time you add or remove a tool mid-conversation, the system prompt region recomputes. A single stable <code>run()</code> tool sidesteps this entirely, which is a subtle cost advantage that I don't see people talk about enough.
+                </p>
+            </div>
+        </section>
+
+        <div class="divider"><span>✦</span></div>
+
+        <section>
+            <h2>Why CLI beats MCP specifically</h2>
+
+            <p>
+                Three reasons, in order of importance.
+            </p>
+
+            <p>
+                <strong>1. The model already speaks it.</strong> GitHub is saturated with shell — install scripts, CI pipelines, Stack Overflow answers, README snippets, Dockerfiles. No agent framework has to teach a frontier model what <code>grep -c ERROR app.log</code> does, because the model has seen that exact shape thousands of times. Compare to a bespoke JSON schema the model is seeing for the first time at inference. One of these is free, the other isn't.
+            </p>
+
+            <p>
+                <strong>2. Composition is exponential, not linear.</strong> A catalog exposing 15 typed tools gives you 15 actions. The same 15 commands with <code>|</code>, <code>&amp;&amp;</code>, <code>||</code>, and <code>;</code> give you a composition space that grows combinatorially. The agent writes <code>curl -sL $URL | jq '.items[]' | head 5</code> in a <em>single</em> tool call where a typed framework would need three sequential round-trips through the model. Every round-trip you eliminate is a full inference pass you don't pay for.
+            </p>
+
+            <p>
+                <strong>3. <code>--help</code> is a zero-cost discovery protocol.</strong> Tools document themselves. The agent pulls the documentation into context only when it needs it, and only for the command it's actually using. Anthropic reinvented this for MCP via filesystem-based tool modules the agent navigates on demand — which is a fine solution, but it's solving a problem CLI conventions already solved fifty years ago. Simon Willison put it bluntly: "I don't use MCP at all any more when working with coding agents" (<a href="https://simonwillison.net/2025/Nov/4/code-execution-with-mcp/" target="_blank" rel="noopener noreferrer">simonwillison.net</a>).
+            </p>
+
+            <div class="highlight-box">
+                <p>
+                    The deeper point: MCP is paying token and engineering costs to invent discoverability the model already understands. CLI stops paying those costs.
+                </p>
+            </div>
+        </section>
+
+        <div class="divider"><span>❄</span></div>
+
+        <section>
+            <h2>Best practices for building CLI-for-agents</h2>
+
+            <p>
+                This is where most of the engineering lives. The surface pattern — "expose tools as commands" — is easy. Doing it well is not. Here's what I'd tell someone starting today, ordered roughly by how much pain each one saves you.
+            </p>
+
+            <h3>1. Separate execution from presentation. Always.</h3>
+
+            <p>
+                This is the single most important architectural decision and the one people get wrong first. Inside a pipe chain, outputs have to stay raw, lossless, metadata-free. If you truncate <code>cat</code>'s output mid-pipeline, <code>grep</code> searches the wrong data. If you inject <code>[exit:0]</code> into stdout, the next stage treats it as a search target. Pipes break, silently, and you spend a day wondering why.
+            </p>
+
+            <p>
+                Only after the entire chain completes does the presentation layer wrap the final result for the model: binary guards, truncation-with-overflow, metadata footer, stderr attachment. Two layers. Do not conflate them. This isn't a style preference, it's a correctness requirement.
+            </p>
+
+            <h3>2. Every error message is a navigation hint. Treat it that way.</h3>
+
+            <p>
+                Errors are the highest-leverage surface in your whole system. An agent that hits <code>[error] binary file</code> retries with garbage. An agent that hits <code>[error] binary image (182KB). Use: see photo.png</code> corrects in one step. Across a 50-turn conversation the token savings dominate everything else you optimize.
+            </p>
+
+            <p>
+                Call this <strong>tips thinking</strong> and bake it into every command: what went wrong, plus what to do instead. Both halves. Never just the first half.
+            </p>
+
+            <div class="callout">
+                <p>
+                    And while we're here: <strong>never drop stderr</strong>. The worst bug I've read about in this space is MorroHsu's silent-stderr incident — his code dropped stderr whenever stdout was non-empty, the agent hit <code>pip: command not found</code>, couldn't see why, and ground through ten package-manager variations over fifty seconds of inference before stumbling on <code>uv run</code>. One visible stderr line would have collapsed that to one call. Audit your framework for this pattern before you ship.
+                </p>
+            </div>
+
+            <h3>3. Pass content via stdin, not through the command string.</h3>
+
+            <p>
+                The biggest engineering tax of CLI-for-agents is double-escaping. The LLM emits JSON, the JSON field contains a shell command, the shell command contains quoted content, and now you're escaping quotes at two layers. Nightmare.
+            </p>
+
+            <p>
+                Fix it at the tool interface. Give <code>run()</code> a separate <code>stdin</code> parameter and document it. Content escapes once (the JSON layer) instead of twice. This one change eliminated ~90% of escaping issues in MorroHsu's production system and I believe that number because it matches what I've seen elsewhere.
+            </p>
+
+            <h3>4. Dangerous operations self-gate. Don't wrap the agent in an approval layer.</h3>
+
+            <p>
+                Put the risk gate inside each command, not outside the agent. <code>dns update</code> returns a dry-run preview by default and requires <code>--confirm</code> to actually execute. <code>pay --amount 500</code> blocks on a push notification to the human's device, with full context in the notification, and returns the outcome as part of the same tool call. <code>transfer --amount 10000</code> requires an OTP the agent has to ask the human for, and the error message tells the agent <em>why</em> so it can relay the reason.
+            </p>
+
+            <p>
+                Per-command risk gates are more fine-grained than any global policy framework, and they compose naturally with the CLI model. The command knows its own risk level. The command enforces it. The agent doesn't need to be trusted — it needs to be bounded.
+            </p>
+
+            <h3>5. Large outputs go to files, summaries come back.</h3>
+
+            <p>
+                When a command produces more than ~200 lines or ~50KB, truncate to the first 200 lines, write the full result to <code>/tmp/cmd-output/cmd-N.txt</code>, and return the head plus a pointer. Include suggested follow-up commands in the pointer (<code>grep</code>, <code>tail</code>). The agent already knows how to navigate a file with the tools it has. You're not building a custom pagination API; you're giving it a map.
+            </p>
+
+            <p>
+                This is the CLI-native version of what Anthropic does with code execution: "Large datasets remain inside the execution environment... the heavy lifting happens in code" (<a href="https://www.anthropic.com/engineering/code-execution-with-mcp" target="_blank" rel="noopener noreferrer"><em>Code Execution with MCP</em></a>). Same philosophy, different mechanism.
+            </p>
+
+            <h3>6. Append exit code and duration to every result.</h3>
+
+            <p>
+                <code>[exit:0 | 12ms]</code> at the end of every tool result. After the agent sees this pattern a few dozen times it internalizes both axes: exit code tells it whether to check for errors, duration tells it what's cheap to call freely versus what to use sparingly. Consistent metadata makes the agent smarter across turns. Inconsistent metadata makes every call feel like the first.
+            </p>
+
+            <h3>7. Design by desire path, not by spec.</h3>
+
+            <p>
+                Build a minimal CLI, watch the agent use it, and pave the paths it naturally tries to walk. I stole this framing from landscape architecture and it works better than any amount of upfront design. The agent will try to invoke commands you didn't build; those attempts are free telemetry on what your API surface should look like. Iterate on the real traces, not on your assumptions.
+            </p>
+
+            <h3>8. Your CLI surface <em>is</em> your agent's capability boundary.</h3>
+
+            <p>
+                This is the security model, and it's cleaner than any MCP permissions framework I've seen. The commands you expose define the action space. What's not a command is not a capability. Combine this with sandbox isolation for anything that touches the OS, allowlists for network egress, and the per-command self-gating from practice #4, and you get a layered model where the worst case at each layer is something you've explicitly accepted.
+            </p>
+
+            <p>
+                You're not hoping the agent won't make mistakes. You're designing a boundary, confirming the worst case inside the boundary is acceptable, and letting the agent act freely within it.
+            </p>
+        </section>
+
+        <div class="divider"><span>✦</span></div>
+
+        <section>
+            <h2>Where I wouldn't use CLI</h2>
+
+            <p>
+                I'm not claiming this is universal. Three cases where I'd reach for something else:
+            </p>
+
+            <p>
+                <strong>Strongly-typed structured queries.</strong> Database access, GraphQL, anywhere schema validation beats string parsing on the input side. Build the typed interface, or wrap it so the typed layer lives inside the command handler.
+            </p>
+
+            <p>
+                <strong>Data-heavy transformation workflows.</strong> This is where Anthropic's Programmatic Tool Calling wins — Claude for Excel reads thousands of spreadsheet rows without drowning the context, because the work happens in a sandboxed TypeScript runtime and only the result comes back (<a href="https://www.anthropic.com/engineering/advanced-tool-use" target="_blank" rel="noopener noreferrer"><em>Advanced Tool Use</em></a>). CLI pipes can express the same thing, but code-execution is more ergonomic when the transformation logic is nontrivial. Use both. They're not in conflict.
+            </p>
+
+            <p>
+                <strong>Persistent stateful sessions.</strong> Browser automation, long-lived REPLs, anything where state has to survive across calls. Text-stream pipes are a bottleneck; a protocol with persistent handles is a better fit.
+            </p>
+
+            <div class="highlight-box">
+                <p>
+                    The honest framing is that CLI and code-execution are the same idea at different layers — both move the agent from "emit one tool call at a time through the model" to "compose operations in a language the model already knows." Shell for orchestration, code for data transformation, both exposing capabilities the agent discovers on demand. The enemy isn't MCP or typed tools. The enemy is interfaces the model is seeing for the first time.
+                </p>
+            </div>
+        </section>
+
+        <div class="divider"><span>❄</span></div>
+
+        <section>
+            <h2>What I'm still figuring out</h2>
+
+            <p>
+                <strong>Tool discovery at scale.</strong> <code>--help</code> solves "the agent knows a tool exists and wants to learn how to use it." It doesn't solve "the agent needs a capability it doesn't know is installed." Cloudflare's Code Mode and Anthropic's Tool Search Tool both attack this with search-backed discovery. MorroHsu floats a <code>cli-search</code> command as the CLI-native equivalent. I don't think anyone has shipped a fully satisfying answer. This is probably the next real problem.
+            </p>
+
+            <p>
+                <strong>Multimodal I/O.</strong> Text-stream pipes handle text. Images, audio, binary artifacts need out-of-band handling — MorroHsu's <code>see photo.png</code> pattern auto-attaches to vision, which works, but the boundaries between "text command" and "binary payload" are awkward and I haven't seen a clean general solution.
+            </p>
+
+            <p>
+                <strong>Training on CLI traces.</strong> Every production agent session naturally generates (task, command, output) triples. Targeted fine-tuning on this data could compound the CLI advantage for smaller models — the agent's behavior improves specifically in the shape of its actual environment. I haven't seen public numbers on this yet and I'm suspicious of claims without them, but the setup is obvious enough that someone will publish soon.
+            </p>
+        </section>
+
+        <div class="divider"><span>✦</span></div>
+
+        <section>
+            <h2>The one-line version</h2>
+
+            <blockquote>
+                <p>Stop inventing new tool interfaces. Hand the model the one it already knows.</p>
+            </blockquote>
+
+            <p>
+                Everything else in this document is implementation detail in service of that single claim.
+            </p>
+        </section>
+
+        <div class="divider"><span>❄</span></div>
+
+        <section>
+            <h2>Sources</h2>
+
+            <ul class="source-list">
+                <li>
+                    MorroHsu, <a href="https://www.reddit.com/r/LocalLLaMA/comments/1rrisqn/" target="_blank" rel="noopener noreferrer"><em>I was backend lead at Manus. After building agents for 2 years, I stopped using function calling entirely</em></a> (r/LocalLLaMA, Nov 2025)
+                </li>
+                <li>
+                    MorroHsu, <a href="https://www.reddit.com/r/LocalLLaMA/comments/1rso48p/" target="_blank" rel="noopener noreferrer"><em>CLI is All Agents Need — Part 2: Misconceptions, Patterns, and Open Questions</em></a> (r/LocalLLaMA, Nov 2025)
+                </li>
+                <li>
+                    Anthropic Engineering, <a href="https://www.anthropic.com/engineering/code-execution-with-mcp" target="_blank" rel="noopener noreferrer"><em>Code Execution with MCP</em></a> (Nov 2025)
+                </li>
+                <li>
+                    Anthropic Engineering, <a href="https://www.anthropic.com/engineering/advanced-tool-use" target="_blank" rel="noopener noreferrer"><em>Advanced Tool Use</em></a> — Tool Search Tool, Programmatic Tool Calling
+                </li>
+                <li>
+                    Simon Willison, <a href="https://simonwillison.net/2025/Nov/4/code-execution-with-mcp/" target="_blank" rel="noopener noreferrer"><em>Code execution with MCP: Building more efficient agents</em></a> (Nov 4, 2025)
+                </li>
+                <li>
+                    <a href="https://github.com/xingyaoww/code-act" target="_blank" rel="noopener noreferrer">CodeAct</a> — prior art on code-as-action
+                </li>
+                <li>
+                    <a href="https://github.com/huggingface/smolagents" target="_blank" rel="noopener noreferrer">HuggingFace smolagents</a> — lightweight agent framework in the same lineage
+                </li>
+                <li>
+                    Peter Steinberger, <a href="https://lexfridman.com/peter-steinberger-transcript" target="_blank" rel="noopener noreferrer">Lex Fridman Podcast #491</a> — "Every MCP would be better as a CLI"
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <div class="article-email-capture" style="max-width: 640px; margin-left: auto; margin-right: auto; border-top: 1px solid var(--color-border); padding-top: 2rem; margin-top: 3rem; padding-left: 2rem; padding-right: 2rem;">
+        <p style="color: var(--color-text-muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1rem;">If you read this far, you'd probably like the newsletter. One analysis per week. Free.</p>
+        <form
+            style="display: flex; gap: 0.5rem; max-width: 28rem;"
+            onsubmit="event.preventDefault();var e=this.email.value,f=this;fetch('https://email-subscribe.rahman-sakeeb.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e})}).then(r=>{if(r.ok)f.parentElement.innerHTML='<p style=color:#8a9aad;font-size:0.9rem>You\'re in. Check your inbox.</p>';else f.parentElement.innerHTML='<p style=color:#8a9aad;font-size:0.9rem>Something went wrong. Try again.</p>'}).catch(()=>{f.parentElement.innerHTML='<p style=color:#8a9aad;font-size:0.9rem>Something went wrong. Try again.</p>'})"
+        >
+            <input type="email" name="email" placeholder="your@email.com" required
+                   style="flex:1; padding:0.6rem 0.9rem; background:rgba(168,212,240,0.07); border:1px solid var(--color-border); border-radius:0.25rem; color:var(--color-text); font-family:inherit; font-size:0.85rem;">
+            <button type="submit"
+                    style="padding:0.6rem 1.2rem; background:var(--color-frost-light); color:var(--color-bg); border:none; border-radius:0.25rem; font-family:inherit; font-size:0.85rem; font-weight:500; cursor:pointer; white-space:nowrap;">Subscribe</button>
+        </form>
+    </div>
+
+    <footer class="article-footer">
+        <p>Published April 2026 by Shafkat Rahman</p>
+        <a href="/writings/" class="back-link">← Back to Writing</a>
+    </footer>
+
+    <script src="../theme-toggle.js" defer></script>
+</body>
+</html>
