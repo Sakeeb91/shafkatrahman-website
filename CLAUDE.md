@@ -150,6 +150,28 @@ Articles support the following content elements with automatic styling:
 - **Paragraphs**: Proper vertical rhythm with 1.5rem bottom margin
 - **Quote callouts**: Use `<p class="article-quote">` for emphasized quotes within text
 
+### Math rendering in generated articles
+
+For Markdown sources rendered through `docs/article-template.html`:
+
+- Write inline math as `$N_{\mathrm{decode}}$`.
+- Write display math between `$$` delimiters on their own lines.
+- Do not use `\(...\)` in the Markdown source. The GFM reader can strip those delimiters and expose raw TeX in the generated page.
+- Generate native MathML with Pandoc, then let the template's MathJax script progressively enhance it. Native MathML remains readable if JavaScript or the CDN is unavailable.
+
+Canonical build command:
+
+```bash
+pandoc docs/<article>.md \
+  --from=gfm+tex_math_dollars \
+  --to=html5 \
+  --section-divs \
+  --mathml \
+  --wrap=none \
+  --template=docs/article-template.html \
+  --output=writings/<slug>.html
+```
+
 ### Example Article Structure
 
 ```html

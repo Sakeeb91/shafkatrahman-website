@@ -67,6 +67,9 @@
     <link rel="stylesheet" href="../style.css?v=13">
     <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'dark');</script>
     <script src="https://unpkg.com/lucide@0.576.0" defer></script>
+    <!-- Equations are emitted as native MathML at build time. MathJax enhances
+         that markup for consistent cross-browser typography; MathML remains
+         readable if JavaScript or the CDN is unavailable. -->
     <script>window.MathJax = { options: { enableMenu: false } };</script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" defer></script>
 
@@ -202,6 +205,25 @@
             overflow-y: hidden;
             margin: 2rem 0 !important;
             padding: 1.35rem 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            background: var(--color-bg-elevated);
+            color: var(--color-frost-light);
+        }
+
+        /* Native MathML fallback before MathJax loads, or when JS is disabled. */
+        math[display="inline"] {
+            color: inherit;
+            font-size: 1em;
+        }
+
+        math[display="block"] {
+            display: block;
+            width: 100%;
+            margin: 2rem 0;
+            padding: 1.35rem 1rem;
+            overflow-x: auto;
+            overflow-y: hidden;
             border: 1px solid var(--color-border);
             border-radius: 8px;
             background: var(--color-bg-elevated);
@@ -362,7 +384,7 @@
 <h2>The latency budget of an agent</h2>
 <p>A conventional chatbot often performs one inference pass: process the prompt, produce an answer, stop. An agent may perform dozens of passes. It searches files, selects tools, sends commands, examines results, revises its plan, runs tests, and repeats until a termination condition is satisfied.</p>
 <p>A simplified latency model for an agentic task is:</p>
-<p><span class="math display">\[
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">s</mi><mi mathvariant="normal">k</mi></mrow></msub><mo>=</mo><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>T</mi><mrow><mrow><mi mathvariant="normal">q</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">e</mi></mrow><mo>,</mo><mi>k</mi></mrow></msub><mo>+</mo><msub><mi>T</mi><mrow><mrow><mi mathvariant="normal">p</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">l</mi></mrow><mo>,</mo><mi>k</mi></mrow></msub><mo>+</mo><mfrac><msub><mi>N</mi><mrow><mrow><mi mathvariant="normal">d</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">e</mi></mrow><mo>,</mo><mi>k</mi></mrow></msub><msub><mi>R</mi><mrow><mrow><mi mathvariant="normal">d</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">e</mi></mrow><mo>,</mo><mi>k</mi></mrow></msub></mfrac><mo>+</mo><msub><mi>T</mi><mrow><mrow><mi mathvariant="normal">A</mi><mi mathvariant="normal">P</mi><mi mathvariant="normal">I</mi></mrow><mo>,</mo><mi>k</mi></mrow></msub><mo>+</mo><msub><mi>T</mi><mrow><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">l</mi></mrow><mo>,</mo><mi>k</mi></mrow></msub><mo>+</mo><msub><mi>T</mi><mrow><mrow><mi mathvariant="normal">o</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">h</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">s</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">n</mi></mrow><mo>,</mo><mi>k</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
 T_{\mathrm{task}} =
 \sum_{k=1}^{K}
 \left(
@@ -378,8 +400,8 @@ T_{\mathrm{tool},k}
 +
 T_{\mathrm{orchestration},k}
 \right)
-\]</span></p>
-<p>Here, (K) is the number of model turns, (N_{\mathrm{decode}}) is the number of generated tokens, and (R_{\mathrm{decode}}) is the output-token rate. The remaining terms account for scheduling, prompt processing, API services, external tools, and agent coordination.</p>
+</annotation></semantics></math></p>
+<p>Here, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math> is the number of model turns, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>N</mi><mrow><mi mathvariant="normal">d</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">e</mi></mrow></msub><annotation encoding="application/x-tex">N_{\mathrm{decode}}</annotation></semantics></math> is the number of generated tokens, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mrow><mi mathvariant="normal">d</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">e</mi></mrow></msub><annotation encoding="application/x-tex">R_{\mathrm{decode}}</annotation></semantics></math> is the output-token rate. The remaining terms account for scheduling, prompt processing, API services, external tools, and agent coordination.</p>
 <p>The 750-token-per-second figure directly reduces only the decode term. Its impact can still be large because that term appears repeatedly across a trajectory.</p>
 <p>OpenAI’s own analysis of the Codex agent loop divides latency into three broad regions: API processing, model inference, and client-side work such as executing tools and constructing new context. A single coding task can produce dozens of exchanges among the model, the Responses API, local search utilities, patching tools, and test runners.</p>
 <p>Consider an illustrative trajectory that generates 15,000 tokens across 50 reasoning and tool-selection turns. At 65 tokens per second, the approximate rate OpenAI reported for earlier flagship models, the decode component alone would consume about 231 seconds. At 750 tokens per second, the same token count would require about 20 seconds.</p>
@@ -392,15 +414,15 @@ T_{\mathrm{orchestration},k}
 <p>During <strong>prefill</strong>, the system processes the input sequence in parallel, constructs the initial key-value cache, and produces the first-token state. Long prompts make prefill expensive because the accelerator must perform large matrix operations across many input positions.</p>
 <p>During <strong>decode</strong>, the model generates tokens sequentially. Each token depends on the state produced by all previous tokens. The key-value cache avoids recomputing the entire preceding sequence, although the model still performs a new forward pass for every generated token. Cerebras describes prefill as relatively parallelizable and decode as the serial component that sits directly on the interactive critical path.</p>
 <p>For a dense transformer at low batch size, decode is frequently constrained by memory movement. A useful first-order bound is:</p>
-<p><span class="math display">\[
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mrow><mi mathvariant="normal">d</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">e</mi></mrow></msub><mo>≲</mo><mfrac><msub><mi>B</mi><mrow><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">v</mi><mi mathvariant="normal">e</mi></mrow></msub><mrow><msub><mi>W</mi><mrow><mi mathvariant="normal">a</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">v</mi><mi mathvariant="normal">e</mi></mrow></msub><mo>+</mo><msub><mi>K</mi><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">c</mi></mrow></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">
 R_{\mathrm{decode}}
 \lesssim
 \frac{B_{\mathrm{effective}}}
 {W_{\mathrm{active}} + K_{\mathrm{traffic}}}
-\]</span></p>
-<p>where (B_{\mathrm{effective}}) is usable memory bandwidth, (W_{\mathrm{active}}) is the volume of active model weights that must be accessed per generated token, and (K_{\mathrm{traffic}}) represents key-value-cache and activation traffic.</p>
-<p>This is deliberately simplified. Kernel efficiency, quantization, sparsity, mixture-of-experts routing, speculative decoding, tensor parallelism, and batching all alter the roofline. For a dense model, (W_{\mathrm{active}}) approaches the deployed weight footprint. For a mixture-of-experts model, it is closer to the subset of experts activated for that token. As context length grows, key-value-cache traffic consumes a larger fraction of the memory budget.</p>
-<p>The central constraint remains: autoregressive generation contains a sequential dependency. Additional compute cannot produce token (t+1) before the system has sampled token (t), except through techniques that speculate about several future tokens and subsequently verify them.</p>
+</annotation></semantics></math></p>
+<p>where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>B</mi><mrow><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">v</mi><mi mathvariant="normal">e</mi></mrow></msub><annotation encoding="application/x-tex">B_{\mathrm{effective}}</annotation></semantics></math> is usable memory bandwidth, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>W</mi><mrow><mi mathvariant="normal">a</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">v</mi><mi mathvariant="normal">e</mi></mrow></msub><annotation encoding="application/x-tex">W_{\mathrm{active}}</annotation></semantics></math> is the volume of active model weights that must be accessed per generated token, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>K</mi><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">c</mi></mrow></msub><annotation encoding="application/x-tex">K_{\mathrm{traffic}}</annotation></semantics></math> represents key-value-cache and activation traffic.</p>
+<p>This is deliberately simplified. Kernel efficiency, quantization, sparsity, mixture-of-experts routing, speculative decoding, tensor parallelism, and batching all alter the roofline. For a dense model, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>W</mi><mrow><mi mathvariant="normal">a</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">v</mi><mi mathvariant="normal">e</mi></mrow></msub><annotation encoding="application/x-tex">W_{\mathrm{active}}</annotation></semantics></math> approaches the deployed weight footprint. For a mixture-of-experts model, it is closer to the subset of experts activated for that token. As context length grows, key-value-cache traffic consumes a larger fraction of the memory budget.</p>
+<p>The central constraint remains: autoregressive generation contains a sequential dependency. Additional compute cannot produce token <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">t+1</annotation></semantics></math> before the system has sampled token <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>, except through techniques that speculate about several future tokens and subsequently verify them.</p>
 <p>This is why peak floating-point performance alone provides a poor prediction of low-batch decode speed. The hardware must feed the compute units with weights and cached state on every step.</p>
 <hr />
 </section>
@@ -446,16 +468,16 @@ R_{\mathrm{decode}}
 <section id="the-agent-as-a-delayed-feedback-controller" class="level2">
 <h2>The agent as a delayed feedback controller</h2>
 <p>An agentic system can be described using the language of control theory.</p>
-<p>Let (x_t) represent the agent’s observed state: files, browser contents, tool results, memory, test failures, and intermediate artifacts. The model implements a policy (\pi) that selects an action:</p>
-<p><span class="math display">\[
+<p>Let <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mi>t</mi></msub><annotation encoding="application/x-tex">x_t</annotation></semantics></math> represent the agent’s observed state: files, browser contents, tool results, memory, test failures, and intermediate artifacts. The model implements a policy <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>π</mi><annotation encoding="application/x-tex">\pi</annotation></semantics></math> that selects an action:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>u</mi><mi>t</mi></msub><mo>=</mo><mi>π</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>x</mi><mi>t</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">
 u_t = \pi(x_t)
-\]</span></p>
+</annotation></semantics></math></p>
 <p>The environment then evolves:</p>
-<p><span class="math display">\[
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>F</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>x</mi><mi>t</mi></msub><mo>,</mo><msub><mi>u</mi><mi>t</mi></msub><mo>,</mo><msub><mi>ϵ</mi><mi>t</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">
 x_{t+1} = F(x_t, u_t, \epsilon_t)
-\]</span></p>
-<p>where (\epsilon_t) represents uncertainty: nondeterministic tools, external systems, stochastic model sampling, incomplete observations, and changing data.</p>
-<p>Each iteration has a delay (\tau_t). In a physical controller, excessive delay can reduce stability margins because corrective actions arrive after the controlled system has moved. In a software agent, the usual consequence is lower loop bandwidth: fewer experiments, checks, and corrections can be completed per minute.</p>
+</annotation></semantics></math></p>
+<p>where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ϵ</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\epsilon_t</annotation></semantics></math> represents uncertainty: nondeterministic tools, external systems, stochastic model sampling, incomplete observations, and changing data.</p>
+<p>Each iteration has a delay <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>τ</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\tau_t</annotation></semantics></math>. In a physical controller, excessive delay can reduce stability margins because corrective actions arrive after the controlled system has moved. In a software agent, the usual consequence is lower loop bandwidth: fewer experiments, checks, and corrections can be completed per minute.</p>
 <p>The delay can also create state-management problems. Long-running agents operate against environments that change. Files are edited, remote data updates, locks expire, browser sessions move, credentials rotate, and other processes modify shared resources. A faster loop reduces the interval between observation and action, lowering the probability that the agent acts on stale state.</p>
 <p>This is the deeper importance of high-speed inference. The model becomes capable of participating in tighter feedback loops.</p>
 <p>In coding, that means reading an error, proposing a patch, running a test, and responding to the new failure without long pauses. In cybersecurity, it can mean inspecting evidence, generating a hypothesis, testing it inside a sandbox, and revising the investigation. In scientific workflows, it can mean selecting an analysis, executing it, checking residuals, and altering the model while the researcher remains cognitively engaged.</p>
@@ -465,12 +487,12 @@ x_{t+1} = F(x_t, u_t, \epsilon_t)
 <section id="amdahls-law-arrives-at-the-inference-stack" class="level2">
 <h2>Amdahl’s law arrives at the inference stack</h2>
 <p>Accelerating one component eventually exposes another.</p>
-<p>Suppose inference accounts for fraction (f) of an agent’s total runtime and the new hardware accelerates inference by factor (s). Amdahl’s law gives the maximum end-to-end speedup:</p>
-<p><span class="math display">\[
+<p>Suppose inference accounts for fraction <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>f</mi><annotation encoding="application/x-tex">f</annotation></semantics></math> of an agent’s total runtime and the new hardware accelerates inference by factor <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>. Amdahl’s law gives the maximum end-to-end speedup:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">l</mi></mrow></msub><mo>=</mo><mfrac><mn>1</mn><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>f</mi><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mfrac><mi>f</mi><mi>s</mi></mfrac></mrow></mfrac></mrow><annotation encoding="application/x-tex">
 S_{\mathrm{total}} =
 \frac{1}
 {(1-f)+\frac{f}{s}}
-\]</span></p>
+</annotation></semantics></math></p>
 <p>If inference occupies 70% of runtime and becomes ten times faster, the overall workflow improves by about 2.7 times. If inference occupies 30%, the same hardware improvement produces only about a 1.37-times end-to-end gain.</p>
 <p>OpenAI encountered exactly this systems effect while preparing GPT-5.3-Codex-Spark, which targeted more than 1,000 tokens per second on Cerebras. Earlier flagship models operated at roughly 65 tokens per second in the Responses API. Once inference accelerated by an order of magnitude, CPU-side request processing and repeated API work became visible bottlenecks.</p>
 <p>The company responded by optimizing the surrounding stack:</p>
@@ -492,10 +514,10 @@ S_{\mathrm{total}} =
 <p>Average latency conceals the failures users notice.</p>
 <p>A single chat response may be adequately described by median time to first token and median output speed. An agent with 50 sequential turns is exposed to 50 opportunities for queueing spikes, cache misses, retries, tool failures, and network variance.</p>
 <p>If task latency is a sum of turn latencies,</p>
-<p><span class="math display">\[
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">s</mi><mi mathvariant="normal">k</mi></mrow></msub><mo>=</mo><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover><msub><mi>T</mi><mi>k</mi></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">
 T_{\mathrm{task}} = \sum_{k=1}^{K} T_k,
-\]</span></p>
-<p>then small increases in the tail of the (T_k) distribution accumulate. A few p99 events can dominate the wall-clock duration of an otherwise fast trajectory.</p>
+</annotation></semantics></math></p>
+<p>then small increases in the tail of the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>T</mi><mi>k</mi></msub><annotation encoding="application/x-tex">T_k</annotation></semantics></math> distribution accumulate. A few p99 events can dominate the wall-clock duration of an otherwise fast trajectory.</p>
 <p>This creates several infrastructure requirements:</p>
 <p><strong>Admission control.</strong> The serving system must protect latency-sensitive workloads from overload rather than accepting unlimited requests and allowing queues to expand.</p>
 <p><strong>Deadline-aware scheduling.</strong> Interactive agent turns, offline document generation, and asynchronous batch jobs should not necessarily share the same scheduling policy.</p>
@@ -520,14 +542,14 @@ T_{\mathrm{task}} = \sum_{k=1}^{K} T_k,
 <li>synthesize evidence from parallel workstreams.</li>
 </ul>
 <p>GPT-5.6 introduces <code>ultra</code>, a mode in which multiple agents coordinate across parallel subproblems. OpenAI also exposes multi-agent execution through the Responses API, allowing a GPT-5.6 instance to run concurrent subagents and synthesize their outputs.</p>
-<p>Parallelism changes the latency equation. If a task decomposes into (m) independent workstreams, wall-clock time can approach the duration of the slowest branch plus orchestration overhead:</p>
-<p><span class="math display">\[
+<p>Parallelism changes the latency equation. If a task decomposes into <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math> independent workstreams, wall-clock time can approach the duration of the slowest branch plus orchestration overhead:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mrow><mi mathvariant="normal">p</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">l</mi></mrow></msub><mo>≈</mo><mrow><mi mathvariant="normal">max</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>T</mi><mn>1</mn></msub><mo>,</mo><msub><mi>T</mi><mn>2</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>T</mi><mi>m</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>+</mo><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">g</mi><mi mathvariant="normal">e</mi></mrow></msub></mrow><annotation encoding="application/x-tex">
 T_{\mathrm{parallel}}
 \approx
 \max(T_1, T_2, \ldots, T_m)
 +
 T_{\mathrm{merge}}
-\]</span></p>
+</annotation></semantics></math></p>
 <p>The total token and compute bill may increase even as elapsed time falls. Faster inference therefore creates a choice between three operating modes:</p>
 <ol type="1">
 <li><strong>Return the same amount of work sooner.</strong></li>
@@ -543,7 +565,7 @@ T_{\mathrm{merge}}
 <p>High generation speed does not make inefficient reasoning free.</p>
 <p>GPT-5.6’s release emphasizes performance per token and reports that Sol completes several long-horizon evaluations with fewer output tokens than earlier or competing systems. OpenAI lists Sol at $5 per million input tokens and $30 per million output tokens, with lower prices for Terra and Luna.</p>
 <p>From a systems perspective, total task cost can be approximated as:</p>
-<p><span class="math display">\[
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">s</mi><mi mathvariant="normal">k</mi></mrow></msub><mo>=</mo><msub><mi>C</mi><mrow><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">p</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">t</mi></mrow></msub><mo>+</mo><msub><mi>C</mi><mrow><mi mathvariant="normal">o</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">p</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">t</mi></mrow></msub><mo>+</mo><msub><mi>C</mi><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">s</mi></mrow></msub><mo>+</mo><msub><mi>C</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">s</mi></mrow></msub><mo>+</mo><msub><mi>C</mi><mrow><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">s</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi></mrow></msub></mrow><annotation encoding="application/x-tex">
 C_{\mathrm{task}} =
 C_{\mathrm{input}}
 +
@@ -554,7 +576,7 @@ C_{\mathrm{tools}}
 C_{\mathrm{retries}}
 +
 C_{\mathrm{infrastructure}}
-\]</span></p>
+</annotation></semantics></math></p>
 <p>A model that requires fewer turns, fewer tool calls, or fewer repair cycles may outperform a faster model in total cost and elapsed time. OpenAI cites early production evaluations in which GPT-5.6 reduced the number of steps, tool calls, and stuck runs for application-building workflows. Those figures are vendor-provided customer observations rather than independent benchmarks, but they illustrate the appropriate unit of measurement: the completed workflow.</p>
 <p>Tokens per second measures the rate of expenditure. Token efficiency determines how much expenditure is required. Tool-selection quality determines whether the expenditure advances the task.</p>
 <p>The engineering objective is high successful-work throughput.</p>
@@ -599,10 +621,10 @@ C_{\mathrm{infrastructure}}
 <p><strong>Availability and variance.</strong> Measure performance across time, regions, and production load.</p>
 <p>Cerebras advertises inference performance of up to 15 times that of GPU-based systems. OpenAI’s Sol announcement provides the separate model-specific peak of 750 tokens per second. Public documentation does not provide a matched Sol-on-Cerebras versus Sol-on-GPU benchmark with identical model settings and workload conditions. The two numbers should not be combined into a single verified comparison.</p>
 <p>The credible unit is:</p>
-<p><span class="math display">\[
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mfrac><mtext mathvariant="normal">verified tasks completed</mtext><mrow><mtext mathvariant="normal">dollar</mtext><mo>×</mo><mtext mathvariant="normal">second</mtext></mrow></mfrac><annotation encoding="application/x-tex">
 \frac{\text{verified tasks completed}}
 {\text{dollar} \times \text{second}}
-\]</span></p>
+</annotation></semantics></math></p>
 <p>No single benchmark captures the whole system, but this ratio forces the evaluation toward useful work.</p>
 <hr />
 </section>
@@ -613,7 +635,7 @@ C_{\mathrm{infrastructure}}
 <p>Any one of these improvements in isolation has limited value.</p>
 <p>A highly capable model with slow inference produces long waiting periods. Fast hardware serving an inefficient model burns through tokens rapidly. A fast model behind a slow API leaves the user waiting on CPUs and network hops. A low-latency stack connected to sluggish tools spends its time blocked on external systems.</p>
 <p>The emerging engineering object is the entire closed loop:</p>
-<p><span class="math display">\[
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">observe</mtext><mo>→</mo><mtext mathvariant="normal">reason</mtext><mo>→</mo><mtext mathvariant="normal">act</mtext><mo>→</mo><mtext mathvariant="normal">measure</mtext><mo>→</mo><mtext mathvariant="normal">verify</mtext><mo>→</mo><mtext mathvariant="normal">update</mtext></mrow><annotation encoding="application/x-tex">
 \text{observe}
 \rightarrow
 \text{reason}
@@ -625,7 +647,7 @@ C_{\mathrm{infrastructure}}
 \text{verify}
 \rightarrow
 \text{update}
-\]</span></p>
+</annotation></semantics></math></p>
 <p>Once that loop operates quickly enough, AI begins to occupy a different role. It can remain coupled to a programmer’s actions, a live investigation, an evolving simulation, or an experimental workflow. The user no longer submits a request and leaves. The model participates in an ongoing process.</p>
 <p>Seven hundred fifty tokens per second does not, by itself, create real-time intelligence. It removes one of the largest delays inside the loop. The next bottlenecks are already visible: prefill, queueing, safety processing, transport, state reconstruction, tool execution, verification, and tail reliability.</p>
 <p>That is the real systems breakthrough exposed by GPT-5.6 Sol and Cerebras. AI infrastructure is moving beyond the optimization of model responses and toward the optimization of repeated, verified interaction with an environment.</p>

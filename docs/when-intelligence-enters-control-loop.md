@@ -41,7 +41,7 @@ T_{\mathrm{orchestration},k}
 \right)
 $$
 
-Here, \(K\) is the number of model turns, \(N_{\mathrm{decode}}\) is the number of generated tokens, and \(R_{\mathrm{decode}}\) is the output-token rate. The remaining terms account for scheduling, prompt processing, API services, external tools, and agent coordination.
+Here, $K$ is the number of model turns, $N_{\mathrm{decode}}$ is the number of generated tokens, and $R_{\mathrm{decode}}$ is the output-token rate. The remaining terms account for scheduling, prompt processing, API services, external tools, and agent coordination.
 
 The 750-token-per-second figure directly reduces only the decode term. Its impact can still be large because that term appears repeatedly across a trajectory.
 
@@ -70,11 +70,11 @@ R_{\mathrm{decode}}
 {W_{\mathrm{active}} + K_{\mathrm{traffic}}}
 $$
 
-where \(B_{\mathrm{effective}}\) is usable memory bandwidth, \(W_{\mathrm{active}}\) is the volume of active model weights that must be accessed per generated token, and \(K_{\mathrm{traffic}}\) represents key-value-cache and activation traffic.
+where $B_{\mathrm{effective}}$ is usable memory bandwidth, $W_{\mathrm{active}}$ is the volume of active model weights that must be accessed per generated token, and $K_{\mathrm{traffic}}$ represents key-value-cache and activation traffic.
 
-This is deliberately simplified. Kernel efficiency, quantization, sparsity, mixture-of-experts routing, speculative decoding, tensor parallelism, and batching all alter the roofline. For a dense model, \(W_{\mathrm{active}}\) approaches the deployed weight footprint. For a mixture-of-experts model, it is closer to the subset of experts activated for that token. As context length grows, key-value-cache traffic consumes a larger fraction of the memory budget.
+This is deliberately simplified. Kernel efficiency, quantization, sparsity, mixture-of-experts routing, speculative decoding, tensor parallelism, and batching all alter the roofline. For a dense model, $W_{\mathrm{active}}$ approaches the deployed weight footprint. For a mixture-of-experts model, it is closer to the subset of experts activated for that token. As context length grows, key-value-cache traffic consumes a larger fraction of the memory budget.
 
-The central constraint remains: autoregressive generation contains a sequential dependency. Additional compute cannot produce token \(t+1\) before the system has sampled token \(t\), except through techniques that speculate about several future tokens and subsequently verify them.
+The central constraint remains: autoregressive generation contains a sequential dependency. Additional compute cannot produce token $t+1$ before the system has sampled token $t$, except through techniques that speculate about several future tokens and subsequently verify them.
 
 This is why peak floating-point performance alone provides a poor prediction of low-batch decode speed. The hardware must feed the compute units with weights and cached state on every step.
 
@@ -142,7 +142,7 @@ The topology matters more than the slogan.
 
 An agentic system can be described using the language of control theory.
 
-Let \(x_t\) represent the agent’s observed state: files, browser contents, tool results, memory, test failures, and intermediate artifacts. The model implements a policy \(\pi\) that selects an action:
+Let $x_t$ represent the agent’s observed state: files, browser contents, tool results, memory, test failures, and intermediate artifacts. The model implements a policy $\pi$ that selects an action:
 
 $$
 u_t = \pi(x_t)
@@ -154,9 +154,9 @@ $$
 x_{t+1} = F(x_t, u_t, \epsilon_t)
 $$
 
-where \(\epsilon_t\) represents uncertainty: nondeterministic tools, external systems, stochastic model sampling, incomplete observations, and changing data.
+where $\epsilon_t$ represents uncertainty: nondeterministic tools, external systems, stochastic model sampling, incomplete observations, and changing data.
 
-Each iteration has a delay \(\tau_t\). In a physical controller, excessive delay can reduce stability margins because corrective actions arrive after the controlled system has moved. In a software agent, the usual consequence is lower loop bandwidth: fewer experiments, checks, and corrections can be completed per minute.
+Each iteration has a delay $\tau_t$. In a physical controller, excessive delay can reduce stability margins because corrective actions arrive after the controlled system has moved. In a software agent, the usual consequence is lower loop bandwidth: fewer experiments, checks, and corrections can be completed per minute.
 
 The delay can also create state-management problems. Long-running agents operate against environments that change. Files are edited, remote data updates, locks expire, browser sessions move, credentials rotate, and other processes modify shared resources. A faster loop reduces the interval between observation and action, lowering the probability that the agent acts on stale state.
 
@@ -172,7 +172,7 @@ The useful metric becomes **time to verified action**, not time to prose.
 
 Accelerating one component eventually exposes another.
 
-Suppose inference accounts for fraction \(f\) of an agent’s total runtime and the new hardware accelerates inference by factor \(s\). Amdahl’s law gives the maximum end-to-end speedup:
+Suppose inference accounts for fraction $f$ of an agent’s total runtime and the new hardware accelerates inference by factor $s$. Amdahl’s law gives the maximum end-to-end speedup:
 
 $$
 S_{\mathrm{total}} =
@@ -213,7 +213,7 @@ $$
 T_{\mathrm{task}} = \sum_{k=1}^{K} T_k,
 $$
 
-then small increases in the tail of the \(T_k\) distribution accumulate. A few p99 events can dominate the wall-clock duration of an otherwise fast trajectory.
+then small increases in the tail of the $T_k$ distribution accumulate. A few p99 events can dominate the wall-clock duration of an otherwise fast trajectory.
 
 This creates several infrastructure requirements:
 
@@ -248,7 +248,7 @@ Within a fixed ten-second latency budget, a system could use higher output speed
 
 GPT-5.6 introduces `ultra`, a mode in which multiple agents coordinate across parallel subproblems. OpenAI also exposes multi-agent execution through the Responses API, allowing a GPT-5.6 instance to run concurrent subagents and synthesize their outputs.
 
-Parallelism changes the latency equation. If a task decomposes into \(m\) independent workstreams, wall-clock time can approach the duration of the slowest branch plus orchestration overhead:
+Parallelism changes the latency equation. If a task decomposes into $m$ independent workstreams, wall-clock time can approach the duration of the slowest branch plus orchestration overhead:
 
 $$
 T_{\mathrm{parallel}}

@@ -67,6 +67,9 @@
     <link rel="stylesheet" href="../style.css?v=13">
     <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'dark');</script>
     <script src="https://unpkg.com/lucide@0.576.0" defer></script>
+    <!-- Equations are emitted as native MathML at build time. MathJax enhances
+         that markup for consistent cross-browser typography; MathML remains
+         readable if JavaScript or the CDN is unavailable. -->
     <script>window.MathJax = { options: { enableMenu: false } };</script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" defer></script>
 
@@ -202,6 +205,25 @@
             overflow-y: hidden;
             margin: 2rem 0 !important;
             padding: 1.35rem 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            background: var(--color-bg-elevated);
+            color: var(--color-frost-light);
+        }
+
+        /* Native MathML fallback before MathJax loads, or when JS is disabled. */
+        math[display="inline"] {
+            color: inherit;
+            font-size: 1em;
+        }
+
+        math[display="block"] {
+            display: block;
+            width: 100%;
+            margin: 2rem 0;
+            padding: 1.35rem 1rem;
+            overflow-x: auto;
+            overflow-y: hidden;
             border: 1px solid var(--color-border);
             border-radius: 8px;
             background: var(--color-bg-elevated);
