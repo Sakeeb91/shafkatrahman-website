@@ -853,6 +853,21 @@ mjx-container[display="true"] {
     padding: 0 clamp(24px, 4vw, 48px) 80px;
 }
 
+/* On wide screens, use spare canvas around the article to correct the
+   half-rail optical shift. The offset grows only when the 980px lead image
+   can remain clear of the rail, then caps at half the rail width. */
+body > .article-hero,
+body > .article-visual,
+body > .hero-figure,
+body > .article-hero ~ main,
+body > .article-visual + main,
+body > .hero-figure + main,
+body > .article-email-capture,
+body > .article-footer {
+    position: relative;
+    left: clamp(-118px, calc((1248px - 100vw) / 2), 0px);
+}
+
 .article-section-nav {
     position: fixed;
     top: 3rem;
