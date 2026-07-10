@@ -6,6 +6,8 @@ node_modules/
 
 # Documentation and internal files
 docs/
+.impeccable/
+PRODUCT.md
 CLAUDE.md
 SETUP_GITHUB_ACTIONS.md
 
