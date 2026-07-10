@@ -4,6 +4,7 @@
 
     const root = document.documentElement;
     const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+    let userTheme = localStorage.getItem('theme');
     const localPreviewTheme = ['127.0.0.1', 'localhost'].includes(window.location.hostname)
         ? new URLSearchParams(window.location.search).get('theme')
         : null;
@@ -11,7 +12,9 @@
     function syncTheme(event) {
         root.dataset.theme = localPreviewTheme === 'dark' || localPreviewTheme === 'light'
             ? localPreviewTheme
-            : (event ? event.matches : systemTheme.matches) ? 'dark' : 'light';
+            : userTheme === 'dark' || userTheme === 'light'
+                ? userTheme
+                : (event ? event.matches : systemTheme.matches) ? 'dark' : 'light';
     }
 
     syncTheme();
@@ -33,7 +36,6 @@
         nav.innerHTML = `
             <div class="nav-inner">
                 <a class="nav-brand" href="/" aria-label="Shafkat Rahman, home">
-                    <span class="nav-monogram" aria-hidden="true">SR</span>
                     <span class="nav-name">Shafkat Rahman</span>
                 </a>
                 <button class="nav-hamburger" type="button" aria-controls="primary-links" aria-expanded="false">
@@ -43,6 +45,7 @@
                 <nav class="nav-links" id="primary-links" aria-label="Primary navigation">
                     ${destinations.map(([label, href, active]) => `<a class="nav-link${active ? ' nav-link-active' : ''}" href="${href}"${active ? ' aria-current="page"' : ''}>${label}</a>`).join('')}
                 </nav>
+                <button class="theme-switch" type="button" aria-pressed="${root.dataset.theme === 'dark'}"></button>
                 <div class="nav-utility" aria-label="Elsewhere">
                     <a href="https://www.linkedin.com/in/shafkat-rahman/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
                     <a href="https://github.com/Sakeeb91" target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -52,6 +55,24 @@
 
         const toggle = nav.querySelector('.nav-hamburger');
         const links = nav.querySelector('.nav-links');
+        const themeSwitch = nav.querySelector('.theme-switch');
+
+        function updateThemeSwitch() {
+            const dark = root.dataset.theme === 'dark';
+            themeSwitch.textContent = `Theme: ${dark ? 'Dark' : 'Light'}`;
+            themeSwitch.setAttribute('aria-pressed', String(dark));
+            themeSwitch.setAttribute('aria-label', `Current theme: ${dark ? 'dark' : 'light'}. Switch to ${dark ? 'light' : 'dark'} theme`);
+        }
+
+        updateThemeSwitch();
+        systemTheme.addEventListener('change', updateThemeSwitch);
+        themeSwitch.addEventListener('click', () => {
+            userTheme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('theme', userTheme);
+            syncTheme();
+            updateThemeSwitch();
+        });
+
         toggle.addEventListener('click', () => {
             const open = nav.classList.toggle('nav-open');
             toggle.setAttribute('aria-expanded', String(open));
@@ -73,6 +94,72 @@
     }
 
     const articleMain = document.querySelector('.article-hero + main, .article-visual + main, .hero-figure + main');
+    const manifest = Array.isArray(window.WRITING_MANIFEST) ? window.WRITING_MANIFEST : [];
+    const currentArticle = manifest.find((entry) => entry.path === window.location.pathname);
+
+    function renderTags(tags, className) {
+        const list = document.createElement('ul');
+        list.className = className;
+        list.setAttribute('aria-label', 'Article tags');
+        tags.forEach((tag) => {
+            const item = document.createElement('li');
+            item.textContent = tag;
+            list.appendChild(item);
+        });
+        return list;
+    }
+
+    if (currentArticle) {
+        document.querySelectorAll('meta[property="article:tag"]').forEach((meta) => meta.remove());
+        currentArticle.tags.forEach((tag) => {
+            const meta = document.createElement('meta');
+            meta.setAttribute('property', 'article:tag');
+            meta.setAttribute('content', tag);
+            document.head.appendChild(meta);
+        });
+
+        document.querySelectorAll('script[type="application/ld+json"]').forEach((script) => {
+            try {
+                const data = JSON.parse(script.textContent);
+                if (data['@type'] === 'Article') {
+                    data.keywords = currentArticle.tags;
+                    script.textContent = JSON.stringify(data);
+                }
+            } catch (error) {
+                console.warn('Could not synchronize article tags with structured data.');
+            }
+        });
+
+        const hero = document.querySelector('.article-hero');
+        if (hero) {
+            if (!hero.querySelector('.article-date')) {
+                const date = document.createElement('time');
+                date.className = 'article-date';
+                date.dateTime = currentArticle.date;
+                date.textContent = new Intl.DateTimeFormat('en-CA', {
+                    year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC'
+                }).format(new Date(`${currentArticle.date}T00:00:00Z`));
+                hero.appendChild(date);
+            }
+            hero.appendChild(renderTags(currentArticle.tags, 'article-tags'));
+        }
+    }
+
+    document.querySelectorAll('.writing-item').forEach((item) => {
+        const link = item.querySelector('.writing-link');
+        if (!link) return;
+        const article = manifest.find((entry) => entry.path === new URL(link.href, window.location.origin).pathname);
+        if (!article) return;
+        item.dataset.tags = article.tags.map((tag) => tag.toLowerCase()).join('|');
+        link.appendChild(renderTags(article.tags, 'writing-tags'));
+    });
+
+    document.querySelectorAll('.workspace-row a[href^="/writings/"]').forEach((link) => {
+        const article = manifest.find((entry) => entry.path === new URL(link.href, window.location.origin).pathname);
+        const row = link.closest('.workspace-row');
+        if (article && row) row.appendChild(renderTags(article.tags.slice(0, 3), 'workspace-tags'));
+    });
+
     if (articleMain) {
         const sections = Array.from(articleMain.querySelectorAll('h2')).slice(0, 10);
         if (sections.length > 1) {

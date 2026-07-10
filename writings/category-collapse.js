@@ -27,28 +27,51 @@
 
     const controls = document.createElement('div');
     controls.className = 'writing-filters';
-    controls.setAttribute('role', 'group');
-    controls.setAttribute('aria-label', 'Filter writing by type');
+    controls.setAttribute('aria-label', 'Writing filters');
+    const topics = Array.from(new Set(
+        (window.WRITING_MANIFEST || []).flatMap((entry) => entry.tags)
+    )).sort((a, b) => a.localeCompare(b));
     controls.innerHTML = `
-        <button class="writing-filter" type="button" data-filter="all" aria-pressed="true">All</button>
-        <button class="writing-filter" type="button" data-filter="essay" aria-pressed="false">Essays</button>
-        <button class="writing-filter" type="button" data-filter="research" aria-pressed="false">Research</button>`;
+        <div class="writing-type-filters" role="group" aria-label="Filter writing by type">
+            <button class="writing-filter" type="button" data-filter="all" aria-pressed="true">All</button>
+            <button class="writing-filter" type="button" data-filter="essay" aria-pressed="false">Essays</button>
+            <button class="writing-filter" type="button" data-filter="research" aria-pressed="false">Research</button>
+        </div>
+        <label class="writing-topic-filter">Topic
+            <select>
+                <option value="all">All topics</option>
+                ${topics.map((topic) => `<option value="${topic.toLowerCase()}">${topic}</option>`).join('')}
+            </select>
+        </label>`;
     header.insertAdjacentElement('afterend', controls);
 
-    controls.addEventListener('click', (event) => {
-        const button = event.target.closest('.writing-filter');
-        if (!button) return;
-        const filter = button.dataset.filter;
+    let activeType = 'all';
+    let activeTopic = 'all';
 
-        controls.querySelectorAll('.writing-filter').forEach((candidate) => {
-            candidate.setAttribute('aria-pressed', String(candidate === button));
-        });
-
+    function applyFilters() {
         entries.forEach((item) => {
-            item.hidden = filter !== 'all' && item.dataset.kind !== filter;
+            const typeMatch = activeType === 'all' || item.dataset.kind === activeType;
+            const topicMatch = activeTopic === 'all' || (item.dataset.tags || '').split('|').includes(activeTopic);
+            item.hidden = !typeMatch || !topicMatch;
         });
 
         const visible = entries.filter((item) => !item.hidden).length;
         list.setAttribute('aria-label', `${visible} ${visible === 1 ? 'article' : 'articles'} shown`);
+    }
+
+    controls.addEventListener('click', (event) => {
+        const button = event.target.closest('.writing-filter');
+        if (!button) return;
+        activeType = button.dataset.filter;
+
+        controls.querySelectorAll('.writing-filter').forEach((candidate) => {
+            candidate.setAttribute('aria-pressed', String(candidate === button));
+        });
+        applyFilters();
+    });
+
+    controls.querySelector('select').addEventListener('change', (event) => {
+        activeTopic = event.target.value;
+        applyFilters();
     });
 }());

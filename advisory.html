@@ -39,8 +39,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" fetchpriority="high">
     <link rel="stylesheet" href="style.css?v=14">
-    <link rel="stylesheet" href="redesign.css?v=3">
-    <script>document.documentElement.dataset.theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';</script>
+    <link rel="stylesheet" href="redesign.css?v=6">
+    <script>document.documentElement.dataset.theme = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');</script>
 
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@0.576.0" defer></script>
@@ -134,7 +134,7 @@
 
                 <p><strong>Investor lens.</strong> Background in private equity research, where I learned to evaluate technology companies through the lens of unit economics, competitive dynamics, and capital efficiency.</p>
 
-                <p><strong>Builder experience.</strong> I ship real products. <a href="https://servicepronto.ca" target="_blank" rel="noopener noreferrer">Service Pronto</a> is currently deployed at Sheraton Laval, handling guest service operations in production.</p>
+                <p><strong>Builder experience.</strong> I ship and operate AI products in production.</p>
 
                 <p><strong>Quantitative analysis.</strong> Trained in theoretical physics, which means I think in terms of first principles, scaling behavior, and the math behind the abstractions.</p>
 
@@ -175,6 +175,7 @@
         </div>
     </main>
 
-    <script src="theme-toggle.js" defer></script>
+    <script src="/writing-manifest.js?v=1" defer></script>
+    <script src="theme-toggle.js?v=2" defer></script>
 </body>
 </html>

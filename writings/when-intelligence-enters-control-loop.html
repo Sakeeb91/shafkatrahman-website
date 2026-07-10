@@ -65,8 +65,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500&amp;family=Inter:wght@400;500;600&amp;family=Cormorant+Garamond:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Source+Sans+3:wght@300;400;500;600&amp;display=swap" rel="stylesheet" fetchpriority="high">
     <link rel="stylesheet" href="../style.css?v=14">
-    <link rel="stylesheet" href="../redesign.css?v=3">
-    <script>document.documentElement.dataset.theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';</script>
+    <link rel="stylesheet" href="../redesign.css?v=6">
+    <script>document.documentElement.dataset.theme = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');</script>
     <script src="https://unpkg.com/lucide@0.576.0" defer></script>
     <!-- Equations are emitted as native MathML at build time. MathJax enhances
          that markup for consistent cross-browser typography; MathML remains
@@ -683,6 +683,7 @@ C_{\mathrm{infrastructure}}
         <a href="/writings/" class="back-link">← Back to Writing</a>
     </footer>
 
-    <script src="../theme-toggle.js" defer></script>
+    <script src="/writing-manifest.js?v=1" defer></script>
+    <script src="../theme-toggle.js?v=2" defer></script>
 </body>
 </html>

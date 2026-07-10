@@ -100,6 +100,8 @@ After pushing, verify deployment propagation. Browser caching can cause issues; 
 
 ## Adding New Writing
 
+Read `WRITING.md` first. The canonical article inventory and tags live in `writing-manifest.js`; update that registry whenever an article is added, removed, renamed, or retagged.
+
 To add a new essay or article:
 
 1. **Create the article HTML** in `writings/[slug].html`:
