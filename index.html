@@ -37,8 +37,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" fetchpriority="high">
-    <link rel="stylesheet" href="style.css?v=13">
-    <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'dark');</script>
+    <link rel="stylesheet" href="style.css?v=14">
+    <link rel="stylesheet" href="redesign.css?v=3">
+    <script>document.documentElement.dataset.theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';</script>
 
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@0.576.0" defer></script>
@@ -77,78 +78,85 @@
     </script>
 </head>
 <body>
-    <!-- Theme Toggle Button -->
-    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
-        <i data-lucide="moon" class="moon-icon"></i>
-        <i data-lucide="sun" class="sun-icon"></i>
-    </button>
+    <header class="site-nav" aria-label="Primary"></header>
 
-    <header class="site-nav" aria-label="Primary">
-        <div class="container nav-inner">
-            <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
-                <i data-lucide="menu" class="hamburger-icon"></i>
-                <i data-lucide="x" class="hamburger-close-icon"></i>
-            </button>
-            <a class="nav-link nav-link-active" href="/">Home</a>
-            <a class="nav-link" href="/writings/">Writing</a>
-            <a class="nav-link" href="/reading/">Reading</a>
-            <a class="nav-link" href="/resources/">Resources</a>
-            <a class="nav-link" href="/advisory.html">Advisory</a>
-        </div>
-    </header>
+    <main class="home-page">
+        <header class="home-intro">
+            <h1>Shafkat Rahman</h1>
+            <p class="home-lede">AI investment research and applied AI development.</p>
+            <p class="home-context">I write technical analysis on agent systems, scaling behavior, model architectures, and infrastructure economics. My background spans theoretical physics, private equity research, and shipping AI products.</p>
+        </header>
 
-    <main class="hero">
-        <div class="container hero-inner animate-fade-in">
-            <div class="hero-header animate-slide-up">
-                <h1>Shafkat Rahman</h1>
-            </div>
-            <div class="hero-body animate-slide-up-delay">
-                <p>AI investment and applied AI development.</p>
-                <p class="text-muted">I write technical analysis on what's actually happening in AI — agent coordination, scaling laws, model architectures, and infrastructure economics. 10K+ followers on Threads. Cited by Forbes. Background in theoretical physics and private equity research.</p>
-            </div>
-            <div class="email-capture animate-slide-up-delay">
-                <p>One analysis per week. Free.</p>
-                <form
-                    class="email-capture-form"
-                    onsubmit="event.preventDefault();var e=this.email.value,f=this;fetch('https://email-subscribe.rahman-sakeeb.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e})}).then(r=>{if(r.ok)f.parentElement.innerHTML='<p class=email-capture-success>You\'re in. Check your inbox.</p>';else f.parentElement.innerHTML='<p class=email-capture-success>Something went wrong. Try again.</p>'}).catch(()=>{f.parentElement.innerHTML='<p class=email-capture-success>Something went wrong. Try again.</p>'})"
-                >
-                    <input type="email" name="email" placeholder="your@email.com" required>
-                    <button type="submit">Subscribe</button>
-                </form>
-            </div>
-            <div class="social-section animate-slide-up-delay-2">
-                <div class="social-links-icons">
-                    <a href="https://www.linkedin.com/in/shafkat-rahman/"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       aria-label="LinkedIn"
-                       class="social-icon-link">
-                        <i data-lucide="linkedin" class="social-icon"></i>
-                    </a>
-                    <a href="https://github.com/Sakeeb91"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       aria-label="GitHub"
-                       class="social-icon-link">
-                        <i data-lucide="github" class="social-icon"></i>
-                    </a>
-                    <a href="https://x.com/Sakeeb91"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       aria-label="Twitter"
-                       class="social-icon-link">
-                        <i data-lucide="twitter" class="social-icon"></i>
-                    </a>
-                    <a href="https://www.threads.com/@sakeeb.rahman"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       aria-label="Threads"
-                       class="social-icon-link">
-                        <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.291a13.853 13.853 0 0 1 3.02.142c-.126-.742-.375-1.332-.75-1.757-.513-.586-1.308-.883-2.359-.89h-.029c-.844 0-1.992.232-2.721 1.32L7.734 7.847c.98-1.454 2.568-2.256 4.478-2.256h.044c3.194.02 5.097 1.975 5.287 5.388.108.046.216.094.321.142 1.49.7 2.58 1.761 3.154 3.07.797 1.82.871 4.79-1.548 7.158-1.85 1.81-4.094 2.628-7.277 2.65Zm1.003-11.69c-.242 0-.487.007-.739.021-1.836.103-2.98.946-2.916 2.143.067 1.256 1.452 1.839 2.784 1.767 1.224-.065 2.818-.543 3.086-3.71a10.5 10.5 0 0 0-2.215-.221z"/></svg>
-                    </a>
+        <section class="workspace-section" aria-labelledby="latest-heading">
+            <h2 id="latest-heading">Latest writing</h2>
+            <div class="workspace-rows">
+                <div class="workspace-row">
+                    <a href="/writings/when-intelligence-enters-control-loop.html">When Intelligence Enters the Control Loop</a>
+                    <span class="workspace-meta">Jul 10, 2026</span>
+                    <p>Why inference speed changes what intelligent systems can control.</p>
+                </div>
+                <div class="workspace-row">
+                    <a href="/writings/ai-adhd-advantage-real-playbook.html">The ADHD-AI Thesis</a>
+                    <span class="workspace-meta">Apr 26, 2026</span>
+                    <p>What is real, what is cope, and what the practical playbook looks like.</p>
+                </div>
+                <div class="workspace-row">
+                    <a href="/writings/why-agents-need-cli.html">Why Agents Need CLI</a>
+                    <span class="workspace-meta">Apr 11, 2026</span>
+                    <p>Command-line interfaces as durable, composable tools for agents.</p>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <section class="workspace-section" aria-labelledby="research-heading">
+            <h2 id="research-heading">Research</h2>
+            <div class="workspace-rows">
+                <div class="workspace-row">
+                    <a href="/writings/research/data-center-investment-analysis.html">Data Center Infrastructure Investment Analysis</a>
+                    <span class="workspace-meta">Nov 25, 2025</span>
+                    <p>Power, cooling, compute density, and capital allocation at gigawatt scale.</p>
+                </div>
+                <div class="workspace-row">
+                    <a href="/writings/research/ai_infrastructure_analysis.html">AI Infrastructure Economics</a>
+                    <span class="workspace-meta">Dec 15, 2024</span>
+                    <p>Technical constraints and competitive dynamics across the AI supply chain.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="workspace-section" aria-labelledby="advisory-heading">
+            <h2 id="advisory-heading">Advisory</h2>
+            <div class="workspace-rows">
+                <div class="workspace-row">
+                    <a href="/advisory.html">AI product strategy and technical diligence</a>
+                    <span class="workspace-meta">Available</span>
+                    <p>Independent analysis for builders and investors working through product architecture, model choice, and infrastructure economics.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="workspace-section" aria-labelledby="elsewhere-heading">
+            <h2 id="elsewhere-heading">Elsewhere</h2>
+            <div class="workspace-rows">
+                <div class="workspace-row"><a href="https://www.linkedin.com/in/shafkat-rahman/" target="_blank" rel="noopener noreferrer">LinkedIn</a><span class="workspace-meta">Profile</span></div>
+                <div class="workspace-row"><a href="https://github.com/Sakeeb91" target="_blank" rel="noopener noreferrer">GitHub</a><span class="workspace-meta">Code</span></div>
+                <div class="workspace-row"><a href="https://x.com/Sakeeb91" target="_blank" rel="noopener noreferrer">X</a><span class="workspace-meta">Notes</span></div>
+                <div class="workspace-row"><a href="https://www.threads.com/@sakeeb.rahman" target="_blank" rel="noopener noreferrer">Threads</a><span class="workspace-meta">10K+ readers</span></div>
+            </div>
+        </section>
+
+        <section class="newsletter-module" aria-labelledby="newsletter-heading">
+            <h2 id="newsletter-heading">Technical analysis, by email</h2>
+            <p>One useful analysis each week. No feed to keep up with.</p>
+            <form
+                class="email-capture-form"
+                onsubmit="event.preventDefault();var e=this.email.value,f=this;fetch('https://email-subscribe.rahman-sakeeb.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e})}).then(r=>{if(r.ok)f.parentElement.innerHTML='<p class=email-capture-success>You\'re in. Check your inbox.</p>';else f.parentElement.innerHTML='<p class=email-capture-success>Something went wrong. Try again.</p>'}).catch(()=>{f.parentElement.innerHTML='<p class=email-capture-success>Something went wrong. Try again.</p>'})"
+            >
+                <label class="sr-only" for="newsletter-email">Email address</label>
+                <input id="newsletter-email" type="email" name="email" autocomplete="email" placeholder="you@example.com" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </section>
     </main>
 
     <script src="theme-toggle.js" defer></script>
