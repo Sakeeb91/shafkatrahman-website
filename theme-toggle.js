@@ -5,7 +5,7 @@
     const root = document.documentElement;
     const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
     let userTheme = localStorage.getItem('theme');
-    const localPreviewTheme = ['127.0.0.1', 'localhost'].includes(window.location.hostname)
+    let localPreviewTheme = ['127.0.0.1', 'localhost'].includes(window.location.hostname)
         ? new URLSearchParams(window.location.search).get('theme')
         : null;
 
@@ -38,14 +38,17 @@
                 <a class="nav-brand" href="/" aria-label="Shafkat Rahman, home">
                     <span class="nav-name">Shafkat Rahman</span>
                 </a>
+                <nav class="nav-links" id="primary-links" aria-label="Primary navigation">
+                    ${destinations.map(([label, href, active]) => `<a class="nav-link${active ? ' nav-link-active' : ''}" href="${href}"${active ? ' aria-current="page"' : ''}>${label}</a>`).join('')}
+                </nav>
+                <button class="theme-switch" type="button" role="switch" aria-checked="${root.dataset.theme === 'dark'}">
+                    <span class="theme-switch-label" aria-hidden="true">Theme</span>
+                    <span class="theme-switch-control" aria-hidden="true"><span class="theme-switch-thumb"></span></span>
+                </button>
                 <button class="nav-hamburger" type="button" aria-controls="primary-links" aria-expanded="false">
                     <span class="menu-label">Menu</span>
                     <span class="menu-close-label">Close</span>
                 </button>
-                <nav class="nav-links" id="primary-links" aria-label="Primary navigation">
-                    ${destinations.map(([label, href, active]) => `<a class="nav-link${active ? ' nav-link-active' : ''}" href="${href}"${active ? ' aria-current="page"' : ''}>${label}</a>`).join('')}
-                </nav>
-                <button class="theme-switch" type="button" aria-pressed="${root.dataset.theme === 'dark'}"></button>
                 <div class="nav-utility" aria-label="Elsewhere">
                     <a href="https://www.linkedin.com/in/shafkat-rahman/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
                     <a href="https://github.com/Sakeeb91" target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -59,18 +62,26 @@
 
         function updateThemeSwitch() {
             const dark = root.dataset.theme === 'dark';
-            themeSwitch.textContent = `Theme: ${dark ? 'Dark' : 'Light'}`;
-            themeSwitch.setAttribute('aria-pressed', String(dark));
-            themeSwitch.setAttribute('aria-label', `Current theme: ${dark ? 'dark' : 'light'}. Switch to ${dark ? 'light' : 'dark'} theme`);
+            themeSwitch.setAttribute('aria-checked', String(dark));
+            themeSwitch.setAttribute('aria-label', `Use ${dark ? 'light' : 'dark'} theme`);
+            themeSwitch.setAttribute('title', `Use ${dark ? 'light' : 'dark'} theme`);
         }
 
         updateThemeSwitch();
         systemTheme.addEventListener('change', updateThemeSwitch);
-        themeSwitch.addEventListener('click', () => {
+        function toggleTheme() {
+            localPreviewTheme = null;
             userTheme = root.dataset.theme === 'dark' ? 'light' : 'dark';
             localStorage.setItem('theme', userTheme);
             syncTheme();
             updateThemeSwitch();
+        }
+        themeSwitch.addEventListener('click', toggleTheme);
+        themeSwitch.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') {
+                event.preventDefault();
+                toggleTheme();
+            }
         });
 
         toggle.addEventListener('click', () => {
