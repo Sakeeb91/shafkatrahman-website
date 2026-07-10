@@ -1,81 +1,54 @@
-// Category Collapse Functionality for Writing Index
-(function() {
+/* Accessible flat filters for the writing index. */
+(function () {
     'use strict';
 
-    const STORAGE_KEY = 'writings-expanded-categories';
-    const ANIMATION_DURATION = 400;
+    if (window.location.pathname !== '/writings/' && window.location.pathname !== '/writings/index.html') return;
 
-    const categorySections = document.querySelectorAll('.category-section');
+    const list = document.querySelector('.writing-list');
+    const header = document.querySelector('.writing-header');
+    if (!list || !header) return;
 
-    function loadExpandedState() {
-        try {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            return saved ? JSON.parse(saved) : {};
-        } catch (e) {
-            return {};
-        }
-    }
-
-    function saveExpandedState(categoryId, isExpanded) {
-        try {
-            const state = loadExpandedState();
-            state[categoryId] = isExpanded;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        } catch (e) {
-            console.warn('Failed to save category state');
-        }
-    }
-
-    function toggleCategory(header, content, shouldExpand) {
-        const isExpanding = shouldExpand !== undefined ? shouldExpand : content.hasAttribute('hidden');
-        const categoryId = header.closest('.category-section').getAttribute('data-category');
-
-        if (isExpanding) {
-            header.setAttribute('aria-expanded', 'true');
-            content.removeAttribute('hidden');
-            saveExpandedState(categoryId, true);
-
-            if (window.lucide) {
-                lucide.createIcons();
-            }
-        } else {
-            header.setAttribute('aria-expanded', 'false');
-
-            setTimeout(() => {
-                content.setAttribute('hidden', '');
-            }, ANIMATION_DURATION);
-
-            saveExpandedState(categoryId, false);
-        }
-    }
-
-    categorySections.forEach(section => {
-        const header = section.querySelector('.category-header');
-        const content = section.querySelector('.category-content');
-        const categoryId = section.getAttribute('data-category');
-
-        if (!header || !content) return;
-
-        const savedState = loadExpandedState();
-        const shouldBeExpanded = savedState[categoryId] === true;
-
-        if (shouldBeExpanded) {
-            toggleCategory(header, content, true);
-        }
-
-        header.addEventListener('click', () => {
-            toggleCategory(header, content);
-        });
-
-        header.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                toggleCategory(header, content);
-            }
+    const entries = Array.from(list.querySelectorAll('.category-section')).flatMap((section) => {
+        const kind = section.dataset.category === 'research' ? 'research' : 'essay';
+        return Array.from(section.querySelectorAll('.writing-item')).map((item) => {
+            item.dataset.kind = kind;
+            return item;
         });
     });
 
-    if (window.lucide) {
-        lucide.createIcons();
-    }
-})();
+    entries.sort((a, b) => {
+        const first = a.querySelector('time')?.getAttribute('datetime') || '';
+        const second = b.querySelector('time')?.getAttribute('datetime') || '';
+        return second.localeCompare(first);
+    });
+
+    list.replaceChildren(...entries);
+    list.setAttribute('aria-live', 'polite');
+
+    const controls = document.createElement('div');
+    controls.className = 'writing-filters';
+    controls.setAttribute('role', 'group');
+    controls.setAttribute('aria-label', 'Filter writing by type');
+    controls.innerHTML = `
+        <button class="writing-filter" type="button" data-filter="all" aria-pressed="true">All</button>
+        <button class="writing-filter" type="button" data-filter="essay" aria-pressed="false">Essays</button>
+        <button class="writing-filter" type="button" data-filter="research" aria-pressed="false">Research</button>`;
+    header.insertAdjacentElement('afterend', controls);
+
+    controls.addEventListener('click', (event) => {
+        const button = event.target.closest('.writing-filter');
+        if (!button) return;
+        const filter = button.dataset.filter;
+
+        controls.querySelectorAll('.writing-filter').forEach((candidate) => {
+            candidate.setAttribute('aria-pressed', String(candidate === button));
+        });
+
+        entries.forEach((item) => {
+            item.hidden = filter !== 'all' && item.dataset.kind !== filter;
+        });
+
+        const visible = entries.filter((item) => !item.hidden).length;
+        list.setAttribute('aria-label', `${visible} ${visible === 1 ? 'article' : 'articles'} shown`);
+    });
+}());
