@@ -195,5 +195,24 @@
         }
     }
 
+    if (articleMain && currentArticle) {
+        const loadWritingGraph = () => {
+            const dataScript = document.createElement('script');
+            dataScript.src = '/writing-graph-data.js?v=1';
+            dataScript.onload = () => {
+                const interfaceScript = document.createElement('script');
+                interfaceScript.src = '/writing-graph.js?v=1';
+                document.head.appendChild(interfaceScript);
+            };
+            document.head.appendChild(dataScript);
+        };
+
+        if ('requestIdleCallback' in window) {
+            window.requestIdleCallback(loadWritingGraph, { timeout: 1800 });
+        } else {
+            window.setTimeout(loadWritingGraph, 250);
+        }
+    }
+
     if (window.lucide) window.lucide.createIcons();
 }());

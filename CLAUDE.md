@@ -100,7 +100,7 @@ After pushing, verify deployment propagation. Browser caching can cause issues; 
 
 ## Adding New Writing
 
-Read `WRITING.md` first. The canonical article inventory and tags live in `writing-manifest.js`; update that registry whenever an article is added, removed, renamed, or retagged.
+Read `WRITING.md` first. The canonical article inventory, tags, and reviewed relationships live in `writing-manifest.js`; update that registry whenever an article is added, removed, renamed, retagged, or meaningfully connected to another article.
 
 To add a new essay or article:
 
@@ -126,14 +126,20 @@ To add a new essay or article:
    - Add compelling title and 2-3 sentence excerpt
    - Maintain reverse chronological order (newest first)
 
-4. **Commit structure** (create atomic commits):
+4. **Regenerate and validate the writing graph**:
+   - Propose `related` article paths, but publish only relationships reviewed as substantively meaningful.
+   - Run `node scripts/generate-writing-graph.mjs`.
+   - Run `node scripts/generate-writing-graph.mjs --check`.
+   - Verify the local graph on the new article and at least one related article.
+
+5. **Commit structure** (create atomic commits):
    - First commit: Add the article HTML file
    - Second commit: Add image assets for the article
    - Third commit: Update writings index page
    - Fourth commit (if needed): Add any supporting files like .wranglerignore updates
    - Use descriptive commit messages with the article title and date
 
-5. **Deploy**:
+6. **Deploy**:
    - Push commits to GitHub: `git push`
    - Monitor CI/CD: `gh run list --limit 5` and `gh run watch [run-id]`
    - Verify all checks pass before considering deployment complete
