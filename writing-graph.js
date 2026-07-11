@@ -14,7 +14,30 @@
     const articleNodes = graph.nodes.filter((node) => node.type === 'article');
     const tagNodes = graph.nodes.filter((node) => node.type === 'tag');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const quartzStyleConfig = Object.freeze({
+        localGraph: { depth: 1, focusOnHover: false, enableRadial: false },
+        globalGraph: { depth: -1, focusOnHover: true, enableRadial: true }
+    });
+    const visitedStorageKey = 'writing-graph-visited';
+    let visitedArticles = new Set();
+    try {
+        visitedArticles = new Set(JSON.parse(window.localStorage.getItem(visitedStorageKey) || '[]'));
+        visitedArticles.add(currentId);
+        window.localStorage.setItem(visitedStorageKey, JSON.stringify(Array.from(visitedArticles)));
+    } catch {
+        visitedArticles = new Set([currentId]);
+    }
     let lastTrigger = null;
+
+    function markVisited(id) {
+        if (!id.startsWith('article:')) return;
+        visitedArticles.add(id);
+        try {
+            window.localStorage.setItem(visitedStorageKey, JSON.stringify(Array.from(visitedArticles)));
+        } catch {
+            // The graph remains usable when storage is unavailable.
+        }
+    }
 
     function element(tag, className, text) {
         const node = document.createElement(tag);
@@ -63,6 +86,7 @@
         const nodesById = new Map(nodes.map((node) => [node.id, node]));
         const articleTagIds = new Map();
         const tagArticleIds = new Map();
+        const articleNeighbourIds = new Map();
         edges.filter((edge) => edge.type === 'tag').forEach((edge) => {
             const articleId = edge.source.startsWith('article:') ? edge.source : edge.target;
             const tagId = edge.source.startsWith('tag:') ? edge.source : edge.target;
@@ -70,6 +94,14 @@
             if (!tagArticleIds.has(tagId)) tagArticleIds.set(tagId, new Set());
             articleTagIds.get(articleId).add(tagId);
             tagArticleIds.get(tagId).add(articleId);
+        });
+        edges.filter((edge) => edge.type !== 'tag').forEach((edge) => {
+            const sourceId = typeof edge.source === 'string' ? edge.source : edge.source.id;
+            const targetId = typeof edge.target === 'string' ? edge.target : edge.target.id;
+            if (!articleNeighbourIds.has(sourceId)) articleNeighbourIds.set(sourceId, new Set());
+            if (!articleNeighbourIds.has(targetId)) articleNeighbourIds.set(targetId, new Set());
+            articleNeighbourIds.get(sourceId).add(targetId);
+            articleNeighbourIds.get(targetId).add(sourceId);
         });
 
         const svg = svgElement('svg', {
@@ -98,7 +130,7 @@
         const nodeElements = new Map();
         nodes.forEach((node) => {
             const group = svgElement('g', {
-                class: `writing-graph-node writing-graph-node-${node.type}${node.id === currentId ? ' writing-graph-node-current' : ''}`,
+                class: `writing-graph-node writing-graph-node-${node.type}${node.id === currentId ? ' writing-graph-node-current' : ''}${visitedArticles.has(node.id) ? ' writing-graph-node-visited' : ''}`,
                 tabindex: '0',
                 role: 'button',
                 'aria-pressed': 'false',
@@ -128,6 +160,13 @@
 
         function connectedSet() {
             if (selectedTag) return new Set([selectedTag, ...(tagArticleIds.get(selectedTag) || [])]);
+            if (!compact && quartzStyleConfig.globalGraph.focusOnHover && hoveredArticle && !selectedArticle) {
+                return new Set([
+                    hoveredArticle,
+                    ...(articleNeighbourIds.get(hoveredArticle) || []),
+                    ...(articleTagIds.get(hoveredArticle) || [])
+                ]);
+            }
             return null;
         }
 
@@ -191,6 +230,10 @@
             .force('collide', d3.forceCollide().radius((node) => node.type === 'article' ? 34 : 18).iterations(2))
             .alphaDecay(0.035)
             .velocityDecay(0.34);
+
+        if (!compact && quartzStyleConfig.globalGraph.enableRadial) {
+            simulation.force('radial', d3.forceRadial(Math.min(width, height) * 0.29, width / 2, height / 2).strength(0.028));
+        }
 
         function clamp(node) {
             const rightInset = node.type === 'article' ? (compact ? 88 : 210) : 70;
@@ -313,7 +356,10 @@
                 if (event.key === 'Enter') {
                     event.preventDefault();
                     if (compact) openDialog(group);
-                    else if (node.type === 'article') window.location.href = node.path;
+                    else if (node.type === 'article') {
+                        markVisited(node.id);
+                        window.location.href = node.path;
+                    }
                     else selectTag(node);
                     return;
                 }
@@ -490,9 +536,9 @@
         const shell = element('div', 'writing-graph-dialog-shell');
         const header = element('header', 'writing-graph-dialog-header');
         const headingGroup = element('div');
-        const title = element('h2', '', 'Writing graph');
+        const title = element('h2', '', 'Global writing graph');
         title.id = 'writing-graph-title';
-        headingGroup.append(title, element('p', '', 'Article relationships first. Reveal tags as you explore.'));
+        headingGroup.append(title, element('p', '', 'Explore every article relationship. Reveal tags as you move through the graph.'));
         const controls = element('div', 'writing-graph-controls');
         const searchLabel = element('label', 'writing-graph-search-label', 'Find');
         const search = element('input', 'writing-graph-search');
@@ -529,7 +575,7 @@
         });
         canvas.appendChild(svg);
         const legend = element('div', 'writing-graph-legend');
-        legend.innerHTML = '<span><i class="legend-article"></i>Article</span><span><i class="legend-tag"></i>Revealed tag</span><span><i class="legend-related"></i>Reviewed relationship</span>';
+        legend.innerHTML = '<span><i class="legend-article"></i>Article</span><span><i class="legend-tag"></i>Revealed tag</span><span><i class="legend-related"></i>Reviewed relationship</span><span class="writing-graph-shortcut">Ctrl/Cmd + G toggles this view</span>';
         shell.append(header, canvas, legend, status, createSemanticFallback());
         dialog.appendChild(shell);
 
@@ -545,7 +591,11 @@
         zoomOut.addEventListener('click', () => svg.graphView.zoom(1.2));
         zoomIn.addEventListener('click', () => svg.graphView.zoom(0.8));
         reset.addEventListener('click', () => { search.value = ''; svg.graphView.reset(); });
-        openSelected.addEventListener('click', () => { if (openSelected.dataset.path) window.location.href = openSelected.dataset.path; });
+        openSelected.addEventListener('click', () => {
+            if (!openSelected.dataset.path) return;
+            markVisited(`article:${openSelected.dataset.path}`);
+            window.location.href = openSelected.dataset.path;
+        });
         close.addEventListener('click', () => dialog.close());
         dialog.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); });
         dialog.addEventListener('close', () => { if (lastTrigger && document.contains(lastTrigger)) lastTrigger.focus(); });
@@ -562,20 +612,35 @@
         if (close) close.focus();
     }
 
+    function toggleGlobalGraph(trigger) {
+        if (dialog.open) dialog.close();
+        else openDialog(trigger || document.activeElement);
+    }
+
+    document.addEventListener('keydown', (event) => {
+        if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== 'g') return;
+        const target = event.target;
+        if (target instanceof HTMLElement && (target.matches('input, textarea, select') || target.isContentEditable)) return;
+        event.preventDefault();
+        toggleGlobalGraph(target instanceof HTMLElement ? target : null);
+    });
+
     function createLauncher() {
         const local = localGraphData();
         const launcher = element('aside', 'writing-graph-launcher');
         launcher.setAttribute('aria-label', 'Writing graph');
         const preview = element('div', 'writing-graph-preview');
         const heading = element('div', 'writing-graph-preview-heading');
-        heading.append(element('p', '', 'Connected ideas'));
-        const expand = element('button', 'writing-graph-expand', 'Expand');
+        heading.append(element('p', '', 'Local graph'));
+        const expand = element('button', 'writing-graph-expand', 'Global graph');
         expand.type = 'button';
+        expand.setAttribute('aria-keyshortcuts', 'Control+G Meta+G');
         expand.addEventListener('click', () => openDialog(expand));
         heading.appendChild(expand);
         preview.append(heading, createGraphSvg(local.nodes, local.edges, { width: 240, height: 150, compact: true }));
-        const compactButton = element('button', 'writing-graph-compact-button', 'Open writing graph');
+        const compactButton = element('button', 'writing-graph-compact-button', 'Open global graph');
         compactButton.type = 'button';
+        compactButton.setAttribute('aria-keyshortcuts', 'Control+G Meta+G');
         compactButton.addEventListener('click', () => openDialog(compactButton));
         launcher.append(preview, compactButton);
         document.body.appendChild(launcher);

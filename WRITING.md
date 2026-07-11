@@ -37,6 +37,8 @@ The shared shell injects visible article tags and `article:tag` metadata from th
 
 The graph uses the locally served `vendor-d3.v7.min.js` bundle for force simulation and drag handling. Do not replace it with a CDN reference. The generated graph data remains framework-independent and the rendered interface remains an accessible SVG with a semantic list fallback.
 
+Its local/global model follows the interaction conventions of the MIT-licensed [Quartz community graph](https://github.com/quartz-community/graph): a one-hop local view beside the current article, a global view for the complete network, hover-neighbour focus, visited-article state, radial global layout, and a Ctrl/Cmd + G shortcut. The renderer remains SVG rather than adopting Quartz's PixiJS canvas so every node keeps its keyboard focus, accessible name, and button semantics.
+
 - The default view contains articles and article-to-article relationships only.
 - Hovering or focusing an article previews its tags. Selecting an article with click or Space keeps those tags visible.
 - Selecting a tag, including through the Find field or list fallback, reveals its connected articles.
@@ -45,6 +47,7 @@ The graph uses the locally served `vendor-d3.v7.min.js` bundle for force simulat
 - Reset clears selections, pinned positions, pan, and zoom before restoring the deterministic generated layout.
 - Reduced-motion mode computes the settled force layout synchronously and does not run live animation.
 - The corner graph is limited to the current article, directly related articles, and their interaction-only tags.
+- Ctrl/Cmd + G opens or closes the global graph unless focus is inside a text-entry control.
 
 ## Writing graph relationship rules
 

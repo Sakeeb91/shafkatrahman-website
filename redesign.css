@@ -1019,6 +1019,9 @@ body > .article-footer {
 
 .writing-graph-node-article { color: var(--foreground); }
 .writing-graph-node-tag { color: var(--muted-foreground); }
+.writing-graph-node-visited:not(.writing-graph-node-current) circle:not(.writing-graph-node-hit) {
+    fill: color-mix(in srgb, currentColor 10%, var(--background));
+}
 .writing-graph-node-current,
 .writing-graph-node-selected { color: var(--primary); }
 .writing-graph-node-current circle { fill: var(--primary); }
@@ -1149,6 +1152,7 @@ body > .article-footer {
 }
 
 .writing-graph-legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+.writing-graph-legend .writing-graph-shortcut { margin-left: auto; }
 .writing-graph-legend i { display: inline-block; width: 0.55rem; height: 0.55rem; border: 1px solid var(--foreground); border-radius: 50%; }
 .writing-graph-legend .legend-tag { width: 0.4rem; height: 0.4rem; border-color: var(--muted-foreground); }
 .writing-graph-legend .legend-related { width: 1rem; height: 0; border: 0; border-top: 1px dashed var(--primary); border-radius: 0; }
@@ -1201,6 +1205,7 @@ body > .article-footer {
     .writing-graph-search-label { width: 100%; }
     .writing-graph-search { width: min(16rem, calc(100vw - 4.5rem)); }
     .writing-graph-node-label { font-size: 12px; }
+    .writing-graph-legend .writing-graph-shortcut { width: 100%; margin-left: 0; }
     .writing-graph-fallback-columns { grid-template-columns: 1fr; gap: 1rem; }
 
     .site-nav {

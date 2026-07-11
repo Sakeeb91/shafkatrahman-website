@@ -204,7 +204,7 @@
                 dataScript.src = '/writing-graph-data.js?v=1';
                 dataScript.onload = () => {
                     const interfaceScript = document.createElement('script');
-                    interfaceScript.src = '/writing-graph.js?v=2';
+                    interfaceScript.src = '/writing-graph.js?v=3';
                     document.head.appendChild(interfaceScript);
                 };
                 document.head.appendChild(dataScript);
