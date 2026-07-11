@@ -883,8 +883,22 @@ body > .article-footer {
 .article-section-nav > p { margin: 0 0 0.65rem; color: var(--foreground); font-size: 0.72rem; font-weight: 650; }
 .article-section-nav ol { margin: 0; padding: 0; list-style: none; }
 .article-section-nav li { margin: 0; padding: 0; }
-.article-section-nav a { display: block; padding: 0.28rem 0; color: var(--muted-foreground); font-size: 0.7rem; line-height: 1.35; text-decoration: none; }
-.article-section-nav a:hover { color: var(--foreground); text-decoration: underline; }
+.article-section-nav a {
+    display: block;
+    padding: 0.28rem 0;
+    border: 0 !important;
+    color: var(--muted-foreground);
+    font-size: 0.7rem;
+    line-height: 1.35;
+    text-decoration: none !important;
+}
+.article-section-nav a:hover,
+.article-section-nav a:focus-visible {
+    color: var(--foreground);
+    text-decoration: underline !important;
+    text-decoration-thickness: 1px !important;
+    text-underline-offset: 0.18em !important;
+}
 
 /* Existing animation classes become static by design. */
 .animate-fade-in,
