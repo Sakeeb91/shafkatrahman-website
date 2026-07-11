@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>The Compute Curve: Can Futures Markets Forecast AI Progress? | Shafkat Rahman</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+    <meta name="description" content="Why GPU derivatives may become a market-implied model of AI's hidden state, and why treating them as a crystal ball would be a category error.">
+    <meta name="author" content="Shafkat Rahman">
+    <meta name="keywords" content="GPT-5.6, Cerebras, AI inference, agent latency, control theory, wafer-scale computing, AI infrastructure">
+    <link rel="canonical" href="https://shafkatrahman.com/writings/the-compute-curve-ai-progress.html">
+
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://shafkatrahman.com/writings/the-compute-curve-ai-progress.html">
+    <meta property="og:title" content="The Compute Curve: Can Futures Markets Forecast AI Progress?">
+    <meta property="og:description" content="Why GPU derivatives may become a market-implied model of AI's hidden state, and why treating them as a crystal ball would be a category error.">
+    <meta property="og:site_name" content="Shafkat Rahman">
+    <meta property="article:published_time" content="2026-07-11T00:00:00-04:00">
+    <meta property="article:author" content="Shafkat Rahman">
+    <meta property="article:section" content="AI Infrastructure">
+    <meta property="og:image" content="https://shafkatrahman.com/writings/the-compute-curve-ai-progress/card.png">
+    <meta property="og:image:secure_url" content="https://shafkatrahman.com/writings/the-compute-curve-ai-progress/card.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1672">
+    <meta property="og:image:height" content="941">
+    <meta property="og:image:alt" content="A rising compute curve crossing power infrastructure, AI chips, a data center, and a network of market signals">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@Sakeeb91">
+    <meta name="twitter:creator" content="@Sakeeb91">
+    <meta name="twitter:title" content="The Compute Curve: Can Futures Markets Forecast AI Progress?">
+    <meta name="twitter:description" content="Why GPU derivatives may become a market-implied model of AI's hidden state, and why treating them as a crystal ball would be a category error.">
+    <meta name="twitter:image" content="https://shafkatrahman.com/writings/the-compute-curve-ai-progress/card.png">
+    <meta name="twitter:image:alt" content="A rising compute curve crossing power infrastructure, AI chips, a data center, and a network of market signals">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "The Compute Curve: Can Futures Markets Forecast AI Progress?",
+      "alternativeHeadline": "Why GPU derivatives may become a market-implied model of AI’s hidden state, and why treating them as a crystal ball would be a category error",
+      "author": {
+        "@type": "Person",
+        "name": "Shafkat Rahman",
+        "url": "https://shafkatrahman.com"
+      },
+      "datePublished": "2026-07-11",
+      "dateModified": "2026-07-11",
+      "description": "Why GPU derivatives may become a market-implied model of AI's hidden state, and why treating them as a crystal ball would be a category error.",
+      "image": "https://shafkatrahman.com/writings/the-compute-curve-ai-progress/card.png",
+      "url": "https://shafkatrahman.com/writings/the-compute-curve-ai-progress.html",
+      "publisher": {
+        "@type": "Person",
+        "name": "Shafkat Rahman"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://shafkatrahman.com/writings/the-compute-curve-ai-progress.html"
+      }
+    }
+    </script>
+
+    <link rel="dns-prefetch" href="https://unpkg.com">
+    <link rel="preconnect" href="https://unpkg.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500&amp;family=Inter:wght@400;500;600&amp;family=Cormorant+Garamond:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Source+Sans+3:wght@300;400;500;600&amp;display=swap" rel="stylesheet" fetchpriority="high">
+    <link rel="stylesheet" href="../style.css?v=14">
+    <link rel="stylesheet" href="../redesign.css?v=9">
+    <script>document.documentElement.dataset.theme = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');</script>
+    <script src="https://unpkg.com/lucide@0.576.0" defer></script>
+    <!-- Equations are emitted as native MathML at build time. MathJax enhances
+         that markup for consistent cross-browser typography; MathML remains
+         readable if JavaScript or the CDN is unavailable. -->
+    <script>window.MathJax = { options: { enableMenu: false } };</script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" defer></script>
+
+    <style>
+        :root {
+            --font-display: 'Cormorant Garamond', Georgia, serif;
+            --font-body: 'Source Sans 3', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        html { font-size: 18px; scroll-behavior: smooth; }
+
+        body {
+            display: block;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            background: var(--color-bg);
+            color: var(--color-text);
+            font-family: var(--font-body);
+            font-weight: 300;
+            line-height: 1.75;
+        }
+
+        .frost-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            background: radial-gradient(ellipse at 72% 12%, var(--color-frost-glow), transparent 42%);
+        }
+
+        .article-hero {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 7rem 2rem 3rem;
+            text-align: center;
+        }
+
+        .header-label,
+        .article-date {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .header-label { margin: 0 0 1.5rem; color: var(--color-frost); }
+
+        h1 {
+            max-width: 900px;
+            margin: 0 auto 1.25rem;
+            color: var(--color-frost-light);
+            font-family: var(--font-display);
+            font-size: clamp(2.65rem, 6vw, 4.75rem);
+            font-weight: 400;
+            letter-spacing: -0.025em;
+            line-height: 1.03;
+            text-wrap: balance;
+        }
+
+        .subtitle {
+            max-width: 720px;
+            margin: 0 auto;
+            color: var(--color-text-muted);
+            font-family: var(--font-display);
+            font-size: clamp(1.15rem, 2.3vw, 1.4rem);
+            line-height: 1.45;
+            text-wrap: balance;
+        }
+
+        .article-date { display: block; margin-top: 1.5rem; color: var(--color-text-dim); }
+
+        .article-visual {
+            width: min(1120px, calc(100% - 3rem));
+            margin: 0 auto 5rem;
+        }
+
+        .article-visual img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+        }
+
+        main { max-width: 760px; margin: 0 auto; padding: 0 2rem 5rem; }
+
+        main > p:first-child {
+            margin-bottom: 3rem;
+            color: var(--color-text-muted);
+            font-size: 1.18rem;
+            line-height: 1.85;
+        }
+
+        section.level2 { margin-bottom: 4rem; }
+
+        h2 {
+            margin: 0 0 1.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-border);
+            color: var(--color-frost-light);
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 4vw, 2.25rem);
+            font-weight: 500;
+            line-height: 1.2;
+            text-wrap: balance;
+        }
+
+        p { margin: 0 0 1.5rem; color: var(--color-text); text-wrap: pretty; }
+        strong { color: var(--color-frost); font-weight: 500; }
+        em { color: var(--color-accent); }
+
+        a {
+            color: var(--color-frost);
+            text-decoration-thickness: 1px;
+            text-underline-offset: 0.18em;
+        }
+
+        a:hover { color: var(--color-frost-light); }
+
+        code {
+            padding: 0.12rem 0.35rem;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            background: var(--color-bg-elevated);
+            color: var(--color-accent-warm);
+            font-family: var(--font-mono);
+            font-size: 0.84em;
+        }
+
+        mjx-container[display="true"] {
+            overflow-x: auto;
+            overflow-y: hidden;
+            margin: 2rem 0 !important;
+            padding: 1.35rem 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            background: var(--color-bg-elevated);
+            color: var(--color-frost-light);
+        }
+
+        /* Native MathML fallback before MathJax loads, or when JS is disabled. */
+        math[display="inline"] {
+            color: inherit;
+            font-size: 1em;
+        }
+
+        math[display="block"] {
+            display: block;
+            width: 100%;
+            margin: 2rem 0;
+            padding: 1.35rem 1rem;
+            overflow-x: auto;
+            overflow-y: hidden;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            background: var(--color-bg-elevated);
+            color: var(--color-frost-light);
+        }
+
+        table {
+            display: block;
+            width: 100%;
+            margin: 2rem 0;
+            overflow-x: auto;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            line-height: 1.55;
+        }
+
+        th, td {
+            min-width: 12rem;
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid var(--color-border);
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th { color: var(--color-frost-light); font-weight: 500; }
+
+        hr { height: 1px; margin: 4rem 0; border: 0; background: var(--color-border); }
+
+        ul, ol { margin: 0 0 1.75rem; padding-left: 1.35rem; }
+        li { margin-bottom: 0.65rem; padding-left: 0.3rem; }
+        li::marker { color: var(--color-frost); }
+
+        #sources-and-notes + ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        #sources-and-notes + ul li {
+            margin: 0;
+            padding: 0.7rem 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .article-email-capture {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 2rem;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .article-email-capture p { margin: 0 0 1rem; color: var(--color-text-muted); font-size: 0.9rem; }
+        .article-email-capture form { display: flex; gap: 0.5rem; max-width: 28rem; }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .article-email-capture input {
+            min-width: 0;
+            flex: 1;
+            padding: 0.65rem 0.9rem;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            background: var(--color-bg-elevated);
+            color: var(--color-text);
+            font: inherit;
+            font-size: 0.86rem;
+        }
+
+        .article-email-capture input::placeholder { color: var(--color-text-dim); opacity: 1; }
+
+        .article-email-capture button {
+            padding: 0.65rem 1.2rem;
+            border: 0;
+            border-radius: 4px;
+            background: var(--color-frost-light);
+            color: var(--color-bg);
+            cursor: pointer;
+            font: inherit;
+            font-size: 0.86rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .article-email-capture button:active { transform: translateY(1px); }
+        .article-email-capture input:focus-visible,
+        .article-email-capture button:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+
+        .article-footer {
+            margin-top: 4rem;
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--color-border);
+            color: var(--color-text-dim);
+            text-align: center;
+        }
+
+        .article-footer p { margin: 0; }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.7rem 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            text-decoration: none;
+        }
+
+        @media (max-width: 640px) {
+            html { font-size: 16px; }
+            .article-hero { padding: 5.5rem 1.25rem 2.5rem; }
+            .article-visual { width: calc(100% - 2rem); margin-bottom: 3.5rem; }
+            main { padding: 0 1.25rem 4rem; }
+            .article-email-capture { padding: 2rem 1.25rem; }
+            .article-email-capture form { flex-direction: column; }
+            .article-email-capture button { width: 100%; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+        }
+
+        @media print {
+            .site-nav, .theme-toggle, .frost-bg, .article-email-capture { display: none; }
+            body { background: white; color: black; }
+            .article-hero { padding-top: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <i data-lucide="moon" class="moon-icon"></i>
+        <i data-lucide="sun" class="sun-icon"></i>
+    </button>
+
+    <header class="site-nav" aria-label="Primary">
+        <div class="container nav-inner">
+            <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
+                <i data-lucide="menu" class="hamburger-icon"></i>
+                <i data-lucide="x" class="hamburger-close-icon"></i>
+            </button>
+            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link nav-link-active" href="/writings/">Writing</a>
+            <a class="nav-link" href="/reading/">Reading</a>
+            <a class="nav-link" href="/resources/">Resources</a>
+            <a class="nav-link" href="/advisory.html">Advisory</a>
+        </div>
+    </header>
+
+    <div class="frost-bg"></div>
+
+    <header class="article-hero">
+        <p class="header-label">AI Infrastructure</p>
+        <h1>The Compute Curve: Can Futures Markets Forecast AI Progress?</h1>
+        <p class="subtitle">Why GPU derivatives may become a market-implied model of AI’s hidden state, and why treating them as a crystal ball would be a category error</p>
+        <time class="article-date" datetime="2026-07-11">2026-07-11</time>
+    </header>
+
+    <figure class="article-visual">
+        <img src="the-compute-curve-ai-progress/card.png" width="1672" height="941" alt="A rising compute curve crossing power infrastructure, AI chips, a data center, and a network of market signals" fetchpriority="high">
+    </figure>
+
+    <main>
+<section id="the-compute-curve-can-futures-markets-forecast-ai-progress" class="level1">
+<p>A liquid futures market for AI compute would create something the field has never possessed: a continuously updated, financially consequential estimate of the future scarcity and economic value of machine computation. That sounds, at first, like a prediction market for AI progress. The idea is seductive. If frontier models require enormous quantities of specialized compute, and traders can price the future rental cost of that compute, perhaps the forward curve will reveal when the market expects another scaling wave, an agentic deployment boom, or a collapse in the cost of intelligence.</p>
+<p>The literal version of this thesis is wrong. A compute futures contract is not an event contract paying out when an AI system crosses a capability threshold. Its price will mix expectations about GPU demand with chip supply, power constraints, hardware obsolescence, algorithmic efficiency, utilization, financing conditions, hedging pressure, benchmark construction, and risk premia. A higher futures price could signal faster expected AI progress, slower infrastructure delivery, a speculative risk premium, or simply a transformer shortage. A lower price could signal weak AI demand, or a major efficiency breakthrough that makes each GPU-hour more productive.</p>
+<p>The stronger thesis is more interesting. A sufficiently rich compute-derivatives market could become a market-implied latent-state estimator for the AI economy. Its informational value would lie in the joint geometry of the curve rather than any headline price: maturities, chip-generation spreads, regional basis, training-versus-inference benchmarks, option-implied volatility, power-adjusted margins, and reactions to model releases, hardware announcements, export controls, and grid shocks. Read alongside capability evaluations, token prices, utilization data, and infrastructure indicators, the compute curve could become to AI what the yield curve is to macroeconomics: fallible, reflexive, contaminated by risk premia, yet too information-dense to ignore.</p>
+<section id="the-first-market-price-for-ais-hidden-variable" class="level2">
+<h2>The first market price for AI’s hidden variable</h2>
+<p>In May 2026, BlackRock CEO Larry Fink argued that shortages of power, chips, memory, and computing capacity could give rise to a new asset class built around “futures of compute.”<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> The comment initially sounded speculative. Within days, it became a market-structure proposal.</p>
+<p>CME Group and Silicon Data announced plans to launch compute futures later in 2026, subject to regulatory review. The contracts are intended to reference Silicon Data’s daily benchmarks for on-demand GPU rental rates.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Intercontinental Exchange and Ornn separately announced plans for U.S.-dollar-denominated, cash-settled GPU compute futures based on Ornn’s Compute Price Index, a transaction-based benchmark whose series cover the H100, H200, B200, and RTX 5090, with more hardware types to follow.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> Ornn reports that the first compute swap using cleared prices was executed in December 2025, and ICE is one of several venues now building compute derivatives.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<p>The weeks after those announcements showed how quickly financialization gathers momentum. Goldman Sachs and JPMorgan began exploring compute trading, according to reporting by The Information; both banks already trade power and other commodities adjacent to AI infrastructure.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> Asset managers including ProShares and Rex Shares filed proposals for exchange-traded funds tied to the proposed CME contracts within days of the announcement, including leveraged and inverse products, before a single contract had traded.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> In July 2026, ICE announced a second compute-futures partnership, this time with NATIVX, whose COIL Index tracks tokenized, energy-normalized compute and publishes separate sub-indices for training, inference, graphics, and connectivity workloads.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> As of July 11, 2026, all of these remain announced or developing markets rather than an established, liquid futures complex with a long public history.</p>
+<p>History suggests some humility here. During the broadband boom of the late 1990s, Enron’s broadband division tried to trade unused fiber-optic capacity before the company’s spectacular collapse.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> Capacity markets for fast-moving technologies have been proposed before; they have not always survived contact with reality.</p>
+<p>The immediate purpose of these contracts is conventional: hedging. An AI laboratory expecting to rent millions of GPU-hours could buy futures to reduce the risk that compute prices rise before a training or deployment cycle. A neocloud, data-center operator, or GPU owner could sell futures to stabilize future rental revenue. Market makers and speculators would absorb the mismatch between natural buyers and sellers.</p>
+<p>Yet the product has a second-order consequence. Once a contract trades, its price becomes public information. Every participant with knowledge about accelerator shipments, cloud utilization, model road maps, electricity availability, inference demand, data-center delays, financing conditions, or algorithmic efficiency has an incentive to trade on that knowledge. The resulting forward curve may compress a dispersed body of technical and commercial information into a numerical signal.</p>
+<p>That is the Hayekian promise of prices: they coordinate local knowledge without requiring any participant to understand the entire system.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> Prediction-market research makes a related claim. Well-designed contracts can aggregate dispersed beliefs and often generate forecasts that outperform common alternatives.<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a> It is natural, then, to ask whether compute futures could aggregate beliefs about the future of AI.</p>
+<p>But that question contains an ambiguity. What exactly would the market be predicting? The future dollar price of an H100-equivalent hour is one candidate. So is the scale of frontier training runs, the volume of production inference, the rate of algorithmic improvement, the arrival of systems capable of longer autonomous tasks, the economic value created per unit of compute, the probability of a capability discontinuity, or the pace of infrastructure construction. These variables are connected. They are not interchangeable. The intellectual task is to identify what information a compute curve can contain, what it cannot contain, and how one might recover a useful AI-progress signal from a market whose direct object is a heterogeneous industrial input.</p>
+</section>
+<section id="compute-futures-are-not-prediction-markets-in-the-strict-sense" class="level2">
+<h2>Compute futures are not prediction markets in the strict sense</h2>
+<p>A prediction market is normally designed around an outcome. A binary contract might pay one dollar if an event occurs and zero otherwise. Under suitable conditions, its price can be interpreted as an approximation of the market’s probability for that event. Other contract forms can elicit expectations about a future mean, median, or distribution.<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a></p>
+<p>A compute future is different. It settles against the future price of a resource. Its terminal payoff is linked to a GPU-rental benchmark, not to a claim such as:</p>
+<blockquote>
+<p>“A publicly available AI system will achieve a 50% task-completion horizon of eight hours by December 2027.”</p>
+</blockquote>
+<p>The two market types are already touching, for what it’s worth. Polymarket cleared its first on-chain institutional block trade tied to AI compute in June 2026, settled against Ornn’s index of H100 rental pricing.<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a> A prediction-market venue clearing compute exposure is a sign of how porous the boundary may become. The conceptual distinction still stands.</p>
+<p>It stands because commodity futures are not pure forecasts of future spot prices. A useful schematic decomposition is:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><mi>t</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>T</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msub><mi mathvariant="double-struck">𝔼</mi><mi>t</mi></msub><mo stretchy="false" form="prefix">[</mo><msub><mi>S</mi><mi>T</mi></msub><mo stretchy="false" form="postfix">]</mo><mo>+</mo><msub><mi mathvariant="normal">Π</mi><mi>t</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>T</mi><mo stretchy="false" form="postfix">)</mo><mo>,</mo></mrow><annotation encoding="application/x-tex">
+F_t(T) = \mathbb{E}_t[S_T] + \Pi_t(T),
+</annotation></semantics></math></p>
+<p>where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><mi>t</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>T</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">F_t(T)</annotation></semantics></math> is the futures price at time <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math> for maturity <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="double-struck">𝔼</mi><mi>t</mi></msub><mo stretchy="false" form="prefix">[</mo><msub><mi>S</mi><mi>T</mi></msub><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">\mathbb{E}_t[S_T]</annotation></semantics></math> is the market’s expectation of the future spot price, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="normal">Π</mi><mi>t</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>T</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\Pi_t(T)</annotation></semantics></math> is a maturity-dependent risk premium. The sign convention varies across models, but the substantive point does not: the quoted futures price contains both expectations and compensation for bearing risk.<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p>
+<p>In physical commodities, the curve is also shaped by inventory, storage costs, financing, and the convenience yield of having immediate access to a scarce input. Empirical work shows that commodity risk premia vary across products and maturities and are related to hedging pressure and physical scarcity.<a href="#fn14" class="footnote-ref" id="fnref14" role="doc-noteref"><sup>14</sup></a> Federal Reserve research finds that futures prices can be useful forecasting guides, while also documenting substantial deviations between spot and futures prices and the importance of storage and convenience yield.<a href="#fn15" class="footnote-ref" id="fnref15" role="doc-noteref"><sup>15</sup></a></p>
+<p>Compute complicates this structure further. A GPU-hour is not stored in the same way as copper or crude oil. Idle hardware can preserve future capacity, but unused time itself expires. Compute therefore resembles electricity, airline seats, freight capacity, and cloud spot instances more than a conventional storable commodity. It is capacity with a clock attached.</p>
+<p>A compute curve would consequently be a market forecast only after several wedges are considered:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">quoted futures price</mtext><mo>=</mo><mtext mathvariant="normal">expected future rental price</mtext><mo>+</mo><mtext mathvariant="normal">risk premium</mtext><mo>+</mo><mtext mathvariant="normal">hedging-pressure premium</mtext><mo>+</mo><mtext mathvariant="normal">benchmark basis</mtext><mo>+</mo><mtext mathvariant="normal">delivery and quality adjustments</mtext><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\text{quoted futures price}
+=
+\text{expected future rental price}
++
+\text{risk premium}
++
+\text{hedging-pressure premium}
++
+\text{benchmark basis}
++
+\text{delivery and quality adjustments}.
+</annotation></semantics></math></p>
+<p>Calling the curve a prediction market for AI progress is therefore a metaphor. The useful question is whether it is a <em>good</em> metaphor, whether the market contains enough structured information to infer something about AI’s trajectory after these contaminating factors are modeled.</p>
+</section>
+<section id="why-compute-should-contain-information-about-progress" class="level2">
+<h2>Why compute should contain information about progress</h2>
+<p>Compute is not synonymous with intelligence, but it has been one of the most measurable inputs to modern AI progress. OpenAI’s early analysis framed advances in AI as a function of three broad inputs, algorithms, data, and training compute, while emphasizing that compute is unusually quantifiable compared with the other two.<a href="#fn16" class="footnote-ref" id="fnref16" role="doc-noteref"><sup>16</sup></a></p>
+<p>Empirical scaling laws strengthened the relationship. Kaplan and colleagues found power-law relationships between language-model loss and model size, dataset size, and training compute over large ranges.<a href="#fn17" class="footnote-ref" id="fnref17" role="doc-noteref"><sup>17</sup></a> DeepMind’s Chinchilla work later showed that model size and training data must be allocated together under a fixed compute budget; its central result was not merely that more compute helps, but that the <em>way</em> compute is allocated materially changes the capability obtained from it.<a href="#fn18" class="footnote-ref" id="fnref18" role="doc-noteref"><sup>18</sup></a> Subsequent work has incorporated inference demand into compute-optimal scaling, showing that a model’s economically optimal training configuration depends on the quantity of downstream inference it is expected to serve.<a href="#fn19" class="footnote-ref" id="fnref19" role="doc-noteref"><sup>19</sup></a></p>
+<p>The causal chain is therefore real but mediated:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">physical compute</mtext><mo>→</mo><mtext mathvariant="normal">effective training</mtext><mo>→</mo><mtext mathvariant="normal">model capability</mtext><mo>→</mo><mtext mathvariant="normal">deployment</mtext><mo>→</mo><mtext mathvariant="normal">economic demand for inference</mtext><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\text{physical compute}
+\rightarrow
+\text{effective training}
+\rightarrow
+\text{model capability}
+\rightarrow
+\text{deployment}
+\rightarrow
+\text{economic demand for inference}.
+</annotation></semantics></math></p>
+<p>The chain also runs backward. Expected deployment revenue raises the value of training better models. That increases demand for training clusters, which raises demand for accelerators, memory, networking, power, cooling, and capital. The market price of compute is produced by both current capabilities and expectations about future ones.</p>
+<p>This creates the possibility of forward-looking information. A laboratory that privately discovers a promising scaling regime may seek more future capacity. A cloud provider observing rapidly rising enterprise agent usage may revise its demand forecast. A semiconductor supplier may know that a production bottleneck will constrain deliveries. A power developer may see interconnection delays that prevent announced data centers from becoming operational. Each actor holds a different fragment of the AI system’s state. A liquid market can, in principle, force these fragments to meet.</p>
+<p>The result would not be an oracle. It would be a compressed sufficient statistic for the marginal value of compute, conditional on the participants, benchmark, and market structure that exist at that moment.</p>
+</section>
+<section id="the-object-being-priced-is-not-intelligence" class="level2">
+<h2>The object being priced is not intelligence</h2>
+<p>A useful analytical model begins by separating physical compute from effective compute. Let:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>C</mi><mi>t</mi><mrow><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">f</mi></mrow></msubsup><mo>=</mo><msub><mi>H</mi><mi>t</mi></msub><mo>⋅</mo><msubsup><mi>η</mi><mi>t</mi><mrow><mi mathvariant="normal">h</mi><mi mathvariant="normal">w</mi></mrow></msubsup><mo>⋅</mo><msubsup><mi>η</mi><mi>t</mi><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">w</mi></mrow></msubsup><mo>⋅</mo><msub><mi>u</mi><mi>t</mi></msub><mo>⋅</mo><msub><mi>q</mi><mi>t</mi></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">
+C^{\mathrm{eff}}_t
+=
+H_t
+\cdot \eta^{\mathrm{hw}}_t
+\cdot \eta^{\mathrm{sw}}_t
+\cdot u_t
+\cdot q_t,
+</annotation></semantics></math></p>
+<p>where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mi>t</mi></msub><annotation encoding="application/x-tex">H_t</annotation></semantics></math> is installed physical accelerator capacity, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>η</mi><mi>t</mi><mrow><mi mathvariant="normal">h</mi><mi mathvariant="normal">w</mi></mrow></msubsup><annotation encoding="application/x-tex">\eta^{\mathrm{hw}}_t</annotation></semantics></math> is hardware performance per nominal accelerator-hour, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>η</mi><mi>t</mi><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">w</mi></mrow></msubsup><annotation encoding="application/x-tex">\eta^{\mathrm{sw}}_t</annotation></semantics></math> is software and algorithmic efficiency, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>u</mi><mi>t</mi></msub><annotation encoding="application/x-tex">u_t</annotation></semantics></math> is utilization, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>q</mi><mi>t</mi></msub><annotation encoding="application/x-tex">q_t</annotation></semantics></math> is a workload-specific quality adjustment covering memory, interconnect, reliability, and topology.</p>
+<p>AI capability can then be represented schematically as:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>A</mi><mi>t</mi></msub><mo>=</mo><mi>G</mi><mo stretchy="false" form="prefix">(</mo><msubsup><mi>C</mi><mi>t</mi><mrow><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">f</mi><mo mathvariant="normal">,</mo><mi mathvariant="normal">t</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi></mrow></msubsup><mo>,</mo><msub><mi>D</mi><mi>t</mi></msub><mo>,</mo><msub><mi>R</mi><mi>t</mi></msub><mo>,</mo><msub><mi mathvariant="normal">Θ</mi><mi>t</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>,</mo></mrow><annotation encoding="application/x-tex">
+A_t = G(C^{\mathrm{eff,train}}_t, D_t, R_t, \Theta_t),
+</annotation></semantics></math></p>
+<p>where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>D</mi><mi>t</mi></msub><annotation encoding="application/x-tex">D_t</annotation></semantics></math> is data, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mi>t</mi></msub><annotation encoding="application/x-tex">R_t</annotation></semantics></math> is research and human capital, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="normal">Θ</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\Theta_t</annotation></semantics></math> captures architecture, objectives, post-training, tool use, and other algorithmic choices. Economic AI output depends on a related but distinct deployment function:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>Y</mi><mi>t</mi><mrow><mi mathvariant="normal">A</mi><mi mathvariant="normal">I</mi></mrow></msubsup><mo>=</mo><mi>Q</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>A</mi><mi>t</mi></msub><mo>,</mo><msubsup><mi>C</mi><mi>t</mi><mrow><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">f</mi><mo mathvariant="normal">,</mo><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">r</mi></mrow></msubsup><mo>,</mo><msub><mi>Z</mi><mi>t</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>,</mo></mrow><annotation encoding="application/x-tex">
+Y^{\mathrm{AI}}_t
+=
+Q(A_t, C^{\mathrm{eff,infer}}_t, Z_t),
+</annotation></semantics></math></p>
+<p>where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Z</mi><mi>t</mi></msub><annotation encoding="application/x-tex">Z_t</annotation></semantics></math> includes product design, distribution, trust, regulation, organizational integration, and the availability of complementary human and physical systems. The spot price of compute is set elsewhere:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mi>t</mi></msub><mo>=</mo><mi>P</mi><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mi>D</mi><mi>t</mi><mrow><mi mathvariant="normal">t</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi></mrow></msubsup><mo>+</mo><msubsup><mi>D</mi><mi>t</mi><mrow><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">r</mi></mrow></msubsup><mo>+</mo><msubsup><mi>D</mi><mi>t</mi><mrow><mi mathvariant="normal">o</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">h</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">r</mi></mrow></msubsup><mo>,</mo><mspace width="0.167em"></mspace><msub><mi>H</mi><mi>t</mi></msub><mo>,</mo><mspace width="0.167em"></mspace><msub><mi>E</mi><mi>t</mi></msub><mo>,</mo><mspace width="0.167em"></mspace><msub><mi>K</mi><mi>t</mi></msub><mo>,</mo><mspace width="0.167em"></mspace><msub><mi>B</mi><mi>t</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">
+S_t
+=
+P\left(
+D^{\mathrm{train}}_t
++
+D^{\mathrm{infer}}_t
++
+D^{\mathrm{other}}_t,\,
+H_t,\,
+E_t,\,
+K_t,\,
+B_t
+\right),
+</annotation></semantics></math></p>
+<p>where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>E</mi><mi>t</mi></msub><annotation encoding="application/x-tex">E_t</annotation></semantics></math> represents energy and grid conditions, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>K</mi><mi>t</mi></msub><annotation encoding="application/x-tex">K_t</annotation></semantics></math> financing and capital constraints, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>B</mi><mi>t</mi></msub><annotation encoding="application/x-tex">B_t</annotation></semantics></math> benchmark and market frictions.</p>
+<p>These equations expose the central identification problem. The same movement in <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>S</mi><mi>t</mi></msub><annotation encoding="application/x-tex">S_t</annotation></semantics></math> can be generated by very different changes in the underlying AI system. A rise in compute futures may reflect expected capability progress, because laboratories anticipate productive large runs. It may reflect expected deployment growth, because enterprises are consuming more inference. It may equally reflect hardware scarcity from delayed accelerator production, energy scarcity when projects cannot secure power, financing stress that raises the cost of building capacity, geopolitical segmentation as export controls divide regional markets, a larger risk premium when natural buyers grow desperate to hedge, or benchmark deterioration, where the contract ceases to match the capacity users actually need.</p>
+<p>A fall is just as ambiguous. It may reflect weak AI demand or overbuilt data centers. It may also reflect a new accelerator generation, better model architectures, gains from quantization, batching, caching, or speculative decoding, migration to custom silicon, lower electricity costs, declining financing costs, or an increase in supply that enables <em>more</em> AI progress.</p>
+<p>The sign is not invariant. Expensive compute can mean AI is accelerating. Cheap compute can also mean AI is accelerating.</p>
+</section>
+<section id="the-paradox-of-algorithmic-efficiency" class="level2">
+<h2>The paradox of algorithmic efficiency</h2>
+<p>The most important reason a compute price cannot be read naively is that AI engineering constantly tries to destroy the scarcity being priced.</p>
+<p>OpenAI defined algorithmic efficiency as the reduction in compute required to reach a fixed level of capability and documented rapid historical improvements in several machine-learning domains.<a href="#fn20" class="footnote-ref" id="fnref20" role="doc-noteref"><sup>20</sup></a> Epoch AI’s current trends dashboard similarly separates advances in training compute, hardware, software efficiency, and inference prices. Its February 2026 update reports rapid improvement in pre-training compute efficiency and a steep decline in the price of inference at fixed performance, though the exact rates vary by task and methodology.<a href="#fn21" class="footnote-ref" id="fnref21" role="doc-noteref"><sup>21</sup></a></p>
+<p>An efficiency breakthrough creates two opposing effects.</p>
+<p>The first is substitution. If a workload needs fewer GPU-hours, demand for raw compute falls: <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>η</mi><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">w</mi></mrow></msup><mo>↑</mo></mrow><annotation encoding="application/x-tex">\eta^{\mathrm{sw}} \uparrow</annotation></semantics></math> implies fewer GPU-hours per task, which pushes <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>S</mi><mi>t</mi></msub><annotation encoding="application/x-tex">S_t</annotation></semantics></math> down. Under this channel, falling compute futures could be bullish for AI progress. The market is pricing a collapse in the resource cost of a given capability.</p>
+<p>The second is rebound. Cheaper effective intelligence can create new use cases and increase total consumption: as the cost per useful task falls, the quantity of tasks demanded rises, and inference demand <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>D</mi><mi>t</mi><mrow><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">r</mi></mrow></msubsup><annotation encoding="application/x-tex">D^{\mathrm{infer}}_t</annotation></semantics></math> grows. If the elasticity of demand is high enough, total compute demand rises despite efficiency gains. This is a digital form of the Jevons paradox. Better inference kernels, smaller models, caching, and batching may reduce the cost per task while expanding the number, duration, and complexity of tasks sufficiently to raise total accelerator use.</p>
+<p>Reasoning and agentic systems make this rebound especially plausible. A cheaper token may be consumed inside longer chains of thought, parallel sampling, verification loops, tool calls, or multi-agent workflows. The economically relevant unit becomes neither the token nor the GPU-hour, but the successful completion of a valuable task.</p>
+<p>The implication for market interpretation is severe. A falling H100 curve accompanied by falling quality-adjusted token prices and rising task volume may indicate accelerating diffusion. The same falling curve accompanied by weak utilization and stagnant capability metrics may indicate a demand bust.</p>
+</section>
+<section id="training-demand-and-inference-demand-tell-different-stories" class="level2">
+<h2>Training demand and inference demand tell different stories</h2>
+<p>A single compute index may combine two economically different markets.</p>
+<p>Training compute is a wager on the frontier. Large training runs are lumpy, strategic, and concentrated. Their demand reflects expected scaling returns, competitive races among laboratories, research confidence, capital availability, access to data, and beliefs about the next architecture or post-training regime. Training demand is therefore closer to a venture-style option on future capability. A sudden rise in long-dated demand for tightly interconnected frontier-grade clusters could be informative about laboratories’ private expectations.</p>
+<p>Inference compute is a wager on diffusion. Its demand reflects deployed usage: API traffic, coding agents, search and recommendation, enterprise automation, media generation, scientific workloads, robotics and control, consumer products. It is more closely connected to realized economic adoption than to frontier research alone.</p>
+<p>The distinction is not cosmetic. Epoch AI estimates that the most prominent frontier laboratories did not use most of the world’s AI compute in 2025; substantial capacity was held or used by hyperscalers, other model developers, recommender systems, open-weight inference, and non-language workloads.<a href="#fn22" class="footnote-ref" id="fnref22" role="doc-noteref"><sup>22</sup></a> A broad compute index could therefore rise because of mass deployment even if frontier scaling slows. Conversely, a few enormous training runs could tighten premium cluster capacity while leaving the broader rental market soft.</p>
+<p>A prediction system should ideally maintain separate curves for tightly interconnected training clusters, latency-sensitive inference, throughput-oriented batch inference, memory-heavy long-context workloads, lower-cost commodity accelerators, and custom silicon where comparable pricing can be constructed. Market design is already moving in this direction: NATIVX’s COIL Index, the reference for ICE’s second announced compute-futures suite, publishes separate sub-indices for training, inference, graphics, and connectivity.<a href="#fn23" class="footnote-ref" id="fnref23" role="doc-noteref"><sup>23</sup></a> Without segmentation of this kind, the market risks creating a beautifully liquid price for an economically incoherent average.</p>
+</section>
+<section id="compute-is-a-multidimensional-commodity" class="level2">
+<h2>Compute is a multidimensional commodity</h2>
+<p>Standardization is the central market-design problem.</p>
+<p>Silicon Data states that its indices cover major accelerator categories and draw on verified pricing records across countries, platforms, providers, regions, and lease structures. Its own methodology emphasizes that GPU pricing is multidimensional and that simple averages can conceal material heterogeneity.<a href="#fn24" class="footnote-ref" id="fnref24" role="doc-noteref"><sup>24</sup></a> Earlier work on cloud spot markets similarly found that aggregation can stabilize an index, while individual virtual-machine prices remain volatile and operationally distinct.<a href="#fn25" class="footnote-ref" id="fnref25" role="doc-noteref"><sup>25</sup></a></p>
+<p>The heterogeneity is not a nuisance at the edge of the market. It is the substance of the product. An H100-hour differs according to SXM versus PCIe configuration, memory capacity and bandwidth, NVLink and cluster topology, the CPU, storage, and network it is paired with, utilization and contention, reliability and preemption risk, data residency and security, geography and latency, electricity price and carbon intensity, the software stack and orchestration, and whether the lease is reserved, on-demand, or interruptible.</p>
+<p>Hardware generations compound the problem. A future B-series accelerator may deliver more useful work than an H100 while commanding a different price, power envelope, memory configuration, and software profile. A nominal hour is therefore a poor intertemporal unit unless it is adjusted for workload-specific output.</p>
+<p>This suggests three possible market architectures.</p>
+<p>The first is hardware-specific contracts, which settle on the rental price of a specific accelerator class. The approach is observable and relatively concrete, and it is where the announced U.S. products have started: Ornn’s index series reference named chips, from the H100 to the RTX 5090.<a href="#fn26" class="footnote-ref" id="fnref26" role="doc-noteref"><sup>26</sup></a> Its weakness is rapid obsolescence and fragmentation.</p>
+<p>The second is H100-equivalent or performance-adjusted contracts, which normalize different accelerators to a common performance unit. This creates continuity across generations, but equivalence depends on workload, precision, memory, interconnect, and software. NATIVX’s energy-normalized COIL Index is a variant of this direction: it prices compute per stable, auditable unit and deliberately trades hardware specificity for continuity, designed to sit alongside ICE’s natural gas and power complexes.<a href="#fn27" class="footnote-ref" id="fnref27" role="doc-noteref"><sup>27</sup></a></p>
+<p>The third is output-denominated contracts, which settle on the cost of producing a standardized inference or training output: quality-adjusted tokens, benchmark tasks, or a defined model workload. This comes closer to economic utility, but model quality, tokenizer choice, caching, latency, and provider behavior make output difficult to standardize. China’s reported exploration of AI-token futures illustrates this direction, contrasting with U.S. efforts centered on GPU-rental costs.<a href="#fn28" class="footnote-ref" id="fnref28" role="doc-noteref"><sup>28</sup></a> A 2026 preprint has proposed a “standard inference token” and a contract design for token futures, but this remains a theoretical proposal rather than evidence that such a unit can sustain a durable market.<a href="#fn29" class="footnote-ref" id="fnref29" role="doc-noteref"><sup>29</sup></a></p>
+<p>The eventual predictive content will depend heavily on which architecture wins. A hardware-specific curve forecasts hardware scarcity. An output-denominated curve comes closer to forecasting the marginal price of useful machine cognition.</p>
+</section>
+<section id="how-to-read-the-compute-curve" class="level2">
+<h2>How to read the compute curve</h2>
+<p>The information would not live in the level alone. It would live in five dimensions.</p>
+<section id="the-level" class="level3">
+<h3>The level</h3>
+<p>The price level estimates the current or future dollar cost of benchmarked capacity. A rising level may indicate a tightening supply-demand balance. It says little by itself about whether demand is coming from frontier training, inference adoption, non-AI workloads, or hedging pressure.</p>
+</section>
+<section id="the-slope" class="level3">
+<h3>The slope</h3>
+<p>Let <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><mi>t</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>T</mi><mn>1</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">F_t(T_1)</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><mi>t</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>T</mi><mn>2</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">F_t(T_2)</annotation></semantics></math> denote near- and long-dated contracts. Backwardation, near prices above later prices, could indicate acute current scarcity expected to ease through new supply or obsolescence. Contango, later prices above near prices, could indicate expected demand growth, financing and carrying costs, future power constraints, or a positive term premium.</p>
+<p>For compute, the slope may also encode expected generational replacement. A steep decline in an H100 curve can coexist with a rising B200 curve if the market expects rapid migration toward newer hardware.</p>
+</section>
+<section id="inter-generation-spreads" class="level3">
+<h3>Inter-generation spreads</h3>
+<p>Define:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi mathvariant="normal">Δ</mi><mi>t</mi><mrow><mi>B</mi><mn>200</mn><mo>−</mo><mi>H</mi><mn>100</mn></mrow></msubsup><mo stretchy="false" form="prefix">(</mo><mi>T</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msubsup><mi>F</mi><mi>t</mi><mrow><mi>B</mi><mn>200</mn></mrow></msubsup><mo stretchy="false" form="prefix">(</mo><mi>T</mi><mo stretchy="false" form="postfix">)</mo><mo>−</mo><msub><mi>α</mi><mi>t</mi></msub><msubsup><mi>F</mi><mi>t</mi><mrow><mi>H</mi><mn>100</mn></mrow></msubsup><mo stretchy="false" form="prefix">(</mo><mi>T</mi><mo stretchy="false" form="postfix">)</mo><mo>,</mo></mrow><annotation encoding="application/x-tex">
+\Delta^{B200-H100}_t(T)
+=
+F^{B200}_t(T) - \alpha_t F^{H100}_t(T),
+</annotation></semantics></math></p>
+<p>where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>α</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\alpha_t</annotation></semantics></math> quality-adjusts for expected performance. This spread may reveal the pace of hardware adoption, scarcity of new-generation systems, expected software readiness, the depreciation rate of older accelerators, and the market value of memory and interconnect improvements. A rapidly widening spread could indicate that frontier workloads increasingly require the new generation. A narrowing spread could indicate supply normalization, software bottlenecks, or strong demand for cheaper inference on older chips.</p>
+</section>
+<section id="regional-basis" class="level3">
+<h3>Regional basis</h3>
+<p>Let:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>B</mi><mi>t</mi><mrow><msub><mi>r</mi><mn>1</mn></msub><mo>,</mo><msub><mi>r</mi><mn>2</mn></msub></mrow></msubsup><mo stretchy="false" form="prefix">(</mo><mi>T</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msubsup><mi>F</mi><mi>t</mi><msub><mi>r</mi><mn>1</mn></msub></msubsup><mo stretchy="false" form="prefix">(</mo><mi>T</mi><mo stretchy="false" form="postfix">)</mo><mo>−</mo><msubsup><mi>F</mi><mi>t</mi><msub><mi>r</mi><mn>2</mn></msub></msubsup><mo stretchy="false" form="prefix">(</mo><mi>T</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+B^{r_1,r_2}_t(T)
+=
+F^{r_1}_t(T) - F^{r_2}_t(T).
+</annotation></semantics></math></p>
+<p>Regional basis could price power availability, grid congestion, data sovereignty, export controls, latency, political risk, cooling and water constraints, and local financing conditions. Because data centers are spatially concentrated, power bottlenecks can be locally severe even when global electricity shares remain modest. The International Energy Agency projects global data-center electricity consumption to reach roughly 945 TWh by 2030 in its base case and stresses that localized concentration makes grid integration especially challenging.<a href="#fn30" class="footnote-ref" id="fnref30" role="doc-noteref"><sup>30</sup></a></p>
+<p>A rising regional compute basis may therefore be less a forecast of AI capability than a forecast of infrastructure failure.</p>
+</section>
+<section id="implied-volatility-and-skew" class="level3">
+<h3>Implied volatility and skew</h3>
+<p>Options on compute futures would reveal the price of tail risk. High upside skew could indicate fear of shortages, model-driven demand shocks, export controls, or power failures. High downside skew could indicate overbuilding, obsolescence, demand disappointment, or an efficiency shock. Calendar spreads in implied volatility could reveal when the market expects uncertainty to resolve.</p>
+<p>For forecasting AI, options may be more informative than futures. A futures level compresses beliefs into an average price. Options reveal the market’s pricing of discontinuities, the very object of interest when discussing sudden capability jumps or infrastructure shocks.</p>
+</section>
+</section>
+<section id="a-regime-map-the-same-price-movement-can-imply-opposite-futures" class="level2">
+<h2>A regime map: the same price movement can imply opposite futures</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Market observation</th>
+<th>Plausible structural cause</th>
+<th>Interpretation for AI progress</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Long-dated compute rises; chip-delivery expectations unchanged</td>
+<td>Stronger expected training or inference demand</td>
+<td>Potentially bullish</td>
+</tr>
+<tr>
+<td>Long-dated compute rises; power basis rises simultaneously</td>
+<td>Grid and energy constraints</td>
+<td>Ambiguous or bearish for realized progress</td>
+</tr>
+<tr>
+<td>H100 falls; B200 rises</td>
+<td>Generational migration</td>
+<td>Bullish for frontier capability, bearish for old hardware</td>
+</tr>
+<tr>
+<td>All hardware curves fall; quality-adjusted inference prices fall faster; usage rises</td>
+<td>Efficiency and diffusion</td>
+<td>Strongly bullish</td>
+</tr>
+<tr>
+<td>All curves fall; utilization and AI revenue fall</td>
+<td>Demand destruction or overbuild</td>
+<td>Bearish</td>
+</tr>
+<tr>
+<td>Near curve spikes; long curve stable</td>
+<td>Temporary outage or delivery shock</td>
+<td>Little information about long-run progress</td>
+</tr>
+<tr>
+<td>Long curve rises; option upside skew rises after a scaling result</td>
+<td>Market reprices future frontier demand</td>
+<td>Potential leading signal</td>
+</tr>
+<tr>
+<td>Compute rises; capability metrics stagnate</td>
+<td>Input escalation without output improvement</td>
+<td>Evidence of declining marginal returns</td>
+</tr>
+<tr>
+<td>Compute flat; capability metrics rise rapidly</td>
+<td>Algorithmic progress dominates physical scaling</td>
+<td>Bullish, with compute prices understating progress</td>
+</tr>
+<tr>
+<td>Regional basis widens under export controls</td>
+<td>Market fragmentation</td>
+<td>Global progress may continue while access becomes unequal</td>
+</tr>
+</tbody>
+</table>
+<p>This table captures the central rule: a compute price is interpretable only conditionally.</p>
+</section>
+<section id="the-compute-curve-as-a-latent-state-estimator" class="level2">
+<h2>The compute curve as a latent-state estimator</h2>
+<p>The correct analogy is not a binary prediction market. It is a state-estimation problem.</p>
+<p>Suppose the hidden state of the AI economy is:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>t</mi></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mtext mathvariant="normal">frontier-training demand</mtext></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mtext mathvariant="normal">inference adoption</mtext></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mtext mathvariant="normal">hardware supply</mtext></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mtext mathvariant="normal">algorithmic efficiency</mtext></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mtext mathvariant="normal">power constraint</mtext></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mtext mathvariant="normal">obsolescence rate</mtext></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mtext mathvariant="normal">financing condition</mtext></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mtext mathvariant="normal">geopolitical segmentation</mtext></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
+x_t =
+\begin{bmatrix}
+\text{frontier-training demand} \\
+\text{inference adoption} \\
+\text{hardware supply} \\
+\text{algorithmic efficiency} \\
+\text{power constraint} \\
+\text{obsolescence rate} \\
+\text{financing condition} \\
+\text{geopolitical segmentation}
+\end{bmatrix}.
+</annotation></semantics></math></p>
+<p>The observable market vector is:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>t</mi></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mtext mathvariant="normal">GPU futures by maturity</mtext></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mtext mathvariant="normal">chip-generation spreads</mtext></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mtext mathvariant="normal">regional basis</mtext></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mtext mathvariant="normal">compute option volatility</mtext></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mtext mathvariant="normal">electricity and gas curves</mtext></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mtext mathvariant="normal">HBM and networking prices</mtext></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mtext mathvariant="normal">cloud utilization</mtext></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mtext mathvariant="normal">quality-adjusted token prices</mtext></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mtext mathvariant="normal">data-center lease and credit spreads</mtext></mtd></mtr></mtable><mo stretchy="true" form="postfix">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
+y_t =
+\begin{bmatrix}
+\text{GPU futures by maturity} \\
+\text{chip-generation spreads} \\
+\text{regional basis} \\
+\text{compute option volatility} \\
+\text{electricity and gas curves} \\
+\text{HBM and networking prices} \\
+\text{cloud utilization} \\
+\text{quality-adjusted token prices} \\
+\text{data-center lease and credit spreads}
+\end{bmatrix}.
+</annotation></semantics></math></p>
+<p>A dynamic factor or state-space model could represent:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>t</mi></msub><mo>=</mo><mi mathvariant="normal">Λ</mi><msub><mi>x</mi><mi>t</mi></msub><mo>+</mo><msub><mi>ε</mi><mi>t</mi></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">
+y_t = \Lambda x_t + \varepsilon_t,
+</annotation></semantics></math></p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>A</mi><msub><mi>x</mi><mi>t</mi></msub><mo>+</mo><msub><mi>η</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">
+x_{t+1} = A x_t + \eta_t.
+</annotation></semantics></math></p>
+<p>Capability and economic outcomes would then be modeled as:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mrow><mi>t</mi><mo>+</mo><mi>h</mi></mrow></msub><mo>=</mo><mi mathvariant="normal">Γ</mi><msub><mi>x</mi><mi>t</mi></msub><mo>+</mo><msub><mi>ν</mi><mrow><mi>t</mi><mo>+</mo><mi>h</mi></mrow></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">
+m_{t+h} = \Gamma x_t + \nu_{t+h},
+</annotation></semantics></math></p>
+<p>where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>m</mi><mrow><mi>t</mi><mo>+</mo><mi>h</mi></mrow></msub><annotation encoding="application/x-tex">m_{t+h}</annotation></semantics></math> might include frontier benchmark improvement, loss at fixed compute, task-completion time horizon, quality-adjusted inference cost, AI revenue or usage, observed training-run scale, and energy consumed by accelerated servers.</p>
+<p>The research question is not whether the compute price equals expected AI progress. It is:</p>
+<blockquote>
+<p><strong>Does the market-derived state vector improve out-of-sample forecasts of AI capability or adoption after controlling for public technical and infrastructure information?</strong></p>
+</blockquote>
+<p>That is empirically testable.</p>
+</section>
+<section id="what-should-count-as-ai-progress" class="level2">
+<h2>What should count as AI progress?</h2>
+<p>A prediction signal is meaningless without a target variable. AI progress is multidimensional, and at least four targets should be separated.</p>
+<p>The first is scientific or benchmark capability: loss, reasoning accuracy, coding performance, cyber capability, scientific problem-solving, or multimodal competence. These measures are relatively easy to update but vulnerable to saturation, contamination, and benchmark-specific optimization.</p>
+<p>The second is autonomous task horizon. METR has proposed measuring the length of tasks that AI agents can complete at a specified reliability. Its work reports an approximately exponential historical trend, while emphasizing uncertainty in extrapolating it to future real-world autonomy.<a href="#fn31" class="footnote-ref" id="fnref31" role="doc-noteref"><sup>31</sup></a> This kind of metric is attractive because it translates model capability into the duration and complexity of coherent action.</p>
+<p>The third is quality-adjusted cost. Progress can mean producing the same capability more cheaply:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">progress</mtext><mo>=</mo><mi>−</mi><mi mathvariant="normal">Δ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mtext mathvariant="normal">dollars</mtext><mtext mathvariant="normal">fixed-quality output</mtext></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\text{progress}
+=
+-\Delta
+\left(
+\frac{\text{dollars}}{\text{fixed-quality output}}
+\right).
+</annotation></semantics></math></p>
+<p>This target is essential because a model that matches yesterday’s frontier at one-tenth the cost may matter more economically than a marginal benchmark leader.</p>
+<p>The fourth is realized productivity and adoption. Capability does not automatically become economic output. METR’s randomized study of experienced open-source developers found that early-2025 AI tools made participants slower in the tested setting, illustrating the gap that can exist between benchmark excitement and realized productivity.<a href="#fn32" class="footnote-ref" id="fnref32" role="doc-noteref"><sup>32</sup></a> That result is a snapshot, not a universal verdict on AI, but it demonstrates why deployment must be measured separately.</p>
+<p>A compute curve might forecast these targets with different signs and horizons. Training-cluster futures may lead frontier capability. Commodity inference prices may lead diffusion. Regional compute-power spreads may lead infrastructure deployment. None should be treated as a universal “AI progress index.”</p>
+</section>
+<section id="event-studies-that-could-reveal-informational-content" class="level2">
+<h2>Event studies that could reveal informational content</h2>
+<p>The first years of compute futures would provide a natural laboratory. Researchers should examine how the curve responds to distinct classes of news.</p>
+<p>Model and algorithm events include the release of a model with unexpectedly strong capabilities, evidence that test-time compute improves performance, a major distillation or quantization result, breakthroughs in sparse architectures, memory, or routing, and evidence of diminishing returns to scaling. Hardware events include accelerator announcements, production delays, HBM shortages, interconnect improvements, custom-silicon launches, and changes in export controls. Infrastructure events include grid interconnection approvals or cancellations, power-purchase agreements, turbine and transformer delivery shocks, major data-center financing, and water or permitting restrictions. Demand events include enterprise adoption reports, agent usage, cloud utilization, API price changes, large customer contracts, and evidence of AI-driven productivity.</p>
+<p>For each event class, one could estimate abnormal movements in curve level, slope, generation spreads, regional basis, implied volatility, and volume and open interest.</p>
+<p>A genuinely informative market should respond differently to an algorithmic efficiency shock than to a power-supply shock. If every headline merely moves one generic “AI hype factor,” the market will have little analytical value.</p>
+</section>
+<section id="can-the-curve-lead-capability-releases" class="level2">
+<h2>Can the curve lead capability releases?</h2>
+<p>The strongest prediction-market thesis would be supported if compute prices systematically move <em>before</em> public capability evidence. That could happen through several channels.</p>
+<p>Private procurement is the first. Labs reserve capacity before training begins. Suppliers, clouds, brokers, lenders, and infrastructure firms may observe demand without knowing the model details.</p>
+<p>Financing is the second. A laboratory seeking capital or signing long-duration contracts reveals confidence through costly commitments. Futures participants may infer the expected value of upcoming runs. The scale of such commitments is already extraordinary: Google agreed in mid-2026 to pay SpaceX roughly $920 million per month for compute capacity from October 2026 through June 2029.<a href="#fn33" class="footnote-ref" id="fnref33" role="doc-noteref"><sup>33</sup></a></p>
+<p>Supply-chain telemetry is the third. Accelerator orders, HBM allocation, networking demand, and power contracting may reveal the scale of projects before model releases.</p>
+<p>Informed hedging is the fourth. An AI company expecting a demand surge may buy protection against rising inference costs. Its hedge can move prices even if it never publicly explains the reason.</p>
+<p>A key empirical test would compare compute-market moves with later model launches, benchmark jumps, task-horizon improvements, API demand, revenue, and cluster completion. If the curve contains non-public but lawful commercial information, it may become a leading indicator. If it simply reacts to press releases, it will be a coincident sentiment index.</p>
+</section>
+<section id="when-the-compute-curve-will-lie" class="level2">
+<h2>When the compute curve will lie</h2>
+<p>Even a liquid market can produce a misleading narrative. Eight failure modes deserve advance attention.</p>
+<p>Risk premia can masquerade as expectations. Natural buyers may be more desperate to hedge than natural sellers. A positive insurance premium can push futures above expected spot prices, and interpreting the quote as a literal forecast would overstate expected scarcity.</p>
+<p>Liquidity can be thin. A new contract may have low volume, wide bid-ask spreads, concentrated positions, and fragile market making. Prices can be moved by balance-sheet constraints rather than information.</p>
+<p>Benchmark basis can drift. The settlement index may not match the capacity a user needs. A benchmark can be statistically broad yet economically wrong for frontier training, secure enterprise inference, or a particular region.</p>
+<p>Adverse selection can hollow out the price. Participants with the best information may avoid the public market if trading reveals their plans, hedging instead through bilateral contracts, vertical integration, power agreements, or cloud reservations. The largest compute commitments today, including deals on the scale of the Google-SpaceX agreement, are struck privately and may never touch an exchange.<a href="#fn34" class="footnote-ref" id="fnref34" role="doc-noteref"><sup>34</sup></a></p>
+<p>Manipulation is possible. An actor with a large physical position may benefit from influencing the benchmark or futures settlement. Strong index governance, transaction verification, position limits, and surveillance will be essential.</p>
+<p>Obsolescence is endogenous. The expected useful life of the benchmarked hardware may change faster than the contract maturity. A technically valid settlement price can become irrelevant to the frontier.</p>
+<p>Narratives can correlate everything. Compute futures, semiconductor equities, and AI-company valuations may all respond to the same speculative factor. Apparent forecasting power may disappear after controlling for broader AI sentiment.</p>
+<p>Capability and value can decouple. A system can become more capable without becoming more profitable, or more profitable without advancing the frontier. Markets care about cash flows and scarcity, not philosophical intelligence.</p>
+</section>
+<section id="reflexivity-the-market-will-change-the-future-it-predicts" class="level2">
+<h2>Reflexivity: the market will change the future it predicts</h2>
+<p>A compute curve would not merely observe AI progress. It would influence it.</p>
+<p>A high long-dated price can improve the expected revenue of compute suppliers. That can support data-center project finance, GPU-backed lending, power investment, long-term procurement, new cloud entrants, and accelerator production. The feedback loop is:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><mi>t</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>T</mi><mo stretchy="false" form="postfix">)</mo><mo>↑</mo><mo>→</mo><mtext mathvariant="normal">expected infrastructure revenue</mtext><mo>↑</mo><mo>→</mo><mtext mathvariant="normal">financing capacity</mtext><mo>↑</mo><mo>→</mo><msub><mi>H</mi><mrow><mi>t</mi><mo>+</mo><mi>h</mi></mrow></msub><mo>↑</mo><mo>→</mo><mtext mathvariant="normal">future scarcity</mtext><mo>↓</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+F_t(T) \uparrow
+\rightarrow
+\text{expected infrastructure revenue} \uparrow
+\rightarrow
+\text{financing capacity} \uparrow
+\rightarrow
+H_{t+h} \uparrow
+\rightarrow
+\text{future scarcity} \downarrow.
+</annotation></semantics></math></p>
+<p>The inverse loop can cancel projects and reduce future supply.</p>
+<p>The financial superstructure is assembling before the underlying market exists. ETF sponsors filed for leveraged and inverse products tied to compute futures within days of the CME announcement, and Silicon Data’s rental benchmarks have already appeared in corporate disclosures, including SpaceX’s IPO prospectus.<a href="#fn35" class="footnote-ref" id="fnref35" role="doc-noteref"><sup>35</sup></a> Speculative capital and reference-pricing effects will be present from the first day of trading, not phased in gradually.</p>
+<p>This reflexivity makes the compute curve closer to a control signal than a passive thermometer. It can coordinate the construction of the system whose future price it quotes. That is economically useful, but it complicates causal interpretation. If a high price predicts abundant future compute because it caused investment, the initial “forecast error” may actually demonstrate successful coordination.</p>
+<p>AI supercomputers already resemble industrial megaprojects. A dataset of more than 500 systems found that from 2019 to 2025 their computational performance doubled roughly every nine months, while estimated hardware acquisition cost and power requirements doubled roughly annually.<a href="#fn36" class="footnote-ref" id="fnref36" role="doc-noteref"><sup>36</sup></a> When projects reach this scale, financing conditions become part of the capability-production function.</p>
+<p>The compute curve may therefore forecast AI progress partly by financing it.</p>
+</section>
+<section id="the-yield-curve-analogy-and-its-limits" class="level2">
+<h2>The yield-curve analogy, and its limits</h2>
+<p>The best analogy is the yield curve.</p>
+<p>The yield curve is not a pure forecast of future short-term interest rates. It also contains term premia, liquidity effects, regulation, central-bank policy, collateral demand, and risk appetite. Yet economists still study its level, slope, curvature, inversions, and cross-market relationships because the curve aggregates consequential beliefs and constraints.</p>
+<p>A mature compute curve could play a similar role. Its level would measure current scarcity of benchmarked compute; its slope, the expected evolution of scarcity and investment; its curvature, transitions between hardware generations or infrastructure phases. Regional basis would price geopolitical and energy fragmentation, generation spreads the rate of technological obsolescence, implied volatility the uncertainty and tail risk, compute-power margins the profitability of converting electricity into machine computation, and token-compute spreads the state of software efficiency and product-layer value capture.</p>
+<p>The analogy breaks at one decisive point. Interest rates are denominated in a stable financial unit. Compute quality is endogenous to technological progress. The underlying itself mutates. The market is attempting to construct a yield curve over a unit whose productive meaning changes every few months.</p>
+<p>For that reason, the most informative object may not be a single curve but a surface:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">maturity</mtext><mo>,</mo><mtext mathvariant="normal">hardware</mtext><mo>,</mo><mtext mathvariant="normal">region</mtext><mo>,</mo><mtext mathvariant="normal">workload</mtext><mo>,</mo><mtext mathvariant="normal">service quality</mtext><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+F(
+\text{maturity},
+\text{hardware},
+\text{region},
+\text{workload},
+\text{service quality}
+).
+</annotation></semantics></math></p>
+<p>AI progress would be inferred from the deformation of this surface through time.</p>
+</section>
+<section id="a-proposed-compute-implied-ai-progress-index" class="level2">
+<h2>A proposed Compute-Implied AI Progress Index</h2>
+<p>A serious index should avoid the mistake of equating expensive compute with rapid progress. One possible framework would combine five standardized factors.</p>
+<p>The first factor is frontier scarcity, measured through prices for tightly interconnected, current-generation training clusters. The second is deployment demand, measured through inference-oriented capacity, utilization, API volume, and output-denominated prices. The third is efficiency, measured through the spread between raw compute prices and quality-adjusted output prices:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>E</mi><mi>t</mi></msub><mo>=</mo><mi mathvariant="normal">Δ</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><msubsup><mi>P</mi><mi>t</mi><mrow><mi mathvariant="normal">c</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">p</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">e</mi></mrow></msubsup><mo>−</mo><mi mathvariant="normal">Δ</mi><mrow><mi mathvariant="normal">log</mi><mo>&#8289;</mo></mrow><msubsup><mi>P</mi><mi>t</mi><mrow><mi mathvariant="normal">q</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">y</mi><mtext mathvariant="normal">-</mtext><mi mathvariant="normal">a</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">j</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">s</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">d</mi><mspace width="0.222em"></mspace><mi mathvariant="normal">o</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">p</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">t</mi></mrow></msubsup><mi>.</mi></mrow><annotation encoding="application/x-tex">
+E_t =
+\Delta \log P^{\mathrm{compute}}_t
+-
+\Delta \log P^{\mathrm{quality\text{-}adjusted\ output}}_t.
+</annotation></semantics></math></p>
+<p>If raw compute remains expensive while useful output becomes dramatically cheaper, efficiency is improving. The fourth factor is infrastructure constraint, measured through regional compute basis, electricity curves, power interconnection, and compute-power margins. The fifth is innovation option value, measured through long-dated implied volatility and generation spreads around known research and hardware milestones.</p>
+<p>The combined index would be estimated rather than hand-weighted. A dynamic model could be trained to forecast multiple progress targets and constrained to preserve interpretability. Its output should be a distribution, not a point estimate. For example:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Pr</mi><mo>&#8289;</mo></mrow><mo stretchy="false" form="prefix">(</mo><mtext mathvariant="normal">METR horizon</mtext><mo>&gt;</mo><mi>h</mi><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> by date </mtext><mspace width="0.333em"></mspace></mrow><mi>T</mi><mo>∣</mo><mtext mathvariant="normal">compute-market state</mtext><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\Pr(
+\text{METR horizon} &gt; h
+\text{ by date } T
+\mid
+\text{compute-market state}
+).
+</annotation></semantics></math></p>
+<p>This still would not be a literal prediction-market probability. It would be a model-implied forecast using market data as inputs. The distinction should be maintained in every public presentation.</p>
+</section>
+<section id="governance-a-public-early-warning-layer-for-ai" class="level2">
+<h2>Governance: a public early-warning layer for AI</h2>
+<p>Compute has attracted governance interest because it is relatively quantifiable, detectable, excludable, and produced through a concentrated supply chain. Researchers have argued that compute can support visibility into AI development, resource allocation, and enforcement, while warning that poorly designed controls could create privacy, economic, and centralization risks.<a href="#fn37" class="footnote-ref" id="fnref37" role="doc-noteref"><sup>37</sup></a></p>
+<p>A regulated compute market could add a new kind of visibility. Unusual movements in long-dated frontier-grade contracts, upside option skew, regional basis under export controls, physical-financial divergence, or the concentration of positions might provide early warnings of emerging shortages, major training demand, financial instability, or geopolitical segmentation. Regulators are already engaged with the product’s foundations: contract specifications, settlement procedures, and benchmark construction are expected to face scrutiny from the Commodity Futures Trading Commission before launch.<a href="#fn38" class="footnote-ref" id="fnref38" role="doc-noteref"><sup>38</sup></a></p>
+<p>The signal would be indirect. Exchanges would see positions, not model weights or training objectives. Most compute demand would remain benign and commercially sensitive. Surveillance could easily become overbroad. Still, the market could supply aggregate information that neither voluntary laboratory disclosures nor public benchmarks currently provide.</p>
+<p>The governance opportunity is therefore narrower than letting the market regulate AI:</p>
+<blockquote>
+<p><strong>Use market telemetry as one input in a plural monitoring system that also includes capability evaluations, chip and cluster data, energy infrastructure, corporate reporting, and technical audits.</strong></p>
+</blockquote>
+<p>Such a system could be useful precisely because traders have money at stake. Cheap talk about AI timelines is abundant. A hedged procurement position is a costly signal.</p>
+</section>
+<section id="an-empirical-research-program" class="level2">
+<h2>An empirical research program</h2>
+<p>The thesis should be treated as a research program, not a slogan.</p>
+<p>The dataset would collect tick or daily compute-futures prices; open interest, volume, and trader categories; benchmark composition and revisions; spot rental transactions; cloud reservation prices; chip shipments and delivery times; power prices and interconnection data; data-center completions; model releases and capability evaluations; quality-adjusted inference prices; and AI usage and revenue indicators.</p>
+<p>Six hypotheses follow.</p>
+<p>First, compute curves lead capability releases. Test whether curve innovations predict benchmark or task-horizon gains after controlling for public announcements, semiconductor equities, and broad risk appetite.</p>
+<p>Second, generation spreads predict architectural migration. Test whether H100-B200 or equivalent spreads lead changes in workload allocation and frontier-cluster composition.</p>
+<p>Third, output-input spreads measure algorithmic efficiency. Test whether movements between token or task prices and raw GPU prices predict independent estimates of software efficiency.</p>
+<p>Fourth, regional basis predicts infrastructure delivery. Test whether compute basis predicts project delays, power constraints, and local utilization.</p>
+<p>Fifth, options contain discontinuity information. Test whether implied skew rises before major capability or supply shocks and whether it outperforms analyst forecasts.</p>
+<p>Sixth, financialization changes investment. Use exchange launches, contract introductions, or liquidity thresholds as quasi-experiments to estimate whether hedgeability lowers financing costs or accelerates infrastructure construction.</p>
+<p>Every model should be evaluated out of sample against simple baselines: the last observation, a linear trend, a semiconductor equity index, announced capex, public chip-shipment forecasts, capability trend extrapolation, and expert surveys. The burden of proof is straightforward: market data must add predictive information beyond what was already public.</p>
+</section>
+<section id="what-could-ultimately-be-written-on-the-tape" class="level2">
+<h2>What could ultimately be written on the tape?</h2>
+<p>If the market succeeds, commentators will be tempted to narrate every price movement as a referendum on artificial general intelligence. That would be intellectually lazy.</p>
+<p>A better interpretation hierarchy is:</p>
+<ol type="1">
+<li><strong>First:</strong> What changed in the physical supply-demand balance for benchmarked compute?</li>
+<li><strong>Second:</strong> Was the movement driven by training, inference, power, hardware, financing, or risk premia?</li>
+<li><strong>Third:</strong> What does that structural change imply for effective compute?</li>
+<li><strong>Fourth:</strong> What does effective compute imply for capability, deployment, or economic output?</li>
+<li><strong>Finally:</strong> Does the move survive comparison with independent evidence?</li>
+</ol>
+<p>Only after those steps should anyone claim that “the market is pricing faster AI progress.”</p>
+<p>The compute curve will be most informative when it disagrees with the dominant narrative. AI equities might rise while long-dated compute demand falls. Raw GPU prices might fall while quality-adjusted inference costs collapse and usage explodes. Frontier-grade capacity might tighten while broad commodity inference remains cheap. Power-adjusted compute margins might deteriorate despite bullish capability releases. Option markets might price a large upside tail while consensus forecasts remain smooth. These divergences can reveal whether the bottleneck lies in intelligence, infrastructure, diffusion, or finance.</p>
+</section>
+<section id="conclusion-a-market-in-the-shadow-of-intelligence" class="level2">
+<h2>Conclusion: a market in the shadow of intelligence</h2>
+<p>Compute futures will not directly price intelligence. They will price claims on machines, electricity, memory, networks, locations, contract terms, and time. The resulting curve will be noisy, strategic, and distorted by the same forces that complicate every commodity market.</p>
+<p>Yet that does not make it trivial.</p>
+<p>Modern AI is produced through a physical-economic pipeline. Research ideas are translated into training runs; training runs into capabilities; capabilities into products; products into inference demand; demand into data centers, power plants, chip orders, and financing. Compute is one of the few variables that touches almost every stage.</p>
+<p>A futures market would place a public price on the marginal capacity flowing through that pipeline. Its movements could aggregate knowledge held by laboratories, clouds, hardware firms, utilities, data-center developers, lenders, and users. That makes it a potentially powerful observational instrument.</p>
+<p>The right claim is therefore neither:</p>
+<blockquote>
+<p>“Compute futures will predict AGI,”</p>
+</blockquote>
+<p>nor:</p>
+<blockquote>
+<p>“Compute prices tell us nothing about AI progress.”</p>
+</blockquote>
+<p>The defensible claim is:</p>
+<blockquote>
+<p><strong>A mature compute-derivatives complex could become the first continuously traded, financially disciplined estimate of the AI economy’s hidden state.</strong></p>
+</blockquote>
+<p>Its predictive power would come from structure, not mysticism: the curve, the spreads, the basis, the volatility surface, and their relationship to independent measures of capability and adoption.</p>
+<p>The yield curve does not tell us the future. It tells us what a consequential market is collectively positioned for, after risk and constraint have left their fingerprints on the price. A compute curve may do the same for AI.</p>
+<p>And because that curve will influence financing, construction, access, and strategy, it will not merely predict the trajectory of machine intelligence. It will become one of the mechanisms through which that trajectory is made.</p>
+<hr />
+</section>
+</section>
+<section id="sources-and-cross-references" class="level1">
+<h1>Sources and cross-references</h1>
+<hr />
+<section id="source-status-note" class="level2">
+<h2>Source-status note</h2>
+<p>This article was source-checked on <strong>July 11, 2026</strong>. The CME-Silicon Data, ICE-Ornn, and ICE-NATIVX products were publicly announced and described as subject to regulatory review or approval; none had begun trading. The essay therefore refers to them as planned or developing markets, not as mature liquid markets with established forecasting records. Reports of bank participation and ETF filings describe intentions and proposals, not operating businesses. Claims about the future informational value of these markets are analytical hypotheses and proposed research questions unless explicitly supported by historical evidence from other futures or prediction markets.</p>
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Milken Institute, “A Conversation with BlackRock CEO Larry Fink and Brookfield Corporation CEO Bruce Flatt,” May 5, 2026, <a href="https://milkeninstitute.org/content-hub/event-panels/conversation-blackrock-ceo-larry-fink-and-brookfield-corporation-ceo-bruce-flatt">event page and transcript access</a>. The original article supplied for this essay is Andreja Stojanovic, “BlackRock says ‘compute futures’ could become a new asset class,” <em>Finbold</em>, May 8, 2026, <a href="https://finbold.com/blackrock-says-compute-futures-could-become-a-new-asset-class/">link</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>CME Group, “CME Group and Silicon Data Partner to Launch First Compute Futures,” May 12, 2026, <a href="https://www.cmegroup.com/media-room/press-releases/2026/5/12/cme_group_and_silicondatapartnertolaunchfirstcomputefutures.html">link</a>. CME’s product information page is <a href="https://www.cmegroup.com/markets/energy/power/compute-futures.html">Compute Futures</a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Intercontinental Exchange, “ICE and Ornn to Launch GPU Compute Futures Contracts,” May 19, 2026, <a href="https://ir.theice.com/press/news-details/2026/ICE-and-Ornn-to-Launch-GPU-Compute-Futures-Contracts/default.aspx">link</a>. See also Ornn, “The OCPI: The Reference Price for Compute,” <a href="https://ornn.com/">link</a>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Blockspace, “ICE and Ornn to launch GPU compute futures contracts,” May 19, 2026, <a href="https://blockspace.media/insight/ice-ornn-launch-gpu-compute-futures-2026-2/">link</a>. Notes that OCPI is built only from printed transactions, that its series cover the H100, H200, B200, and RTX 5090, that Ornn executed the first compute swap using cleared prices in December 2025, and that ICE joins a small but growing group of venues targeting compute derivatives.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>PYMNTS, “Big Banks Eye New AI Compute Trading Market,” June 9, 2026, <a href="https://www.pymnts.com/news/investment-tracker/2026/big-banks-eye-new-ai-compute-trading-market/">link</a>, summarizing reporting by The Information on Goldman Sachs and JPMorgan’s early-stage exploration of compute trading. The same report covers Polymarket’s first on-chain institutional block trade settled against Ornn’s H100 rental index (June 2, 2026) and Google’s disclosed agreement to pay SpaceX $920 million per month for compute capacity from October 2026 through June 2029. The banks’ exploration was described as preliminary and may not proceed.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>CNBC, “The new oil? Inside the effort to turn AI computing power into a tradeable commodity,” June 16, 2026, <a href="https://www.cnbc.com/2026/06/16/the-new-oil-inside-the-effort-to-turn-ai-computing-power-into-a-tradeable-commodity.html">link</a>. Reports the ProShares and Rex Shares ETF filings (including leveraged and inverse products), SpaceX’s reference to Silicon Data rental-rate data in its IPO prospectus, and expectations of CFTC scrutiny of contract specifications, settlement, and benchmark construction.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Intercontinental Exchange and NATIVX, “ICE and NATIVX to Launch Energy-Normalized Compute Futures,” July 2026, Business Wire release, <a href="https://www.stocktitan.net/news/ICE/ice-and-nativx-to-launch-energy-normalized-compute-futures-k0ofkx6bac70.html">reproduction</a>. The COIL Index tracks tokenized, energy-normalized compute and connectivity and publishes COIL-T (training), COIL-I (inference), COIL-G (graphics), and COIL-CO (connectivity) sub-indices. Contracts are planned as U.S.-dollar-denominated and cash-settled, subject to regulatory approval.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>CNBC, “Traders will soon be able to bet on computer chip prices as AI drives costs skyward,” May 12, 2026, <a href="https://www.cnbc.com/2026/05/12/new-futures-market-for-semiconductors-comes-as-ai-drives-costs-skyward.html">link</a>. Recounts the precedent of Enron’s broadband division attempting to sell unused fiber-optic capacity in the late 1990s before the company’s failure.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>F. A. Hayek, “The Use of Knowledge in Society,” <em>American Economic Review</em> 35, no. 4 (1945), hosted by Econlib, <a href="https://www.econlib.org/library/Essays/hykKnw.html">link</a>.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>Justin Wolfers and Eric Zitzewitz, “Prediction Markets,” <em>Journal of Economic Perspectives</em> 18, no. 2 (2004): 107–126, <a href="https://www.aeaweb.org/articles?id=10.1257/0895330041371321">link</a>.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p>Justin Wolfers and Eric Zitzewitz, “Prediction Markets,” <em>Journal of Economic Perspectives</em> 18, no. 2 (2004): 107–126, <a href="https://www.aeaweb.org/articles?id=10.1257/0895330041371321">link</a>.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p>PYMNTS, “Big Banks Eye New AI Compute Trading Market,” June 9, 2026, <a href="https://www.pymnts.com/news/investment-tracker/2026/big-banks-eye-new-ai-compute-trading-market/">link</a>, summarizing reporting by The Information on Goldman Sachs and JPMorgan’s early-stage exploration of compute trading. The same report covers Polymarket’s first on-chain institutional block trade settled against Ornn’s H100 rental index (June 2, 2026) and Google’s disclosed agreement to pay SpaceX $920 million per month for compute capacity from October 2026 through June 2029. The banks’ exploration was described as preliminary and may not proceed.<a href="#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13"><p>Jonathan Hambur and Nick Stenner, “The Term Structure of Commodity Risk Premiums and the Role of Hedging,” Reserve Bank of Australia Bulletin, March 2016, <a href="https://www.rba.gov.au/publications/bulletin/2016/mar/7.html">link</a>.<a href="#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn14"><p>Jonathan Hambur and Nick Stenner, “The Term Structure of Commodity Risk Premiums and the Role of Hedging,” Reserve Bank of Australia Bulletin, March 2016, <a href="https://www.rba.gov.au/publications/bulletin/2016/mar/7.html">link</a>.<a href="#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn15"><p>Trevor A. Reeve and Robert J. Vigfusson, “Evaluating the Forecasting Performance of Commodity Futures Prices,” Board of Governors of the Federal Reserve System, International Finance Discussion Paper No. 1025, 2011, <a href="https://www.federalreserve.gov/pubs/ifdp/2011/1025/ifdp1025.pdf">link</a>.<a href="#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn16"><p>Dario Amodei and Danny Hernandez, “AI and Compute,” OpenAI, May 16, 2018, <a href="https://openai.com/index/ai-and-compute/">link</a>.<a href="#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn17"><p>Jared Kaplan et al., “Scaling Laws for Neural Language Models,” arXiv:2001.08361, 2020, <a href="https://arxiv.org/abs/2001.08361">link</a>.<a href="#fnref17" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn18"><p>Jordan Hoffmann et al., “Training Compute-Optimal Large Language Models,” arXiv:2203.15556, 2022, <a href="https://arxiv.org/abs/2203.15556">link</a>.<a href="#fnref18" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn19"><p>Alexander Sardana et al., “Beyond Chinchilla-Optimal: Accounting for Inference in Language Model Scaling Laws,” arXiv:2401.00448, 2024, <a href="https://arxiv.org/html/2401.00448">HTML</a>.<a href="#fnref19" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn20"><p>Danny Hernandez and Tom Brown, “Measuring the Algorithmic Efficiency of Neural Networks,” OpenAI, May 5, 2020, <a href="https://openai.com/index/ai-and-efficiency/">overview</a>.<a href="#fnref20" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn21"><p>Epoch AI, “Trends in Artificial Intelligence,” updated February 5, 2026, <a href="https://epoch.ai/trends">link</a>. The dashboard reports separate estimates for training compute, hardware, software efficiency, inference prices, investment, and data-center scale; estimates should be read with the uncertainty and methodology provided on the page.<a href="#fnref21" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn22"><p>Josh You, “How Much AI Compute Do Frontier Labs Use?” Epoch AI, May 20, 2026, <a href="https://epoch.ai/gradient-updates/frontier-labs-dont-use-most-ai-compute">link</a>.<a href="#fnref22" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn23"><p>Intercontinental Exchange and NATIVX, “ICE and NATIVX to Launch Energy-Normalized Compute Futures,” July 2026, Business Wire release, <a href="https://www.stocktitan.net/news/ICE/ice-and-nativx-to-launch-energy-normalized-compute-futures-k0ofkx6bac70.html">reproduction</a>. The COIL Index tracks tokenized, energy-normalized compute and connectivity and publishes COIL-T (training), COIL-I (inference), COIL-G (graphics), and COIL-CO (connectivity) sub-indices. Contracts are planned as U.S.-dollar-denominated and cash-settled, subject to regulatory approval.<a href="#fnref23" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn24"><p>Carmen Li, “Building a Robust GPU Index,” Silicon Data, March 12, 2026, <a href="https://www.silicondata.com/blog/building-a-robust-gpu-index">link</a>. For background on the initial H100 rental index, see Samuel K. Moore, “Silicon Data Launches First GPU Price Index,” <em>IEEE Spectrum</em>, May 27, 2025, <a href="https://spectrum.ieee.org/gpu-prices">link</a>.<a href="#fnref24" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn25"><p>Supreeth Shastri and David Irwin, “Cloud Index Tracking: Enabling Predictable Costs in Cloud Spot Markets,” arXiv:1809.03110, 2018, <a href="https://arxiv.org/abs/1809.03110">link</a>.<a href="#fnref25" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn26"><p>Blockspace, “ICE and Ornn to launch GPU compute futures contracts,” May 19, 2026, <a href="https://blockspace.media/insight/ice-ornn-launch-gpu-compute-futures-2026-2/">link</a>. Notes that OCPI is built only from printed transactions, that its series cover the H100, H200, B200, and RTX 5090, that Ornn executed the first compute swap using cleared prices in December 2025, and that ICE joins a small but growing group of venues targeting compute derivatives.<a href="#fnref26" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn27"><p>Intercontinental Exchange and NATIVX, “ICE and NATIVX to Launch Energy-Normalized Compute Futures,” July 2026, Business Wire release, <a href="https://www.stocktitan.net/news/ICE/ice-and-nativx-to-launch-energy-normalized-compute-futures-k0ofkx6bac70.html">reproduction</a>. The COIL Index tracks tokenized, energy-normalized compute and connectivity and publishes COIL-T (training), COIL-I (inference), COIL-G (graphics), and COIL-CO (connectivity) sub-indices. Contracts are planned as U.S.-dollar-denominated and cash-settled, subject to regulatory approval.<a href="#fnref27" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn28"><p>Reuters, “China works on AI token futures market, sources say, in race with US,” May 28, 2026, <a href="https://www.reuters.com/world/china/china-works-ai-token-futures-market-sources-say-race-with-us-2026-05-28/">link</a>. Reuters reported that the design work was preliminary and that no launch timeline had been established.<a href="#fnref28" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn29"><p>Yicai Xing, “AI Token Futures Market: Commoditization of Compute and Derivatives Contract Design,” arXiv:2603.21690, 2026, <a href="https://arxiv.org/abs/2603.21690">link</a>. This is a preprint proposing a market design and simulation, not validation from an operating token-futures market.<a href="#fnref29" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn30"><p>International Energy Agency, “Energy Demand from AI,” in <em>Energy and AI</em>, 2025, <a href="https://www.iea.org/reports/energy-and-ai/energy-demand-from-ai">link</a>. See also the <a href="https://www.iea.org/reports/energy-and-ai/executive-summary">executive summary</a>.<a href="#fnref30" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn31"><p>METR, “Measuring AI Ability to Complete Long Tasks,” March 19, 2025, with updated time-horizon data, <a href="https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/">link</a>. METR explicitly discusses methodological uncertainty and warns that trend extrapolation is not a guarantee.<a href="#fnref31" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn32"><p>Joel Becker, Nate Rush, Beth Barnes, and David Rein, “Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity,” METR, July 10, 2025, <a href="https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/">link</a>. The result applies to the study’s specified tools, participants, tasks, and period.<a href="#fnref32" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn33"><p>PYMNTS, “Big Banks Eye New AI Compute Trading Market,” June 9, 2026, <a href="https://www.pymnts.com/news/investment-tracker/2026/big-banks-eye-new-ai-compute-trading-market/">link</a>, summarizing reporting by The Information on Goldman Sachs and JPMorgan’s early-stage exploration of compute trading. The same report covers Polymarket’s first on-chain institutional block trade settled against Ornn’s H100 rental index (June 2, 2026) and Google’s disclosed agreement to pay SpaceX $920 million per month for compute capacity from October 2026 through June 2029. The banks’ exploration was described as preliminary and may not proceed.<a href="#fnref33" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn34"><p>PYMNTS, “Big Banks Eye New AI Compute Trading Market,” June 9, 2026, <a href="https://www.pymnts.com/news/investment-tracker/2026/big-banks-eye-new-ai-compute-trading-market/">link</a>, summarizing reporting by The Information on Goldman Sachs and JPMorgan’s early-stage exploration of compute trading. The same report covers Polymarket’s first on-chain institutional block trade settled against Ornn’s H100 rental index (June 2, 2026) and Google’s disclosed agreement to pay SpaceX $920 million per month for compute capacity from October 2026 through June 2029. The banks’ exploration was described as preliminary and may not proceed.<a href="#fnref34" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn35"><p>CNBC, “The new oil? Inside the effort to turn AI computing power into a tradeable commodity,” June 16, 2026, <a href="https://www.cnbc.com/2026/06/16/the-new-oil-inside-the-effort-to-turn-ai-computing-power-into-a-tradeable-commodity.html">link</a>. Reports the ProShares and Rex Shares ETF filings (including leveraged and inverse products), SpaceX’s reference to Silicon Data rental-rate data in its IPO prospectus, and expectations of CFTC scrutiny of contract specifications, settlement, and benchmark construction.<a href="#fnref35" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn36"><p>Konstantin F. Pilz, James Sanders, Robi Rahman, and Lennart Heim, “Trends in AI Supercomputers,” arXiv:2504.16026, 2025, <a href="https://arxiv.org/html/2504.16026">HTML</a>. The authors note dataset coverage and estimation limitations.<a href="#fnref36" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn37"><p>Girish Sastry et al., “Computing Power and the Governance of Artificial Intelligence,” arXiv:2402.08797, 2024, <a href="https://arxiv.org/html/2402.08797">HTML</a>.<a href="#fnref37" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn38"><p>CNBC, “The new oil? Inside the effort to turn AI computing power into a tradeable commodity,” June 16, 2026, <a href="https://www.cnbc.com/2026/06/16/the-new-oil-inside-the-effort-to-turn-ai-computing-power-into-a-tradeable-commodity.html">link</a>. Reports the ProShares and Rex Shares ETF filings (including leveraged and inverse products), SpaceX’s reference to Silicon Data rental-rate data in its IPO prospectus, and expectations of CFTC scrutiny of contract specifications, settlement, and benchmark construction.<a href="#fnref38" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+    </main>
+
+    <div class="article-email-capture">
+        <p>If you read this far, you'd probably like the newsletter. One analysis per week. Free.</p>
+        <form onsubmit="event.preventDefault();var e=this.email.value,f=this;fetch('https://email-subscribe.rahman-sakeeb.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e})}).then(r=>{if(r.ok)f.parentElement.innerHTML='&lt;p class=subscription-message&gt;You\'re in. Check your inbox.&lt;/p&gt;';else f.parentElement.innerHTML='&lt;p class=subscription-message&gt;Something went wrong. Try again.&lt;/p&gt;'}).catch(()=>{f.parentElement.innerHTML='&lt;p class=subscription-message&gt;Something went wrong. Try again.&lt;/p&gt;'})">
+            <label class="sr-only" for="article-email">Email address</label>
+            <input id="article-email" type="email" name="email" autocomplete="email" placeholder="you@example.com" required>
+            <button type="submit">Subscribe</button>
+        </form>
+    </div>
+
+    <footer class="article-footer">
+        <p>Published 2026-07-11 by Shafkat Rahman</p>
+        <a href="/writings/" class="back-link">← Back to Writing</a>
+    </footer>
+
+    <script src="/writing-manifest.js?v=1" defer></script>
+    <script src="../theme-toggle.js?v=5" defer></script>
+</body>
+</html>

@@ -8,6 +8,13 @@
 
     window.WRITING_MANIFEST = Object.freeze([
         {
+            path: '/writings/the-compute-curve-ai-progress.html',
+            title: 'The Compute Curve: Can Futures Markets Forecast AI Progress?',
+            date: '2026-07-11',
+            type: 'Essay',
+            tags: ['AI infrastructure', 'Compute markets', 'Economics', 'Forecasting']
+        },
+        {
             path: '/writings/when-intelligence-enters-control-loop.html',
             title: 'When Intelligence Enters the Control Loop',
             date: '2026-07-10',
