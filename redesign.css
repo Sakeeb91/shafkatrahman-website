@@ -999,9 +999,11 @@ body > .article-footer {
 
 .writing-graph-node {
     color: var(--muted-foreground);
-    cursor: pointer;
+    cursor: grab;
     transition: opacity 160ms ease;
 }
+
+.writing-graph-node.is-dragging { cursor: grabbing; }
 
 .writing-graph-node circle {
     fill: var(--background);
@@ -1021,6 +1023,16 @@ body > .article-footer {
 .writing-graph-node-selected { color: var(--primary); }
 .writing-graph-node-current circle { fill: var(--primary); }
 
+.writing-graph-node:focus-visible {
+    outline: none;
+}
+
+.writing-graph-node:focus-visible .writing-graph-node-hit {
+    fill: none;
+    stroke: var(--primary);
+    stroke-width: 2;
+}
+
 .writing-graph-node-label {
     fill: currentColor;
     font-family: var(--font-body);
@@ -1036,12 +1048,11 @@ body > .article-footer {
 
 .writing-graph-node-tag:hover .writing-graph-node-label,
 .writing-graph-node-tag:focus-visible .writing-graph-node-label,
-.writing-graph-node-tag.writing-graph-node-connected .writing-graph-node-label,
-.writing-graph-node-tag.writing-graph-node-selected .writing-graph-node-label,
-.writing-graph-svg-compact .writing-graph-node-tag .writing-graph-node-label { opacity: 1; }
+.writing-graph-node-tag.writing-graph-node-selected .writing-graph-node-label { opacity: 1; }
 
 .writing-graph-svg-compact .writing-graph-node-label { font-size: 8px; }
 .writing-graph-dimmed { opacity: 0.12; }
+.writing-graph-hidden { opacity: 0; pointer-events: none; }
 
 .writing-graph-dialog {
     width: min(1180px, calc(100vw - 2rem));
@@ -1091,11 +1102,35 @@ body > .article-footer {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
+    align-items: center;
     gap: 0.8rem;
 }
 
 .writing-graph-controls button { padding: 0; font-size: 0.75rem; }
+.writing-graph-controls button:disabled { color: var(--muted-foreground); cursor: default; opacity: 0.45; }
 .writing-graph-controls .writing-graph-close { color: var(--foreground); font-weight: 650; }
+
+.writing-graph-search-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--muted-foreground);
+    font-size: 0.75rem;
+}
+
+.writing-graph-search {
+    width: 11rem;
+    min-height: 2rem;
+    padding: 0.3rem 0.5rem;
+    border: 1px solid var(--border-strong);
+    border-radius: calc(var(--radius) * 0.7);
+    background: var(--background);
+    color: var(--foreground);
+    font: inherit;
+}
+
+.writing-graph-search::placeholder { color: var(--muted-foreground); opacity: 1; }
+.writing-graph-search:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 
 .writing-graph-canvas {
     min-height: 0;
@@ -1137,7 +1172,8 @@ body > .article-footer {
 
 @media (prefers-reduced-motion: reduce) {
     .writing-graph-node,
-    .writing-graph-node-label { transition: none; }
+    .writing-graph-node-label,
+    .writing-graph-edge { transition: none; }
 }
 
 /* Existing animation classes become static by design. */
@@ -1162,6 +1198,8 @@ body > .article-footer {
     .writing-graph-dialog { width: calc(100vw - 1rem); height: calc(100dvh - 1rem); }
     .writing-graph-dialog-header { display: block; padding: 1rem; }
     .writing-graph-controls { justify-content: flex-start; margin-top: 0.8rem; }
+    .writing-graph-search-label { width: 100%; }
+    .writing-graph-search { width: min(16rem, calc(100vw - 4.5rem)); }
     .writing-graph-node-label { font-size: 12px; }
     .writing-graph-fallback-columns { grid-template-columns: 1fr; gap: 1rem; }
 

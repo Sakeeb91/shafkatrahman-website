@@ -197,14 +197,19 @@
 
     if (articleMain && currentArticle) {
         const loadWritingGraph = () => {
-            const dataScript = document.createElement('script');
-            dataScript.src = '/writing-graph-data.js?v=1';
-            dataScript.onload = () => {
-                const interfaceScript = document.createElement('script');
-                interfaceScript.src = '/writing-graph.js?v=1';
-                document.head.appendChild(interfaceScript);
+            const d3Script = document.createElement('script');
+            d3Script.src = '/vendor-d3.v7.min.js?v=7.9.0';
+            d3Script.onload = () => {
+                const dataScript = document.createElement('script');
+                dataScript.src = '/writing-graph-data.js?v=1';
+                dataScript.onload = () => {
+                    const interfaceScript = document.createElement('script');
+                    interfaceScript.src = '/writing-graph.js?v=2';
+                    document.head.appendChild(interfaceScript);
+                };
+                document.head.appendChild(dataScript);
             };
-            document.head.appendChild(dataScript);
+            document.head.appendChild(d3Script);
         };
 
         if ('requestIdleCallback' in window) {

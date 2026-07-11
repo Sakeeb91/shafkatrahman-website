@@ -33,6 +33,19 @@ The canonical article inventory lives in `writing-manifest.js`. It is the source
 
 The shared shell injects visible article tags and `article:tag` metadata from the manifest. The writing index and writing graph read the same registry, so tag changes propagate without editing multiple tag lists. The graph generator also scans published article HTML for explicit links to other registered articles; those edges are automatic and do not belong in `related`.
 
+## Writing graph interaction
+
+The graph uses the locally served `vendor-d3.v7.min.js` bundle for force simulation and drag handling. Do not replace it with a CDN reference. The generated graph data remains framework-independent and the rendered interface remains an accessible SVG with a semantic list fallback.
+
+- The default view contains articles and article-to-article relationships only.
+- Hovering or focusing an article previews its tags. Selecting an article with click or Space keeps those tags visible.
+- Selecting a tag, including through the Find field or list fallback, reveals its connected articles.
+- Enter opens a focused article. Arrow keys move and pin a focused node; Shift plus an arrow moves it farther.
+- Pointer drag reheats the simulation and pins the node on release. Double-click releases a pinned node.
+- Reset clears selections, pinned positions, pan, and zoom before restoring the deterministic generated layout.
+- Reduced-motion mode computes the settled force layout synchronously and does not run live animation.
+- The corner graph is limited to the current article, directly related articles, and their interaction-only tags.
+
 ## Writing graph relationship rules
 
 - Every manifest entry becomes an article node.
