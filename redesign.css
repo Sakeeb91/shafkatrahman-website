@@ -563,6 +563,17 @@ h1, h2, h3,
     margin-top: 0.2rem;
 }
 
+.featured-resources {
+    margin-top: 3.25rem;
+}
+
+.featured-resources-title {
+    margin: 0 0 0.85rem;
+    font-size: 0.95rem;
+    font-weight: 650;
+    color: var(--muted-foreground);
+}
+
 .category-section,
 .resource-category { margin: 0; }
 .category-header,

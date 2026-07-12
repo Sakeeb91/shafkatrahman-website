@@ -84,7 +84,64 @@
                         </p>
                     </a>
                 </article>
+
+                <article class="writing-item">
+                    <a href="/resources/claude-code.html" class="writing-link">
+                        <div class="writing-meta">
+                            <span data-claude-code-count></span>
+                        </div>
+                        <h2 class="writing-title">Claude Code</h2>
+                        <p class="writing-excerpt">
+                            Direct access to Claude Code docs, architecture deep dives, best practices, skills, and community repos.
+                        </p>
+                    </a>
+                </article>
             </div>
+
+            <section class="featured-resources animate-slide-up-delay" aria-labelledby="featured-claude-code-title">
+                <h2 class="featured-resources-title" id="featured-claude-code-title">Featured Claude Code links</h2>
+                <div class="resources-grid">
+                    <a href="https://code.claude.com/docs/en/best-practices" target="_blank" rel="noopener noreferrer" class="resource-card">
+                        <i data-lucide="external-link" class="resource-card-external" aria-hidden="true"></i>
+                        <div class="resource-card-header">
+                            <i data-lucide="book-open" class="resource-icon" aria-hidden="true"></i>
+                            <span>code.claude.com</span>
+                        </div>
+                        <h3 class="resource-card-title">Claude Code Best Practices</h3>
+                        <p class="resource-card-description">Official documentation for getting the most out of Claude Code.</p>
+                    </a>
+
+                    <a href="https://code.claude.com/docs/en/interactive-mode#side-questions-with-btw" target="_blank" rel="noopener noreferrer" class="resource-card">
+                        <i data-lucide="external-link" class="resource-card-external" aria-hidden="true"></i>
+                        <div class="resource-card-header">
+                            <i data-lucide="book-open" class="resource-icon" aria-hidden="true"></i>
+                            <span>code.claude.com</span>
+                        </div>
+                        <h3 class="resource-card-title">Interactive Mode - Side Questions with BTW</h3>
+                        <p class="resource-card-description">Official docs on using side questions in Claude Code's interactive mode.</p>
+                    </a>
+
+                    <a href="https://www.markdown.engineering/learn-claude-code/" target="_blank" rel="noopener noreferrer" class="resource-card">
+                        <i data-lucide="external-link" class="resource-card-external" aria-hidden="true"></i>
+                        <div class="resource-card-header">
+                            <i data-lucide="book-open" class="resource-icon" aria-hidden="true"></i>
+                            <span>markdown.engineering</span>
+                        </div>
+                        <h3 class="resource-card-title">Claude Code Source Deep Dive</h3>
+                        <p class="resource-card-description">Free 50-lesson architecture course walking through the Claude Code CLI source.</p>
+                    </a>
+
+                    <a href="https://github.com/affaan-m/everything-claude-code" target="_blank" rel="noopener noreferrer" class="resource-card">
+                        <i data-lucide="external-link" class="resource-card-external" aria-hidden="true"></i>
+                        <div class="resource-card-header">
+                            <i data-lucide="github" class="resource-icon" aria-hidden="true"></i>
+                            <span>github.com/affaan-m</span>
+                        </div>
+                        <h3 class="resource-card-title">Everything Claude Code</h3>
+                        <p class="resource-card-description">Comprehensive collection of Claude Code resources, tips, tools, and community knowledge.</p>
+                    </a>
+                </div>
+            </section>
         </div>
     </main>
 
@@ -112,6 +169,15 @@
                     }
                 });
         });
+
+        fetch('/resources/claude-code.html')
+            .then(function(r) { return r.text(); })
+            .then(function(html) {
+                var doc = new DOMParser().parseFromString(html, 'text/html');
+                var count = doc.querySelectorAll('.resource-card').length;
+                var el = document.querySelector('[data-claude-code-count]');
+                if (el) el.textContent = count + ' Claude Code resources';
+            });
     </script>
 </body>
 </html>
