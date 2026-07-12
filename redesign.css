@@ -578,7 +578,15 @@ h1, h2, h3,
 .resource-category { margin: 0; }
 .category-header,
 .resource-category-header { display: none !important; }
-.category-content[hidden] { display: block; }
+.category-content[hidden] {
+    display: block;
+    max-height: none;
+    margin-top: 0;
+    padding-top: 0;
+    overflow: visible;
+    opacity: 1;
+    transform: none;
+}
 
 /* Resource collections use the same flat row grammar. */
 .resources-grid {
