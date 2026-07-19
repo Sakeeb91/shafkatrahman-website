@@ -106,7 +106,10 @@
 
     const articleMain = document.querySelector('.article-hero + main, .article-visual + main, .hero-figure + main');
     const manifest = Array.isArray(window.WRITING_MANIFEST) ? window.WRITING_MANIFEST : [];
-    const currentArticle = manifest.find((entry) => entry.path === window.location.pathname);
+    const findArticle = (pathname) => manifest.find((entry) => (
+        entry.path === pathname || entry.path === `${pathname}.html`
+    ));
+    const currentArticle = findArticle(window.location.pathname);
 
     function renderTags(tags, className) {
         const list = document.createElement('ul');
@@ -159,14 +162,14 @@
     document.querySelectorAll('.writing-item').forEach((item) => {
         const link = item.querySelector('.writing-link');
         if (!link) return;
-        const article = manifest.find((entry) => entry.path === new URL(link.href, window.location.origin).pathname);
+        const article = findArticle(new URL(link.href, window.location.origin).pathname);
         if (!article) return;
         item.dataset.tags = article.tags.map((tag) => tag.toLowerCase()).join('|');
         link.appendChild(renderTags(article.tags, 'writing-tags'));
     });
 
     document.querySelectorAll('.workspace-row a[href^="/writings/"]').forEach((link) => {
-        const article = manifest.find((entry) => entry.path === new URL(link.href, window.location.origin).pathname);
+        const article = findArticle(new URL(link.href, window.location.origin).pathname);
         const row = link.closest('.workspace-row');
         if (article && row) row.appendChild(renderTags(article.tags.slice(0, 3), 'workspace-tags'));
     });
