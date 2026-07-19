@@ -8,6 +8,17 @@
 
     window.WRITING_MANIFEST = Object.freeze([
         {
+            path: '/writings/software-agents-can-actually-use.html',
+            title: 'Software Agents Can Actually Use',
+            date: '2026-07-18',
+            type: 'Essay',
+            tags: ['AI agents', 'Agent-native software', 'MCP', 'AI security', 'Software architecture'],
+            related: [
+                '/writings/why-agents-need-cli.html',
+                '/writings/when-intelligence-enters-control-loop.html'
+            ]
+        },
+        {
             path: '/writings/the-compute-curve-ai-progress.html',
             title: 'The Compute Curve: Can Futures Markets Forecast AI Progress?',
             date: '2026-07-11',

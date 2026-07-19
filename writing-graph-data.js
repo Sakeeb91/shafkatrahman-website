@@ -44,6 +44,14 @@ window.WRITING_GRAPH = Object.freeze({
       "date": "2025-11-25"
     },
     {
+      "id": "article:/writings/software-agents-can-actually-use.html",
+      "type": "article",
+      "label": "Software Agents Can Actually Use",
+      "path": "/writings/software-agents-can-actually-use.html",
+      "articleType": "Essay",
+      "date": "2026-07-18"
+    },
+    {
       "id": "article:/writings/the-compute-curve-ai-progress.html",
       "type": "article",
       "label": "The Compute Curve: Can Futures Markets Forecast AI Progress?",
@@ -76,6 +84,11 @@ window.WRITING_GRAPH = Object.freeze({
       "date": "2025-12-08"
     },
     {
+      "id": "tag:agent-native-software",
+      "type": "tag",
+      "label": "Agent-native software"
+    },
+    {
       "id": "tag:ai",
       "type": "tag",
       "label": "AI"
@@ -94,6 +107,11 @@ window.WRITING_GRAPH = Object.freeze({
       "id": "tag:ai-infrastructure",
       "type": "tag",
       "label": "AI infrastructure"
+    },
+    {
+      "id": "tag:ai-security",
+      "type": "tag",
+      "label": "AI security"
     },
     {
       "id": "tag:art",
@@ -201,6 +219,11 @@ window.WRITING_GRAPH = Object.freeze({
       "label": "Semiconductors"
     },
     {
+      "id": "tag:software-architecture",
+      "type": "tag",
+      "label": "Software architecture"
+    },
+    {
       "id": "tag:thermodynamics",
       "type": "tag",
       "label": "Thermodynamics"
@@ -220,6 +243,16 @@ window.WRITING_GRAPH = Object.freeze({
     {
       "source": "article:/writings/research/data-center-investment-analysis.html",
       "target": "article:/writings/research/ai_infrastructure_analysis.html",
+      "type": "related"
+    },
+    {
+      "source": "article:/writings/software-agents-can-actually-use.html",
+      "target": "article:/writings/when-intelligence-enters-control-loop.html",
+      "type": "related"
+    },
+    {
+      "source": "article:/writings/software-agents-can-actually-use.html",
+      "target": "article:/writings/why-agents-need-cli.html",
       "type": "related"
     },
     {
@@ -335,6 +368,31 @@ window.WRITING_GRAPH = Object.freeze({
     {
       "source": "article:/writings/research/data-center-investment-analysis.html",
       "target": "tag:private-equity",
+      "type": "tag"
+    },
+    {
+      "source": "article:/writings/software-agents-can-actually-use.html",
+      "target": "tag:agent-native-software",
+      "type": "tag"
+    },
+    {
+      "source": "article:/writings/software-agents-can-actually-use.html",
+      "target": "tag:ai-agents",
+      "type": "tag"
+    },
+    {
+      "source": "article:/writings/software-agents-can-actually-use.html",
+      "target": "tag:ai-security",
+      "type": "tag"
+    },
+    {
+      "source": "article:/writings/software-agents-can-actually-use.html",
+      "target": "tag:mcp",
+      "type": "tag"
+    },
+    {
+      "source": "article:/writings/software-agents-can-actually-use.html",
+      "target": "tag:software-architecture",
       "type": "tag"
     },
     {

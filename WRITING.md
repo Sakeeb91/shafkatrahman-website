@@ -6,6 +6,7 @@ The canonical article inventory lives in `writing-manifest.js`. It is the source
 
 | Path | Type | Tags |
 | --- | --- | --- |
+| `/writings/software-agents-can-actually-use.html` | Essay | AI agents, Agent-native software, MCP, AI security, Software architecture |
 | `/writings/the-compute-curve-ai-progress.html` | Essay | AI infrastructure, Compute markets, Economics, Forecasting |
 | `/writings/when-intelligence-enters-control-loop.html` | Essay | AI agents, Inference, AI infrastructure, Control systems |
 | `/writings/ai-adhd-advantage-real-playbook.html` | Essay | AI, Neurodiversity, Productivity, Creativity |
