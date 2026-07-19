@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Software Agents Can Actually Use | Shafkat Rahman</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+    <meta name="description" content="A field guide to agent-native architecture, tool contracts, interface standards, and the security model required to keep agents useful without turning them into exfiltration machines.">
+    <meta name="author" content="Shafkat Rahman">
+    <meta name="keywords" content="agent-native software, AI agents, MCP, tool design, AI security, software architecture">
+    <link rel="canonical" href="https://shafkatrahman.com/writings/software-agents-can-actually-use.html">
+
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://shafkatrahman.com/writings/software-agents-can-actually-use.html">
+    <meta property="og:title" content="Software Agents Can Actually Use">
+    <meta property="og:description" content="A field guide to agent-native architecture, tool contracts, interface standards, and the security model required to keep agents useful without turning them into exfiltration machines.">
+    <meta property="og:site_name" content="Shafkat Rahman">
+    <meta property="article:published_time" content="2026-07-18T00:00:00-04:00">
+    <meta property="article:author" content="Shafkat Rahman">
+    <meta property="article:section" content="AI Agents">
+    <meta property="og:image" content="https://shafkatrahman.com/writings/software-agents-can-actually-use/agent-native-software.png">
+    <meta property="og:image:width" content="2172">
+    <meta property="og:image:height" content="724">
+    <meta property="og:image:alt" content="Diagram of an AI agent connected to tools, data, code, approvals, and execution results">
+    <meta property="og:image:type" content="image/png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@Sakeeb91">
+    <meta name="twitter:creator" content="@Sakeeb91">
+    <meta name="twitter:title" content="Software Agents Can Actually Use">
+    <meta name="twitter:description" content="A field guide to agent-native architecture, tool contracts, interface standards, and the security model required to keep agents useful without turning them into exfiltration machines.">
+    <meta name="twitter:image" content="https://shafkatrahman.com/writings/software-agents-can-actually-use/agent-native-software.png">
+    <meta name="twitter:image:alt" content="Diagram of an AI agent connected to tools, data, code, approvals, and execution results">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Software Agents Can Actually Use",
+      "alternativeHeadline": "What agent-native means, and how to build it without getting owned",
+      "author": {
+        "@type": "Person",
+        "name": "Shafkat Rahman",
+        "url": "https://shafkatrahman.com"
+      },
+      "datePublished": "2026-07-18",
+      "dateModified": "2026-07-18",
+      "description": "A field guide to agent-native architecture, tool contracts, interface standards, and the security model required to keep agents useful without turning them into exfiltration machines.",
+      "image": "https://shafkatrahman.com/writings/software-agents-can-actually-use/agent-native-software.png",
+      "url": "https://shafkatrahman.com/writings/software-agents-can-actually-use.html",
+      "publisher": {
+        "@type": "Person",
+        "name": "Shafkat Rahman"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://shafkatrahman.com/writings/software-agents-can-actually-use.html"
+      }
+    }
+    </script>
+
+    <link rel="dns-prefetch" href="https://unpkg.com">
+    <link rel="preconnect" href="https://unpkg.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500&amp;family=Inter:wght@400;500;600&amp;family=Cormorant+Garamond:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Source+Sans+3:wght@300;400;500;600&amp;display=swap" rel="stylesheet" fetchpriority="high">
+    <link rel="stylesheet" href="../style.css?v=14">
+    <link rel="stylesheet" href="../redesign.css?v=12">
+    <script>document.documentElement.dataset.theme = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');</script>
+    <script src="https://unpkg.com/lucide@0.576.0" defer></script>
+    <!-- Equations are emitted as native MathML at build time. MathJax enhances
+         that markup for consistent cross-browser typography; MathML remains
+         readable if JavaScript or the CDN is unavailable. -->
+    <script>window.MathJax = { options: { enableMenu: false } };</script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" defer></script>
+
+    <style>
+        :root {
+            --font-display: 'Cormorant Garamond', Georgia, serif;
+            --font-body: 'Source Sans 3', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        html { font-size: 18px; scroll-behavior: smooth; }
+
+        body {
+            display: block;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            background: var(--color-bg);
+            color: var(--color-text);
+            font-family: var(--font-body);
+            font-weight: 300;
+            line-height: 1.75;
+        }
+
+        .frost-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            background: radial-gradient(ellipse at 72% 12%, var(--color-frost-glow), transparent 42%);
+        }
+
+        .article-hero {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 7rem 2rem 3rem;
+            text-align: center;
+        }
+
+        .header-label,
+        .article-date {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .header-label { margin: 0 0 1.5rem; color: var(--color-frost); }
+
+        h1 {
+            max-width: 900px;
+            margin: 0 auto 1.25rem;
+            color: var(--color-frost-light);
+            font-family: var(--font-display);
+            font-size: clamp(2.65rem, 6vw, 4.75rem);
+            font-weight: 400;
+            letter-spacing: -0.025em;
+            line-height: 1.03;
+            text-wrap: balance;
+        }
+
+        .subtitle {
+            max-width: 720px;
+            margin: 0 auto;
+            color: var(--color-text-muted);
+            font-family: var(--font-display);
+            font-size: clamp(1.15rem, 2.3vw, 1.4rem);
+            line-height: 1.45;
+            text-wrap: balance;
+        }
+
+        .article-date { display: block; margin-top: 1.5rem; color: var(--color-text-dim); }
+
+        .article-actions {
+            display: flex;
+            justify-content: flex-start;
+            margin-top: 1.15rem;
+        }
+
+        .agent-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            min-height: 2.25rem;
+            padding: 0.42rem 0.72rem;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            color: var(--color-text-muted);
+            font-family: var(--font-body);
+            font-size: 0.76rem;
+            font-weight: 500;
+            line-height: 1;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: border-color 160ms ease, color 160ms ease, transform 160ms ease;
+        }
+
+        .agent-download svg { width: 0.9rem; height: 0.9rem; }
+        .agent-download:hover { border-color: var(--color-frost); color: var(--color-frost-light); }
+        .agent-download:active { transform: translateY(1px); }
+        .agent-download:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+
+        .article-visual {
+            width: min(1120px, calc(100% - 3rem));
+            margin: 0 auto 5rem;
+        }
+
+        .article-visual img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+        }
+
+        main { max-width: 760px; margin: 0 auto; padding: 0 2rem 5rem; }
+
+        main > p:first-child {
+            margin-bottom: 3rem;
+            color: var(--color-text-muted);
+            font-size: 1.18rem;
+            line-height: 1.85;
+        }
+
+        section.level2 { margin-bottom: 4rem; }
+
+        h2 {
+            margin: 0 0 1.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-border);
+            color: var(--color-frost-light);
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 4vw, 2.25rem);
+            font-weight: 500;
+            line-height: 1.2;
+            text-wrap: balance;
+        }
+
+        h3 {
+            margin: 2.4rem 0 1rem;
+            color: var(--color-frost-light);
+            font-family: var(--font-body);
+            font-size: 1.12rem;
+            font-weight: 600;
+            line-height: 1.35;
+            text-wrap: balance;
+        }
+
+        p { margin: 0 0 1.5rem; color: var(--color-text); text-wrap: pretty; }
+        strong { color: var(--color-frost); font-weight: 500; }
+        em { color: var(--color-accent); }
+
+        a {
+            color: var(--color-frost);
+            text-decoration-thickness: 1px;
+            text-underline-offset: 0.18em;
+        }
+
+        a:hover { color: var(--color-frost-light); }
+
+        code {
+            padding: 0.12rem 0.35rem;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            background: var(--color-bg-elevated);
+            color: var(--color-accent-warm);
+            font-family: var(--font-mono);
+            font-size: 0.84em;
+        }
+
+        pre {
+            margin: 2rem 0;
+            padding: 1.15rem 1.25rem;
+            overflow-x: auto;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            background: var(--color-bg-elevated);
+            color: var(--color-text);
+            font-family: var(--font-mono);
+            font-size: 0.74rem;
+            line-height: 1.65;
+        }
+
+        pre code {
+            padding: 0;
+            border: 0;
+            background: transparent;
+            color: inherit;
+            font-size: inherit;
+        }
+
+        table {
+            display: block;
+            width: 100%;
+            margin: 2rem 0;
+            overflow-x: auto;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            line-height: 1.55;
+        }
+
+        th, td {
+            min-width: 12rem;
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid var(--color-border);
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th { color: var(--color-frost-light); font-weight: 500; }
+
+        blockquote {
+            margin: 2rem 0;
+            padding: 1.25rem 1.4rem;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            background: var(--color-bg-elevated);
+        }
+
+        blockquote p:last-child { margin-bottom: 0; }
+
+        mjx-container[display="true"] {
+            overflow-x: auto;
+            overflow-y: hidden;
+            margin: 2rem 0 !important;
+            padding: 1.35rem 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            background: var(--color-bg-elevated);
+            color: var(--color-frost-light);
+        }
+
+        /* Native MathML fallback before MathJax loads, or when JS is disabled. */
+        math[display="inline"] {
+            color: inherit;
+            font-size: 1em;
+        }
+
+        math[display="block"] {
+            display: block;
+            width: 100%;
+            margin: 2rem 0;
+            padding: 1.35rem 1rem;
+            overflow-x: auto;
+            overflow-y: hidden;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            background: var(--color-bg-elevated);
+            color: var(--color-frost-light);
+        }
+
+        hr { height: 1px; margin: 4rem 0; border: 0; background: var(--color-border); }
+
+        ul, ol { margin: 0 0 1.75rem; padding-left: 1.35rem; }
+        li { margin-bottom: 0.65rem; padding-left: 0.3rem; }
+        li::marker { color: var(--color-frost); }
+
+        #sources-and-notes + ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        #sources-and-notes + ul li {
+            margin: 0;
+            padding: 0.7rem 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .article-email-capture {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 2rem;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .article-email-capture p { margin: 0 0 1rem; color: var(--color-text-muted); font-size: 0.9rem; }
+        .article-email-capture form { display: flex; gap: 0.5rem; max-width: 28rem; }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .article-email-capture input {
+            min-width: 0;
+            flex: 1;
+            padding: 0.65rem 0.9rem;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            background: var(--color-bg-elevated);
+            color: var(--color-text);
+            font: inherit;
+            font-size: 0.86rem;
+        }
+
+        .article-email-capture input::placeholder { color: var(--color-text-dim); opacity: 1; }
+
+        .article-email-capture button {
+            padding: 0.65rem 1.2rem;
+            border: 0;
+            border-radius: 4px;
+            background: var(--color-frost-light);
+            color: var(--color-bg);
+            cursor: pointer;
+            font: inherit;
+            font-size: 0.86rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .article-email-capture button:active { transform: translateY(1px); }
+        .article-email-capture input:focus-visible,
+        .article-email-capture button:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+
+        .article-footer {
+            margin-top: 4rem;
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--color-border);
+            color: var(--color-text-dim);
+            text-align: center;
+        }
+
+        .article-footer p { margin: 0; }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.7rem 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            text-decoration: none;
+        }
+
+        @media (max-width: 640px) {
+            html { font-size: 16px; }
+            .article-hero { padding: 5.5rem 1.25rem 2.5rem; }
+            .article-visual { width: calc(100% - 2rem); margin-bottom: 3.5rem; }
+            main { padding: 0 1.25rem 4rem; }
+            .article-email-capture { padding: 2rem 1.25rem; }
+            .article-email-capture form { flex-direction: column; }
+            .article-email-capture button { width: 100%; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+        }
+
+        @media print {
+            .site-nav, .theme-toggle, .frost-bg, .article-actions, .article-email-capture { display: none; }
+            body { background: white; color: black; }
+            .article-hero { padding-top: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <i data-lucide="moon" class="moon-icon"></i>
+        <i data-lucide="sun" class="sun-icon"></i>
+    </button>
+
+    <header class="site-nav" aria-label="Primary">
+        <div class="container nav-inner">
+            <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
+                <i data-lucide="menu" class="hamburger-icon"></i>
+                <i data-lucide="x" class="hamburger-close-icon"></i>
+            </button>
+            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link nav-link-active" href="/writings/">Writing</a>
+            <a class="nav-link" href="/reading/">Reading</a>
+            <a class="nav-link" href="/resources/">Resources</a>
+            <a class="nav-link" href="/advisory.html">Advisory</a>
+        </div>
+    </header>
+
+    <div class="frost-bg"></div>
+
+    <header class="article-hero">
+        <p class="header-label">AI Agents</p>
+        <h1>Software Agents Can Actually Use</h1>
+        <p class="subtitle">What agent-native means, and how to build it without getting owned</p>
+        <time class="article-date" datetime="2026-07-18">July 18, 2026</time>
+        <div class="article-actions">
+            <a class="agent-download" href="/downloads/software-agents-can-actually-use.md" download="software-agents-can-actually-use.md" type="text/markdown" aria-label="Download the complete Markdown source for agents">
+                <i data-lucide="download" aria-hidden="true"></i>
+                Download for agents
+            </a>
+        </div>
+    </header>
+
+    <figure class="article-visual">
+        <img src="software-agents-can-actually-use/agent-native-software.webp" width="2172" height="724" alt="Diagram of an AI agent connected to tools, data, code, approvals, and execution results" fetchpriority="high">
+    </figure>
+
+    <main>
+<p>Here is a test you can run on almost any product today. Open it, pick the most useful thing it does, and ask whether an AI agent could do that same thing on your behalf without a human moving a mouse. For the overwhelming majority of software, the answer is no. The agent can maybe read some data through an API if you're lucky, but the actual verbs, send the invoice, publish the post, refund the order, cancel the subscription, live behind a screen built for human fingers.</p>
+<p>That gap is the whole opportunity. Somewhere around 900 million people use ChatGPT every week, and OpenAI has now folded Codex into it so the same runtime that ships pull requests also drafts documents and works across your apps. On the other side of the fence, Moltbook spun up in January as a Reddit for autonomous agents and had thousands of them posting to each other within days, before Meta bought it in March. You can dismiss the specifics as hype. The underlying shift is not hype. People are moving from chat that retrieves to agents that act, and most software has no surface for an agent to act through.</p>
+<p>The word going around for the fix is "agent-native." It is worth pinning down before it dissolves into a marketing sticker, because the good version of the idea is a genuine engineering discipline and the bad version is "we added a chatbot."</p>
+<section id="what-the-term-actually-means" class="level2">
+<h2>What the term actually means</h2>
+<p>Two definitions are circulating, and the useful thing is that they don't contradict each other. They describe a floor and a ceiling.</p>
+<p>The floor comes from Builder.io: <a href="https://www.builder.io/blog/agent-native-architecture">agent-native software is built so humans and AI agents operate the same product through shared actions, data, permissions, and context</a>. The discipline is a single action model. You define an action once, archive an email, create a dashboard, schedule a meeting, and from that one definition the UI can call it, the agent can see it as a tool, an API client can hit it, and another agent can route to it. The agent is part of how the app is built. It is not glued on afterward.</p>
+<p>The ceiling comes from Dan Shipper's guide at Every, <a href="https://every.to/guides/agent-native">written with Claude</a>, where the agent isn't just a first-class operator but the core of the thing. Features stop being code you write and become prompts that name an outcome, which an agent achieves by looping over atomic tools until it's done. His phrase for this is "Claude Code in a trenchcoat," and it's the right image. Five principles hold it up: parity (the agent can do anything the user can), granularity (tools are primitives, features are prompts), composability (new features are new prompts), emergent capability (the agent handles requests you never designed for), and improvement over time (you ship better prompts, not just more code).</p>
+<p>I find the floor version is what most teams should actually build, and the ceiling version is what they should borrow from. The ceiling trades away determinism, latency, and predictable cost for malleability, and that's a real trade, not a free lunch. But its principles, especially parity and atomic tools, are how you get the floor right in the first place.</p>
+<p>So here's the definition I'd write on the whiteboard: <strong>agent-native software exposes every outcome a human user can reach as a contract an agent can discover, call, and compose, with permission and audit enforced at the action layer rather than the interface.</strong> Two clauses, and you need both. The first clause without the second is a security incident waiting to be scheduled. The second without the first is just tidy API design.</p>
+<section id="what-it-is-not" class="level3">
+<h3>What it is not</h3>
+<p>The term gets stretched, so it helps to fence it off.</p>
+<table>
+<thead>
+<tr>
+<th>Not this</th>
+<th>Why not</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AI-enabled software (summarize buttons, autocomplete)</td>
+<td>A human still drives every action. The AI has no agency and no tool surface.</td>
+</tr>
+<tr>
+<td>"AI-native" products</td>
+<td>Too broad. A product can be built entirely on models and still be a UI-only silo no agent can operate.</td>
+</tr>
+<tr>
+<td>A chatbot or copilot</td>
+<td>Retrieval, not action. A chatbot answers; an agent operates. Chat is a legitimate surface of an agent-native app, never its architecture.</td>
+</tr>
+<tr>
+<td>Workflow automation (Zapier, cron, n8n)</td>
+<td>The steps are choreographed in advance. Agent-native systems name an outcome and let the model choose steps at runtime, including steps you never listed.</td>
+</tr>
+<tr>
+<td>Computer-use / browser agents</td>
+<td>This is the shim for software that is not agent-native. It's slow and brittle precisely because there's no machine-legible action surface. It's evidence of the need, not an example of the answer.</td>
+</tr>
+<tr>
+<td>Software built with coding agents</td>
+<td>Vibe-coding a product and shipping an agent-operable product are different axes. You can build a completely agent-hostile app with Claude Code, and you can hand-write a beautifully agent-native one.</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="a-reference-architecture" class="level2">
+<h2>A reference architecture</h2>
+<p>Strip away the diagrams and agent-native architecture is one commitment enforced everywhere: there is exactly one definition of each action, and everybody, the human, the agent, the API client, goes through it. Here is how the layers stack.</p>
+<pre><code>Operator surfaces        Web/mobile UI · embedded agent · CLI · external agents (Claude,
+(interchangeable)        Codex, OpenClaw) · other services
+        │
+        │  HTTP · MCP (tools/resources/prompts) · A2A (for agent-to-agent)
+        ▼
+Action / capability      One definition per action: name, schema, description, risk tier,
+layer                    idempotency key, dry-run mode, typed errors, pagination
+        │
+        ▼
+Policy plane             Delegated identity (user X via agent Y) · least-privilege scopes
+                         per session · risk-tiered approval gates · rate limits · egress
+                         allowlists
+        │
+        ▼
+Domain services          Business logic · database (volume, queries) · shared workspace
++ state                  (files a human can open) · agent session state (checkpoints)
+        │
+        ▼
+Execution +              Durable long-running work (submit → poll → resume) · retries with
+observability            idempotency · one trace per session · immutable audit log · evals</code></pre>
+<p>The parts that people skip, and then regret skipping:</p>
+<p>The policy plane sits <em>below</em> the surfaces and <em>above</em> the services. If you attach permissions to UI routes, the agent can't see them and doesn't obey them. Attach them to actions and every caller is governed identically. And the agent authenticates as <em>this user, delegated to this agent</em>, never as a god-mode service account. That one decision is the difference between a scoped blast radius and an unscoped one.</p>
+<p>Approvals are a real object, not a modal. An approval is a persisted, resumable state of a task, pending, then approved or denied, then executed, and it can show up in whatever client the human happens to be in. The current MCP spec gives this a protocol shape through elicitation and the Tasks extension.</p>
+<p>The workspace is shared. Agent and human read and write the same artifacts. Shipper's guide makes the case that files are the most battle-tested agent interface there is, since models trained on bash already know <code>cat</code>, <code>grep</code>, and <code>mv</code>, and a human can open a folder and understand it. Keep the database for volume and indexed queries. Keep files for anything a person should be able to inspect.</p>
+</section>
+<section id="the-craft-nobody-warns-you-about-tool-contracts" class="level2">
+<h2>The craft nobody warns you about: tool contracts</h2>
+<p>This is where agent-native projects live or die, and it's the best-documented corner of the field because Anthropic wrote <a href="https://www.anthropic.com/engineering/writing-tools-for-agents">an entire engineering piece on it</a>. The mental model that unlocks everything: a tool is a contract between a deterministic system and a non-deterministic caller. The agent might hallucinate an argument, misread the purpose, or call the thing at the wrong moment. Your tool has to survive that.</p>
+<p>A few rules earn their keep every time.</p>
+<p><strong>Names carry weight.</strong> Namespace them by service and resource, <code>invoices_list</code>, <code>customers_search</code>, so an agent picking among forty tools picks the right one. Vague names measurably degrade selection.</p>
+<p><strong>Descriptions are prompts, not documentation.</strong> They get loaded straight into the model's context, which means every word steers behavior. Write them the way you'd brief a new hire on their first day: spell out the query format, define the niche term, say when to use the tool and, just as important, when not to. I've watched a one-sentence description change flip an agent from reliable to useless and back.</p>
+<p><strong>Schemas should be strict and unambiguous.</strong> Not <code>user</code>, but <code>user_id</code>. Not <code>date</code>, but <code>start_date: ISO YYYY-MM-DD, required</code>. Declare an output schema too, so results come back typed.</p>
+<p><strong>Budget your tokens like they're money, because they are.</strong> Every tool result competes with the actual task for context. Paginate, filter, and truncate by default; Claude Code caps tool responses at 25,000 tokens. When you truncate, tell the agent what you dropped and how to get more. A single unpaginated list endpoint can quietly become your biggest line item.</p>
+<p><strong>Errors are steering text.</strong> "date must be YYYY-MM-DD, you sent 6/14/2026" turns a failed call into a self-correcting retry. An opaque stack trace burns an iteration and teaches the model nothing.</p>
+<p>The meta-lesson underneath all of these: build the tool, write five realistic test tasks, run the agent, then read the transcripts. You'll learn more from one bad transcript than from an afternoon of speculation. The larger the effect of a change, the smaller the sample you need to see it. Most tool quality comes from this loop, not from getting it right on paper.</p>
+</section>
+<section id="the-interface-stack-and-when-to-reach-for-each" class="level2">
+<h2>The interface stack, and when to reach for each</h2>
+<p>There's a small zoo of standards now, and the confusion is understandable because they answer different questions. Here's the map I use.</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>The question it answers</th>
+<th>Reach for it when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OpenAPI / REST</td>
+<td>What deterministic operations exist?</td>
+<td>Always, underneath. But a REST spec alone is not agent-ready: no token budgeting, no prompt-quality descriptions, no approval semantics.</td>
+</tr>
+<tr>
+<td>CLI</td>
+<td>How does an agent operate this from a shell?</td>
+<td>Whenever your users run coding agents. A good CLI with <code>--json</code>, real exit codes, <code>--dry-run</code>, and man-page-quality <code>--help</code> is an agent interface for free. Cheapest path to agent-nativeness for an existing product.</td>
+</tr>
+<tr>
+<td>MCP</td>
+<td>How do AI apps connect to your capabilities, portably?</td>
+<td>When you want to be operable from Claude, Codex, Cursor, and every other MCP client without per-client work. The de facto agent-to-tool standard.</td>
+</tr>
+<tr>
+<td>Agent Skills (SKILL.md)</td>
+<td>How should an agent <em>proceed</em> in this domain?</td>
+<td>Procedural knowledge: multi-step workflows, house style, checklists. A folder with a description and instructions the agent loads only when relevant. Skills sit on top of MCP: MCP sells a capability, a skill sells a procedure.</td>
+</tr>
+<tr>
+<td>AGENTS.md</td>
+<td>What should a coding agent know about this repo?</td>
+<td>Project conventions, build and test commands, taboos. An open standard read by Codex, Copilot, and Gemini. If your product ships as code agents will edit, this file is part of the product.</td>
+</tr>
+<tr>
+<td>A2A</td>
+<td>How do independent agents delegate to each other across vendors?</td>
+<td>Cross-org or cross-framework delegation. Real and growing (Linux Foundation, v1.0 in April 2026, 150+ orgs), but concentrated in enterprise orchestration. Most single products need MCP long before they need A2A.</td>
+</tr>
+</tbody>
+</table>
+<p>One thing you should know if you're touching MCP this quarter: the stable spec is <strong>2025-11-25</strong>, but the <strong>2026-07-28</strong> revision publishes on July 28 and its own maintainers call it <a href="https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/">the largest change since launch</a>. The protocol goes stateless, the session handshake and session header disappear, capabilities move into per-request metadata, and MCP servers become formal OAuth 2.1 resource servers with mandatory discovery. If you run remote MCP servers behind a load balancer, the removal of session affinity is your migration, and it's worth reading the changelog now rather than in August.</p>
+</section>
+<section id="security-or-how-not-to-build-an-exfiltration-machine" class="level2">
+<h2>Security, or how not to build an exfiltration machine</h2>
+<p>Here is the uncomfortable part. The entire premise of agent-native software, a capable machine operator with broad reach, is also a beautiful attack surface, and you cannot prompt your way out of it.</p>
+<p>Simon Willison named the core problem the <a href="https://simonwillison.net/2025/Jul/6/supabase-mcp-lethal-trifecta/">lethal trifecta</a>: give an agent access to private data, exposure to untrusted content, and a way to send data out, all in the same session, and it is reliably exploitable by indirect prompt injection. No jailbreak required. The attack just needs the model to follow instructions, which is the one thing it's guaranteed to do. This isn't theoretical. GitHub's MCP server leaked private-repo data through a prompt-injected public issue. The Supabase Cursor setup paired broad database access with untrusted support tickets. Writer.com exfiltrated document contents through an invisible image URL. Moltbook, the agent social network, shipped with automatic instruction execution that its own docs now flag as a prompt-injection risk.</p>
+<p>The defense is architectural, and I want to be blunt about this because engineers keep looking for the sanitization function that doesn't exist. You break the trifecta by design, per session. An agent reading untrusted inbound email gets no egress. An agent with egress touches only data cleared for that destination. You enforce it with network-level egress allowlists, not with a polite instruction in the system prompt.</p>
+<p>Everything else is the boring, load-bearing hygiene:</p>
+<p>Delegated, short-lived, task-scoped identity, never a shared credential. Least privilege attached to actions, read-only by default. Approvals gated by stakes and reversibility, so the reversible and cheap auto-applies and the irreversible or expensive (payments, deletions, external sends) waits for a human. Idempotency keys on every mutation, because agents retry. Deterministic guardrails, spending caps, recipient allowlists, in code where no prompt can waive them. An immutable audit log that records the model version, because a model upgrade is a breaking change with no changelog entry, and one day you'll need to prove which version did what.</p>
+</section>
+<section id="what-good-engineers-still-get-wrong" class="level2">
+<h2>What good engineers still get wrong</h2>
+<p>I'll be honest about the ones that surprised me, because they're the ones that trip up people who are otherwise excellent.</p>
+<p>Your defensive-programming instincts partially invert. Strict enums and validation at every layer, virtues everywhere else, strangle the exact composability that justifies this architecture. The skill is separating constraints that protect data integrity, which you keep, from constraints on judgment, which belong in the prompt.</p>
+<p>English becomes load-bearing. Tool names, descriptions, and error strings are executable in the way that matters. They need review, version control, and regression tests, and a one-word change can swing your eval numbers.</p>
+<p>Determinism is gone, and unit tests go with it. The same input produces different tool sequences on different runs. You test with eval pass rates over many trials and transcript review, and if you skip building that, a model-version bump will regress you and you won't be able to measure it.</p>
+<p>Silent success reads as failure. An agent that does the right thing invisibly still loses the user's trust. Stream the thinking, show the current tool, reflect changes immediately. Visibility is a feature, not polish.</p>
+<p>And the roadmap inverts. You stop guessing which features to build and start watching what people ask the agent to do. The requests that succeed are features you never had to design. The requests that fail are your parity gaps, pointing at exactly what to build next. Teams that keep planning spec-first throw away the strongest signal the architecture hands them.</p>
+</section>
+<section id="the-test-that-settles-it" class="level2">
+<h2>The test that settles it</h2>
+<p>Shipper's guide ends with a test I keep coming back to, and I'll borrow it because nothing I've written beats it. Describe an outcome to your agent that lives inside your product's domain but that you never built a feature for. "Figure out which customers always pay within three days of a reminder and stop double-sending them." If the agent can compose its tools and its judgment and just do it, looping until it's done, you built something agent-native. If it can't, your architecture is too constrained, and you have a punch list.</p>
+<p>That's the bar. Not whether you shipped a chat box. Whether an agent can accomplish what a person can, safely, through the same door.</p>
+<hr />
+</section>
+<section id="sources" class="level2">
+<h2>Sources</h2>
+<ul>
+<li>Dan Shipper and Claude, <a href="https://every.to/guides/agent-native">Agent-native Architectures</a>, Every, Jan 2026 (updated Apr 2026)</li>
+<li>Builder.io, <a href="https://www.builder.io/blog/agent-native-architecture">Agent-Native: The Next Architecture for Software</a></li>
+<li>Anthropic, <a href="https://www.anthropic.com/engineering/writing-tools-for-agents">Writing effective tools for agents - with agents</a></li>
+<li>Anthropic, <a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">Effective context engineering for AI agents</a></li>
+<li>Model Context Protocol maintainers, <a href="https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/">The 2026-07-28 MCP Specification Release Candidate</a></li>
+<li>Simon Willison, <a href="https://simonwillison.net/2025/Jul/6/supabase-mcp-lethal-trifecta/">The lethal trifecta / Supabase MCP</a></li>
+<li>Oso, <a href="https://www.osohq.com/learn/lethal-trifecta-ai-agent-security">Understanding the Lethal Trifecta of AI Agents</a> (incident survey)</li>
+<li>Linux Foundation, <a href="https://www.linuxfoundation.org/press/a2a-protocol-surpasses-150-organizations-lands-in-major-cloud-platforms-and-sees-enterprise-production-use-in-first-year">A2A Protocol surpasses 150 organizations</a>, Apr 2026</li>
+<li>OpenAI, <a href="https://openai.com/codex/">Codex</a> and <a href="https://developers.openai.com/codex/guides/agents-md">Custom instructions with AGENTS.md</a></li>
+<li>Time via AOL, <a href="https://www.aol.com/articles/moltbook-social-network-ai-bots-005418927.html">Moltbook Is a Social Network for AI Bots</a></li>
+</ul>
+</section>
+    </main>
+
+    <div class="article-email-capture">
+        <p>If you read this far, you'd probably like the newsletter. One analysis per week. Free.</p>
+        <form onsubmit="event.preventDefault();var e=this.email.value,f=this;fetch('https://email-subscribe.rahman-sakeeb.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e})}).then(r=>{if(r.ok)f.parentElement.innerHTML='&lt;p class=subscription-message&gt;You\'re in. Check your inbox.&lt;/p&gt;';else f.parentElement.innerHTML='&lt;p class=subscription-message&gt;Something went wrong. Try again.&lt;/p&gt;'}).catch(()=>{f.parentElement.innerHTML='&lt;p class=subscription-message&gt;Something went wrong. Try again.&lt;/p&gt;'})">
+            <label class="sr-only" for="article-email">Email address</label>
+            <input id="article-email" type="email" name="email" autocomplete="email" placeholder="you@example.com" required>
+            <button type="submit">Subscribe</button>
+        </form>
+    </div>
+
+    <footer class="article-footer">
+        <p>Published July 18, 2026 by Shafkat Rahman</p>
+        <a href="/writings/" class="back-link">← Back to Writing</a>
+    </footer>
+
+    <script src="/writing-manifest.js?v=2" defer></script>
+    <script src="../theme-toggle.js?v=8" defer></script>
+</body>
+</html>
