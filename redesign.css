@@ -203,20 +203,17 @@ a:hover { color: var(--primary-hover); }
 
 .nav-utility {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
+    flex-direction: row;
+    align-items: center;
     margin-top: 0;
-    padding: 16px 10px 0;
+    padding: 16px 0 0;
     border-top: 1px solid var(--border);
 }
 
-.nav-utility a {
-    color: var(--muted-foreground);
-    font-size: 12px;
-}
+.nav-utility.connect-links { gap: 4px; }
 
 .nav-hamburger { display: none; }
+.nav-mobile-connect { display: none; }
 .menu-close-label { display: none; }
 
 .theme-switch {
@@ -374,6 +371,53 @@ h1, h2, h3,
     margin: 0;
     color: var(--muted-foreground);
     font-size: 0.95rem;
+}
+
+/* Direct contact paths remain visible before the longer introduction. */
+.connect-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.home-connect {
+    display: none;
+    margin: 1rem 0 1.25rem -12px;
+}
+
+.connect-icon {
+    display: inline-block;
+    flex: 0 0 20px;
+    width: 20px;
+    height: 20px;
+    background: currentColor;
+    -webkit-mask: var(--social-icon) center / contain no-repeat;
+    mask: var(--social-icon) center / contain no-repeat;
+}
+
+.connect-icon-linkedin { --social-icon: url('/assets/social-icons/linkedin.svg'); }
+.connect-icon-github { --social-icon: url('/assets/social-icons/github.svg'); }
+.connect-icon-x { --social-icon: url('/assets/social-icons/x.svg'); }
+.connect-icon-threads { --social-icon: url('/assets/social-icons/threads.svg'); }
+
+.connect-links .connect-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 12px;
+    border: 0;
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--muted-foreground);
+    text-decoration: none;
+    touch-action: manipulation;
+}
+
+.connect-links .connect-link:hover,
+.connect-links .connect-link:focus-visible {
+    color: var(--primary);
 }
 
 .workspace-section {
@@ -1214,6 +1258,8 @@ body > .article-footer {
 @media (max-width: 820px) {
     :root { --rail-width: 0px; }
 
+    .home-connect { display: flex; }
+
     body { padding: 3.7rem 0 0 !important; }
     body.menu-open { overflow: hidden; }
 
@@ -1271,7 +1317,9 @@ body > .article-footer {
         position: fixed;
         inset: 3.7rem 0 0;
         display: none;
-        padding: 1rem;
+        padding: 1rem 1rem max(1rem, env(safe-area-inset-bottom));
+        overflow-y: auto;
+        overscroll-behavior: contain;
         border-bottom: 1px solid var(--border);
         background: var(--background);
     }
@@ -1283,6 +1331,17 @@ body > .article-footer {
 
     .nav-link { padding: 13px 12px; font-size: 15px; }
     .nav-utility { display: none; }
+    .nav-mobile-connect {
+        display: block;
+        margin-top: 1.5rem;
+        padding: 1.5rem 0 0;
+        border-top: 1px solid var(--border);
+    }
+    .nav-mobile-connect p {
+        margin: 0 0 12px;
+        color: var(--muted-foreground);
+        font-size: 13px;
+    }
 
     .hero,
     .writing-page,

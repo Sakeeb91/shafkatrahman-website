@@ -38,7 +38,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" fetchpriority="high">
     <link rel="stylesheet" href="style.css?v=14">
-    <link rel="stylesheet" href="redesign.css?v=13">
+    <link rel="stylesheet" href="redesign.css?v=14">
     <script>document.documentElement.dataset.theme = localStorage.getItem('theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');</script>
 
     <!-- Lucide Icons CDN -->
@@ -84,6 +84,12 @@
         <header class="home-intro">
             <h1>Shafkat Rahman</h1>
             <p class="home-lede">AI investment research and applied AI development.</p>
+            <nav class="home-connect connect-links" aria-label="Connect with Shafkat">
+                <a class="connect-link" href="https://www.linkedin.com/in/shafkat-rahman/" target="_blank" rel="noopener noreferrer" title="LinkedIn" aria-label="LinkedIn (opens in a new tab)"><span class="connect-icon connect-icon-linkedin" aria-hidden="true"></span></a>
+                <a class="connect-link" href="https://github.com/Sakeeb91" target="_blank" rel="noopener noreferrer" title="GitHub" aria-label="GitHub (opens in a new tab)"><span class="connect-icon connect-icon-github" aria-hidden="true"></span></a>
+                <a class="connect-link" href="https://x.com/Sakeeb91" target="_blank" rel="noopener noreferrer" title="X" aria-label="X (opens in a new tab)"><span class="connect-icon connect-icon-x" aria-hidden="true"></span></a>
+                <a class="connect-link" href="https://www.threads.com/@sakeeb.rahman" target="_blank" rel="noopener noreferrer" title="Threads" aria-label="Threads (opens in a new tab)"><span class="connect-icon connect-icon-threads" aria-hidden="true"></span></a>
+            </nav>
             <p class="home-context">I write technical analysis on agent systems, scaling behavior, model architectures, and infrastructure economics. My background spans theoretical physics, private equity research, and shipping AI products.</p>
         </header>
 
@@ -123,6 +129,6 @@
     </main>
 
     <script src="/writing-manifest.js?v=3" defer></script>
-    <script src="theme-toggle.js?v=9" defer></script>
+    <script src="theme-toggle.js?v=10" defer></script>
 </body>
 </html>

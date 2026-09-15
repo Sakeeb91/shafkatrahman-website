@@ -32,6 +32,14 @@
             ['Resources', '/resources/', path.startsWith('/resources/')],
             ['Advisory', '/advisory.html', path === '/advisory.html']
         ];
+        const socialLinks = [
+            ['LinkedIn', 'https://www.linkedin.com/in/shafkat-rahman/', 'linkedin'],
+            ['GitHub', 'https://github.com/Sakeeb91', 'github'],
+            ['X', 'https://x.com/Sakeeb91', 'x'],
+            ['Threads', 'https://www.threads.com/@sakeeb.rahman', 'threads']
+        ];
+
+        const socialMarkup = socialLinks.map(([label, href, icon]) => `<a class="connect-link" href="${href}" target="_blank" rel="noopener noreferrer" title="${label}" aria-label="${label} (opens in a new tab)"><span class="connect-icon connect-icon-${icon}" aria-hidden="true"></span></a>`).join('');
 
         nav.innerHTML = `
             <div class="nav-inner">
@@ -40,6 +48,12 @@
                 </a>
                 <nav class="nav-links" id="primary-links" aria-label="Primary navigation">
                     ${destinations.map(([label, href, active]) => `<a class="nav-link${active ? ' nav-link-active' : ''}" href="${href}"${active ? ' aria-current="page"' : ''}>${label}</a>`).join('')}
+                    <div class="nav-mobile-connect">
+                        <p>Connect with me</p>
+                        <div class="connect-links">
+                            ${socialMarkup}
+                        </div>
+                    </div>
                 </nav>
                 <button class="theme-switch" type="button" role="switch" aria-checked="${root.dataset.theme === 'dark'}">
                     <span class="theme-switch-label" aria-hidden="true">Theme</span>
@@ -49,11 +63,9 @@
                     <span class="menu-label">Menu</span>
                     <span class="menu-close-label">Close</span>
                 </button>
-                <div class="nav-utility" aria-label="Elsewhere">
-                    <a href="https://www.linkedin.com/in/shafkat-rahman/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                    <a href="https://github.com/Sakeeb91" target="_blank" rel="noopener noreferrer">GitHub</a>
-                    <a href="https://x.com/Sakeeb91" target="_blank" rel="noopener noreferrer">X</a>
-                </div>
+                <nav class="nav-utility connect-links" aria-label="Social profiles">
+                    ${socialMarkup}
+                </nav>
             </div>`;
 
         const toggle = nav.querySelector('.nav-hamburger');
@@ -84,22 +96,49 @@
             }
         });
 
-        toggle.addEventListener('click', () => {
-            const open = nav.classList.toggle('nav-open');
+        const mobileNav = window.matchMedia('(max-width: 820px)');
+        let inactiveContent = [];
+
+        function setMenuOpen(open) {
+            nav.classList.toggle('nav-open', open);
             toggle.setAttribute('aria-expanded', String(open));
             document.body.classList.toggle('menu-open', open);
+            if (open) {
+                inactiveContent = Array.from(document.body.children).filter((element) => (
+                    element !== nav && element instanceof HTMLElement && !element.inert
+                ));
+                inactiveContent.forEach((element) => { element.inert = true; });
+            } else {
+                inactiveContent.forEach((element) => { element.inert = false; });
+                inactiveContent = [];
+            }
+        }
+
+        toggle.addEventListener('click', () => setMenuOpen(!nav.classList.contains('nav-open')));
+        links.addEventListener('click', (event) => {
+            if (event.target.closest('a')) {
+                setMenuOpen(false);
+                if (mobileNav.matches) toggle.focus();
+            }
         });
-        links.addEventListener('click', () => {
-            nav.classList.remove('nav-open');
-            toggle.setAttribute('aria-expanded', 'false');
-            document.body.classList.remove('menu-open');
-        });
+        mobileNav.addEventListener('change', () => setMenuOpen(false));
         document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape' && nav.classList.contains('nav-open')) {
-                nav.classList.remove('nav-open');
-                toggle.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('menu-open');
+            if (!nav.classList.contains('nav-open')) return;
+            if (event.key === 'Escape') {
+                setMenuOpen(false);
                 toggle.focus();
+            }
+            if (event.key === 'Tab') {
+                const controls = Array.from(nav.querySelectorAll('a, button')).filter((element) => element.getClientRects().length);
+                const first = controls[0];
+                const last = controls[controls.length - 1];
+                if (event.shiftKey && document.activeElement === first) {
+                    event.preventDefault();
+                    last.focus();
+                } else if (!event.shiftKey && document.activeElement === last) {
+                    event.preventDefault();
+                    first.focus();
+                }
             }
         });
     }
